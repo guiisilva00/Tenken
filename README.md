@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/assets/img/logo-site/logo_horizontal.svg" alt="Tenken" width="360" />
+  <img src="frontend/public/assets/img/logo-site/logo_horizontal.svg" alt="Tenken" width="360" />
 
   <p><strong>Organização, inspeção e cuidado com equipamentos de laboratórios educacionais.</strong></p>
 
