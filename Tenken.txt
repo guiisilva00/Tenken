@@ -1,0 +1,68 @@
+Tenken 
+
+Sistema para gestão de robôs, bancadas didáticas e projetos de laboratório.
+
+### Funcionalidades esperadas
+
+- cadastro de robôs, bancadas, componentes, projetos e usuários;
+- agendamento e controle de utilização;
+- checklist antes e depois do uso;
+- registro de testes, programas e resultados;
+- registro de falhas e manutenções;
+- histórico por equipamento;
+- dashboard de disponibilidade e ocorrências;
+- relatórios de utilização.
+
+### Espaço para criatividade
+
+O grupo deverá criar um recurso que facilite aprendizagem, segurança, manutenção ou compartilhamento dos projetos.
+
+# Requisitos técnicos obrigatórios
+
+- front-end responsivo;
+- back-end estruturado;
+- API para comunicação entre as camadas;
+- banco de dados relacional;
+- CRUD completo;
+- autenticação;
+- perfis e permissões;
+- validações e tratamento de erros;
+- dashboard com indicadores;
+- relatórios;
+- testes das funções principais;
+- Git/GitHub com participação dos integrantes;
+- documentação técnica e funcional;
+- deploy quando possível.
+
+As tecnologias deverão seguir o que foi trabalhado nas unidades curriculares e combinado com os professores.
+
+# Primeira entrega - planejamento
+
+- identidade visual da empresa/equipe;
+- divisão das funções dos quatro integrantes;
+- problema, público-alvo, objetivo e proposta de valor;
+- requisitos funcionais e não funcionais;
+- regras de negócio iniciais;
+- Kanban e cronograma;
+- wireframe e layout;
+- modelagem do banco de dados;
+- definição da API, perfis de acesso e recurso avançado;
+- documentação inicial.
+
+O professor Paiva criará inicialmente o repositório. Depois, o grupo deverá manter branches, commits e atualizações organizados.
+
+# Entrega final
+
+- produto completo e funcional;
+- código-fonte organizado;
+- banco de dados e instruções de execução;
+- API documentada;
+- Git atualizado;
+- documentação técnica e funcional;
+- evidências de testes;
+- apresentação em PDF;
+- demonstração do fluxo completo;
+- pitch profissional voltado a possíveis clientes;
+- deploy ou versão executável, quando possível.
+
+> As funcionalidades listadas são o mínimo. Cada grupo deverá criar um produto com identidade própria, boa experiência de uso e um diferencial que possa ser defendido diante da banca e do público.
