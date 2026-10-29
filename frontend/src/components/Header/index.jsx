@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import "./Header.css";
 
 const REVEAL_DISTANCE = 140;
 

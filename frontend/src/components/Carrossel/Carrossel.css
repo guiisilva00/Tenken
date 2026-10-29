@@ -1,0 +1,245 @@
+.carrossel {
+  background: var(--carbon-black);
+}
+
+.carrossel__visual {
+  position: relative;
+  min-height: clamp(560px, 48vw, 720px);
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 20% 45%, rgba(164, 22, 26, .3), transparent 42%), linear-gradient(125deg, #242426, #0b090a 72%);
+}
+
+.carrossel__visual::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(11, 9, 10, .08), rgba(11, 9, 10, .42) 42%, rgba(11, 9, 10, .94) 75%), linear-gradient(0deg, rgba(11, 9, 10, .58), transparent 38%);
+}
+
+.carrossel__imagem {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 54%;
+  filter: saturate(.76);
+}
+
+.carrossel__placeholder {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  padding: 8vw;
+}
+
+.placeholder__marca {
+  color: rgba(164, 22, 26, .34);
+  font-size: clamp(14rem, 35vw, 34rem);
+  font-weight: 700;
+  letter-spacing: -.12em;
+  line-height: .8;
+}
+
+.placeholder__aviso,
+.placeholder__instrucao {
+  max-width: 440px;
+  color: var(--silver);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.carrossel__conteudo {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: clamp(24px, 9vw, 150px);
+  width: min(43%, 560px);
+  transform: translateY(-50%);
+  animation: carrossel-entrada 360ms ease both;
+}
+
+.carrossel__sobretitulo {
+  margin: 0 0 18px;
+  color: #df5a5d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.carrossel__conteudo h2 {
+  margin: 0 0 24px;
+  color: var(--white);
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  letter-spacing: -.055em;
+  line-height: .99;
+}
+
+.carrossel__texto {
+  max-width: 520px;
+  margin: 0;
+  color: #ded9d9;
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.75;
+}
+
+.carrossel__legenda {
+  margin: 26px 0 0;
+  color: var(--silver);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.carrossel__contador {
+  position: absolute;
+  z-index: 2;
+  bottom: 42px;
+  left: clamp(24px, 6vw, 92px);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.carrossel__contador span {
+  padding: 0 8px;
+  color: var(--mahogany-red-2);
+}
+
+.carrossel__controles {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 6vw, 92px);
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.carrossel__controles button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(245, 243, 244, .42);
+  border-radius: 50%;
+  background: rgba(11, 9, 10, .25);
+  color: var(--white);
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 180ms, border-color 180ms;
+}
+
+.carrossel__controles button:hover {
+  border-color: var(--mahogany-red-2);
+  background: var(--mahogany-red);
+}
+
+.carrossel__indicadores {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.carrossel__indicadores button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  background: rgba(245, 243, 244, .46);
+}
+
+.carrossel__indicadores button[aria-current="true"] {
+  width: 26px;
+  border-radius: 8px;
+  background: var(--mahogany-red-2);
+}
+
+@keyframes carrossel-entrada {
+  from {
+    opacity: .45;
+    transform: translate(12px, -50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+@keyframes carrossel-entrada-mobile {
+  from {
+    opacity: .45;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .carrossel__visual {
+    min-height: 690px;
+  }
+
+  .carrossel__visual::after {
+    background: linear-gradient(0deg, rgba(11, 9, 10, .97), rgba(11, 9, 10, .72) 55%, rgba(11, 9, 10, .08));
+  }
+
+  .carrossel__conteudo {
+    top: auto;
+    right: 24px;
+    bottom: 115px;
+    left: 24px;
+    width: auto;
+    transform: none;
+    animation-name: carrossel-entrada-mobile;
+  }
+
+  .carrossel__conteudo h2 {
+    font-size: clamp(2.2rem, 10vw, 3.6rem);
+  }
+
+  .carrossel__placeholder {
+    justify-content: flex-start;
+    padding: 100px 24px;
+  }
+
+  .placeholder__marca {
+    font-size: clamp(12rem, 60vw, 20rem);
+  }
+
+  .carrossel__contador {
+    bottom: 38px;
+    left: 24px;
+  }
+
+  .carrossel__controles {
+    right: 18px;
+    bottom: 25px;
+    gap: 10px;
+  }
+
+  .carrossel__controles button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carrossel__indicadores {
+    display: none;
+  }
+}

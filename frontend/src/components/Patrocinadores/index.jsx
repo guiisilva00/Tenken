@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import "./Patrocinadores.css";
 
 const marcas = [
   { nome: "ABB", src: "/assets/img/logo-patrocinadores/abb.png", href: "https://www.abb.com/global/en" },

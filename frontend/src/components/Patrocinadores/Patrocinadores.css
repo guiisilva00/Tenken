@@ -1,0 +1,128 @@
+.secao-patrocinadores {
+  background: var(--white-smoke);
+  color: var(--onyx);
+}
+
+.secao-patrocinadores h2 {
+  max-width: 850px;
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -.045em;
+  line-height: 1.05;
+}
+
+.trilho-patrocinadores {
+  display: flex;
+  width: max-content;
+  animation: rolagem-patrocinadores 32s linear infinite;
+  will-change: transform;
+}
+
+.faixa-patrocinadores {
+  width: 100%;
+  overflow: hidden;
+}
+
+.faixa-patrocinadores:hover .trilho-patrocinadores {
+  animation-play-state: paused;
+}
+
+.carrossel-patrocinadores {
+  display: none;
+}
+
+.grupo-marcas {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 28px;
+  padding-right: 28px;
+}
+
+.marca-patrocinadora {
+  flex: 0 0 160px;
+  height: 132px;
+  display: grid;
+  place-items: center;
+}
+
+.marca-patrocinadora img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 155px;
+  max-height: 62px;
+  object-fit: contain;
+}
+
+.marca-patrocinadora a {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+@keyframes rolagem-patrocinadores {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .trilho-patrocinadores--desktop {
+    display: none;
+  }
+
+  .carrossel-patrocinadores {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .janela-patrocinadores {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .trilho-patrocinadores-mobile {
+    display: flex;
+    transition: transform 280ms ease;
+  }
+
+  .trilho-patrocinadores-mobile .marca-patrocinadora {
+    flex: 0 0 100%;
+    height: 118px;
+  }
+
+  .trilho-patrocinadores-mobile .marca-patrocinadora img {
+    max-width: 145px;
+    max-height: 56px;
+  }
+
+  .seta-patrocinadores {
+    display: grid;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(28, 29, 30, .22);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--onyx);
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .seta-patrocinadores:focus-visible {
+    outline: 2px solid var(--mahogany-red);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trilho-patrocinadores {
+    animation: none;
+  }
+}
