@@ -1,5 +1,5 @@
-import Patrocinadores from "../components/patrocinadores";
-import Carrossel from "../components/carrossel";
+import Patrocinadores from "../components/Patrocinadores";
+import Carrossel from "../components/Carrossel";
 
 const etapas = [
     ["01", "Agendamento", "Organize a reserva dos equipamentos e consulte os horários disponíveis."],

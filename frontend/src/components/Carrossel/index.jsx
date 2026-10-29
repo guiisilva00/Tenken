@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import "./Carrossel.css";
 
 const slides = [
     {
