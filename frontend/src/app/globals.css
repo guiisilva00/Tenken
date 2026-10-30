@@ -303,3 +303,77 @@ a {
   background: var(--mahogany-red);
   color: var(--white);
 }
+
+
+/*Footer*/
+
+.rodape-tenken {
+  color: var(--silver);
+  background: var(--onyx);
+  border-top: 1px solid rgba(177, 167, 166, .18);
+}
+
+.rodape-tenken p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.rodape-tenken__descricao {
+  width: min(100%, 300px);
+}
+
+.marca-rodape {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.marca-rodape img {
+  display: block;
+  width: clamp(150px, 19vw, 230px);
+  height: auto;
+  filter: invert(1);
+}
+
+.rodape-tenken__contato {
+  display: grid;
+  gap: 10px;
+}
+
+.rodape-tenken__contato h2 {
+  margin: 0 0 2px;
+  color: var(--white-smoke);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.link-contato {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--silver);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.link-contato:hover {
+  color: var(--white);
+}
+
+.link-contato svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  fill: var(--mahogany-red-2);
+}
+
+.voltar-topo {
+  color: var(--silver);
+  font-size: 13px;
+  text-decoration: none;
+}
