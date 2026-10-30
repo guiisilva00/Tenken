@@ -27,6 +27,7 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+AGENTS.md
 
 # docker/mysql local data
 mysql-data/

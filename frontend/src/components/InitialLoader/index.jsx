@@ -1,30 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import "./loading.css";
 
-const PRELOADER_DURATION = 2200;
+const TEMPO_CARREGAMENTO = 1000;
 
 // alternando 点 e 検 (ten ken)
-const KANJI_ITEMS = ["点", "検", "点", "検", "点", "検", "点", "検"];
+const SIMBOLOS = ["点", "検", "点", "検", "点", "検", "点", "検"];
 
 export default function InitialLoader() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setVisible(false), PRELOADER_DURATION);
-    return () => window.clearTimeout(timeout);
+    setVisible(true);
+    const temporizador = window.setTimeout(() => {
+      setVisible(false);
+    }, TEMPO_CARREGAMENTO);
+
+    return () => {
+      window.clearTimeout(temporizador);
+    };
   }, []);
 
-  if (!visible) return null;
+  if (pathname !== "/" || !visible) return null;
 
   return (
     <div className="overlay" role="status" aria-label="Carregando o sistema Tenken">
       <div className="content">
         <div className="kanji-spinner" aria-hidden="true">
-          {KANJI_ITEMS.map((kanji, index) => (
-            <div key={index} className="kanji-spinner__item">
-              <span>{kanji}</span>
+          {SIMBOLOS.map((simbolo, indice) => (
+            <div key={indice} className="kanji-spinner__item">
+              <span>{simbolo}</span>
             </div>
           ))}
         </div>
