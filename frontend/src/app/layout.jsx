@@ -1,6 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import Header from "../components/Header";
+import SmoothScroll from "../components/SmoothScroll";
 
 export const metadata = {
   title: "Tenken",
@@ -17,8 +19,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <Header/>
-        {children}
+        <SmoothScroll>
+          <Header />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
