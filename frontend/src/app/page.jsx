@@ -1,5 +1,6 @@
 import Patrocinadores from "../components/Patrocinadores";
 import Carrossel from "../components/Carrossel";
+import InitialLoader from "../components/InitialLoader";
 
 const etapas = [
     ["01", "Agendamento", "Organize a reserva dos equipamentos e consulte os horários disponíveis."],
@@ -12,6 +13,7 @@ const etapas = [
 export default function App() {
     return (
         <>
+            <InitialLoader />
             <section id="inicio" className="secao-destaque" aria-labelledby="titulo-tenken">
                 <video autoPlay muted loop playsInline aria-hidden="true" tabIndex={-1}>
                     <source src="/assets/videos/video-home.mp4" type="video/mp4" />
