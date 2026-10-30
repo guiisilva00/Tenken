@@ -14,7 +14,7 @@
 
 ## Sobre o projeto
 
-Tenken (点検) é uma plataforma web, em desenvolvimento, para apoiar a organização de bancadas didáticas, robôs, componentes e ferramentas em laboratórios educacionais de robótica e automação. O nome significa inspeção, checagem ou verificação.
+Tenken  é uma plataforma web, em desenvolvimento, para apoiar a organização de bancadas didáticas, robôs, componentes e ferramentas em laboratórios educacionais de robótica e automação. O nome significa inspeção, checagem ou verificação.
 
 O projeto busca substituir controles dispersos por um fluxo rastreável que ajude a prevenir falhas, preservar equipamentos e registrar seu histórico de uso. Seu público inclui estudantes, professores, orientadores, técnicos de laboratório e administradores.
 
