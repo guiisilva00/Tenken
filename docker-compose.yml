@@ -29,6 +29,8 @@ services:
       PORT: ${BACKEND_PORT:-8080}
       NODE_ENV: production
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
       DB_HOST: ${DB_HOST:-database}
       DB_PORT: ${DB_PORT:-3306}
       DB_USER: ${DB_USER:-app_user}

@@ -125,7 +125,7 @@ export default function CadastroPage() {
       <div className={styles.field}>
         <label className={styles.label} htmlFor={nome}>{rotulo}</label>
         <input
-          className={`${styles.input} ${erros[nome] || (nome === "email" || nome === "cpf") && erros.contato ? styles.inputError : ""}`}
+          className={`${styles.input} ${erros[nome] || ((nome === "email" || nome === "cpf") && erros.contato) ? styles.inputError : ""}`}
           id={nome}
           name={nome}
           type={tipo}
@@ -169,6 +169,7 @@ export default function CadastroPage() {
               Já tenho matrícula
             </button>
           </p>
+          <p className={styles.linkRow}>Você precisará informar seu e-mail ou CPF para gerar uma matrícula.</p>
           <form className={styles.form} onSubmit={enviarFormulario} noValidate>
             {campo("nome", "Nome completo", "text", true)}
             {campo("email", "E-mail", "email")}
@@ -177,9 +178,11 @@ export default function CadastroPage() {
             <button className={styles.button} type="submit" disabled={enviando}>{enviando ? "Gerando" : "Gerar matrícula"}</button>
           </form>
           </>}
+        </>
       ) : (
         <form className={styles.form} onSubmit={enviarCadastro} noValidate>
-          {campo("matricula", "Matrícula")}
+          <p className={styles.linkRow}>Informe a matrícula que você já possui para criar sua senha.</p>
+          {campo("matricula", "Matrícula", "text", true)}
           {campo("senha", "Senha", "password", true)}
           {campo("confirmarSenha", "Confirmar senha", "password", true)}
           <button className={styles.button} type="submit" disabled={criandoConta}>

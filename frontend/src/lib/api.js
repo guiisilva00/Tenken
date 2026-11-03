@@ -13,7 +13,11 @@ export async function apiFetch(path, options = {}) {
     cabecalhos.set("Authorization", `Bearer ${token}`);
   }
 
-  const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "";
+  const caminho = baseUrl.endsWith("/api") && path.startsWith("/api/")
+    ? path.slice(4)
+    : path;
+  const resposta = await fetch(`${baseUrl}${caminho}`, {
     ...opcoes,
     headers: cabecalhos,
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),

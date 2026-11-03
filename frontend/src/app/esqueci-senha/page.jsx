@@ -10,20 +10,22 @@ export default function EsqueciSenhaPage() {
   const [email, setEmail] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [erro, setErro] = useState(false);
 
   async function enviarFormulario(event) {
     event.preventDefault();
     setEnviando(true);
+    setErro(false);
 
     try {
       await apiFetch("/api/usuarios/esqueci-senha", {
         method: "POST",
         body: { email },
       });
-    } catch {
-      // A resposta permanece neutra mesmo quando a solicitação falha.
-    } finally {
       setEnviado(true);
+    } catch {
+      setErro(true);
+    } finally {
       setEnviando(false);
     }
   }
@@ -36,6 +38,7 @@ export default function EsqueciSenhaPage() {
         </p>
       ) : (
         <form className={styles.form} onSubmit={enviarFormulario}>
+          {erro && <p className={styles.alert} role="alert">Não foi possível enviar as instruções agora. Tente novamente.</p>}
           <div className={styles.field}>
             <label className={styles.label} htmlFor="email">E-mail</label>
             <input

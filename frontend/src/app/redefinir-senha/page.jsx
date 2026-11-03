@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
 import styles from "@/components/auth/authForm.module.css";
@@ -14,7 +15,8 @@ function RedefinirSenhaContent() {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [erroConfirmacao, setErroConfirmacao] = useState("");
-  const [erroToken, setErroToken] = useState(false);
+  const [erroToken, setErroToken] = useState(!token);
+  const [erroServidor, setErroServidor] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
   async function enviarFormulario(event) {
@@ -35,8 +37,9 @@ function RedefinirSenhaContent() {
         body: { token, senha, confirmarSenha },
       });
       router.replace("/login");
-    } catch {
-      setErroToken(true);
+    } catch (error) {
+      if ([400, 404, 410].includes(error.status)) setErroToken(true);
+      else setErroServidor(true);
     } finally {
       setEnviando(false);
     }
@@ -45,9 +48,13 @@ function RedefinirSenhaContent() {
   return (
     <AuthLayout title="Redefinir senha" subtitle="Escolha uma nova senha para sua conta">
       {erroToken ? (
-        <p className={styles.alert} role="alert">Este link expirou. Peça um novo.</p>
+        <div className={styles.form}>
+          <p className={styles.alert} role="alert">Este link expirou. Peça um novo.</p>
+          <p className={styles.linkRow}><Link className={styles.linkStrong} href="/esqueci-senha">Solicitar novo link</Link></p>
+        </div>
       ) : (
         <form className={styles.form} onSubmit={enviarFormulario} noValidate>
+          {erroServidor && <p className={styles.alert} role="alert">Não foi possível redefinir a senha agora. Tente novamente.</p>}
           <div className={styles.field}>
             <label className={styles.label} htmlFor="senha">Nova senha</label>
             <input
@@ -56,7 +63,11 @@ function RedefinirSenhaContent() {
               name="senha"
               type="password"
               value={senha}
-              onChange={(event) => setSenha(event.target.value)}
+              onChange={(event) => {
+                setSenha(event.target.value);
+                setErroSenha(event.target.value.length < 8 ? "A senha deve ter pelo menos 8 caracteres." : "");
+                if (confirmarSenha) setErroConfirmacao(event.target.value !== confirmarSenha ? "As senhas não coincidem." : "");
+              }}
               aria-invalid={Boolean(erroSenha)}
             />
             {erroSenha && <span className={styles.fieldError}>{erroSenha}</span>}
@@ -69,7 +80,10 @@ function RedefinirSenhaContent() {
               name="confirmarSenha"
               type="password"
               value={confirmarSenha}
-              onChange={(event) => setConfirmarSenha(event.target.value)}
+              onChange={(event) => {
+                setConfirmarSenha(event.target.value);
+                setErroConfirmacao(senha !== event.target.value ? "As senhas não coincidem." : "");
+              }}
               aria-invalid={Boolean(erroConfirmacao)}
             />
             {erroConfirmacao && <span className={styles.fieldError}>{erroConfirmacao}</span>}

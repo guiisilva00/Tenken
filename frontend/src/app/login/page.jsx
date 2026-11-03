@@ -54,6 +54,7 @@ function LoginContent() {
             name="matricula"
             type="text"
             placeholder="MAT-XXXXX"
+            required
             value={matricula}
             onChange={(event) => {
               setMatricula(event.target.value);
