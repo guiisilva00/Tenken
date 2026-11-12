@@ -34,6 +34,10 @@ export default function PaginaChamadosTecnico() {
   const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
   const [atualizandoStatus, setAtualizandoStatus] = useState(false);
   const [descricaoServico, setDescricaoServico] = useState("");
+  const [pecasTrocadas, setPecasTrocadas] = useState("");
+  const [custoServico, setCustoServico] = useState("");
+  const [historico, setHistorico] = useState([]);
+  const [carregandoHistorico, setCarregandoHistorico] = useState(false);
   const [aviso, setAviso] = useState("");
 
   const carregar = useCallback(async () => {
@@ -80,8 +84,16 @@ export default function PaginaChamadosTecnico() {
   function abrirDetalhes(chamado) {
     setChamadoSelecionado(chamado);
     setDescricaoServico("");
+    setPecasTrocadas("");
+    setCustoServico("");
+    setHistorico([]);
+    setCarregandoHistorico(true);
     setErro("");
     setAviso("");
+    apiFetch(`/api/chamados/${chamado.id}/historico`)
+      .then((resposta) => setHistorico(Array.isArray(resposta?.dados) ? resposta.dados : []))
+      .catch((error) => setErro(error.message || "Não foi possível carregar o histórico."))
+      .finally(() => setCarregandoHistorico(false));
   }
 
   async function atualizarStatus(novoStatus) {
@@ -122,7 +134,7 @@ export default function PaginaChamadosTecnico() {
     try {
       await apiFetch(`/api/ordens-servico/${chamadoSelecionado.os_id}/concluir`, {
         method: "POST",
-        body: { descricao: descricaoServico },
+        body: { descricao: descricaoServico, pecas_trocadas: pecasTrocadas, custo: custoServico === "" ? 0 : Number(custoServico) },
       });
       setChamados((atuais) => atuais.filter((chamado) => chamado.os_id !== chamadoSelecionado.os_id));
       setChamadoSelecionado(null);
@@ -269,6 +281,19 @@ export default function PaginaChamadosTecnico() {
               <h3>Descrição</h3>
               <p>{chamadoSelecionado.descricao || "Sem descrição informada."}</p>
             </div>
+            <div className={styles.historico}>
+              <h3>Histórico de manutenção</h3>
+              {carregandoHistorico ? <p>Carregando histórico…</p> : historico.length === 0 ? <p>Nenhum serviço registrado anteriormente.</p> : (
+                <ul>{historico.map((item) => (
+                  <li key={item.id}>
+                    <strong>{formatarData(item.registrado_em)}</strong>
+                    <span>{item.descricao}</span>
+                    {item.pecas_trocadas && <small>Peças: {item.pecas_trocadas}</small>}
+                    {Number(item.custo) > 0 && <small>Custo: {Number(item.custo).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</small>}
+                  </li>
+                ))}</ul>
+              )}
+            </div>
             {chamadoSelecionado.status === "ABERTO" && (
               <div className={styles.modalAcoes}>
                 <button type="button" className={styles.botaoAcao} onClick={() => atualizarStatus("EM_ATENDIMENTO")} disabled={atualizandoStatus}>
@@ -281,6 +306,14 @@ export default function PaginaChamadosTecnico() {
                 <label className={styles.campoDescricaoServico}>
                   <span>Descrição do serviço realizado</span>
                   <textarea value={descricaoServico} onChange={(evento) => setDescricaoServico(evento.target.value)} rows={5} placeholder="Descreva o serviço realizado" required />
+                </label>
+                <label className={styles.campoComplementar}>
+                  <span>Peças trocadas (opcional)</span>
+                  <input value={pecasTrocadas} onChange={(evento) => setPecasTrocadas(evento.target.value)} placeholder="Ex.: cabo USB, fusível" />
+                </label>
+                <label className={styles.campoComplementar}>
+                  <span>Custo do serviço (R$)</span>
+                  <input type="number" min="0" step="0.01" value={custoServico} onChange={(evento) => setCustoServico(evento.target.value)} placeholder="0,00" />
                 </label>
                 <button type="button" className={styles.botaoAcao} onClick={concluirOrdem} disabled={atualizandoStatus || !descricaoServico.trim()}>
                   {atualizandoStatus ? "Concluindo..." : "Concluir ordem de serviço"}

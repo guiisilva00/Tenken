@@ -49,12 +49,22 @@
 .modalDescricao { padding-top: 16px; border-top: 1px solid var(--border-subtle); }
 .modalDescricao h3 { margin: 0 0 8px; color: var(--dust-grey); font-size: 12px; }
 .modalDescricao p { margin: 0; color: var(--silver); font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+.historico { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
+.historico h3 { margin: 0 0 10px; color: var(--dust-grey); font-size: 12px; }
+.historico p { margin: 0; color: var(--silver); font-size: 12px; }
+.historico ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.historico li { display: grid; gap: 5px; padding: 11px; background: var(--surface-lowest); border: 1px solid var(--border-subtle); border-radius: 4px; color: var(--silver); font-size: 12px; }
+.historico li strong { color: var(--white-smoke); font-size: 10px; }
+.historico li small { color: var(--dust-grey); }
 .erro { margin: 0 0 14px; padding: 12px 14px; color: var(--white-smoke); background: rgba(164, 22, 26, .18); border: 1px solid var(--mahogany-red-2); border-radius: 4px; font-size: 13px; }
 .aviso { margin: 0 0 14px; padding: 12px 14px; color: #bdd6c4; background: rgba(124, 155, 132, .14); border: 1px solid rgba(124, 155, 132, .45); border-radius: 4px; font-size: 13px; }
 .modalAcoes { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
 .campoDescricaoServico { display: grid; width: 100%; gap: 8px; color: var(--silver); font-size: 12px; font-weight: 700; }
 .campoDescricaoServico textarea { width: 100%; min-height: 120px; padding: 12px; resize: vertical; color: var(--white-smoke); background: var(--surface-lowest); border: 1px solid var(--border-subtle); border-radius: 4px; font: inherit; font-weight: 400; line-height: 1.5; }
 .campoDescricaoServico textarea:focus { outline: 1px solid var(--mahogany-red-2); }
+.campoComplementar { display: grid; width: 100%; gap: 8px; color: var(--silver); font-size: 12px; font-weight: 700; }
+.campoComplementar input { min-height: 40px; padding: 0 12px; color: var(--white-smoke); background: var(--surface-lowest); border: 1px solid var(--border-subtle); border-radius: 4px; font: inherit; font-weight: 400; }
+.campoComplementar input:focus { outline: 1px solid var(--mahogany-red-2); }
 .botaoAcao { min-height: 38px; padding: 0 14px; color: var(--white-smoke); background: var(--mahogany-red); border: 1px solid var(--mahogany-red-2); border-radius: 4px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; }
 .botaoAcao:hover:not(:disabled) { background: var(--mahogany-red-2); }
 .botaoAcao:disabled { cursor: wait; opacity: .7; }
