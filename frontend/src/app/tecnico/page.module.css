@@ -96,6 +96,14 @@
   font-size: 13px;
 }
 
+.alertaCritico { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; padding: 14px 16px; color: #ffb4ac; background: rgba(164, 22, 26, .2); border: 1px solid rgba(255, 180, 172, .38); border-left: 4px solid var(--mahogany-red-2); border-radius: 4px; text-decoration: none; transition: background .15s ease; }
+.alertaCritico:hover { background: rgba(164, 22, 26, .3); }
+.alertaCritico > .material-symbols-outlined { font-size: 23px; }
+.alertaCritico > span:nth-child(2) { display: grid; gap: 3px; }
+.alertaCritico strong { color: var(--white-smoke); font-size: 13px; }
+.alertaCritico small { color: #e4c9c5; font-size: 11px; }
+.alertaSeta { margin-left: auto; }
+
 @keyframes girar { to { transform: rotate(360deg); } }
 
 @media (max-width: 1200px) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import CartaoMetrica from "../admin/components/CartaoMetrica";
 import ResumoChamados from "./components/ResumoChamados";
@@ -123,6 +124,13 @@ export default function PaginaTecnico() {
           />
         ))}
       </section>
+      {criticos > 0 && (
+        <Link className={styles.alertaCritico} href="/tecnico/chamados" role="status">
+          <span className="material-symbols-outlined" aria-hidden="true">notification_important</span>
+          <span><strong>{criticos} {criticos === 1 ? "chamado crítico aguarda" : "chamados críticos aguardam"} atendimento</strong><small>Priorize a avaliação e abra a ordem de serviço.</small></span>
+          <span className={`material-symbols-outlined ${styles.alertaSeta}`} aria-hidden="true">arrow_forward</span>
+        </Link>
+      )}
       <ResumoChamados
         porStatus={status}
         porPrioridade={chamados?.por_severidade_em_aberto}
