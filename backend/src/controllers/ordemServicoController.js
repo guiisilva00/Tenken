@@ -32,7 +32,7 @@ export async function atualizarStatus(req, res, next) {
 
 export async function concluir(req, res, next) {
   try {
-    const ordemServico = await OrdemServicoService.concluir(req.params.id, req.body.descricao, req.usuario);
+    const ordemServico = await OrdemServicoService.concluir(req.params.id, req.body, req.usuario);
     return res.status(200).json({ sucesso: true, dados: ordemServico });
   } catch (erro) { return responderErro(erro, res, next); }
 }

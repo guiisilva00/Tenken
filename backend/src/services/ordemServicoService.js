@@ -83,8 +83,10 @@ export async function atualizarStatus(idRecebido, status) {
   return await OrdemServicoModel.buscarPorId(id);
 }
 
-export async function concluir(idRecebido, descricao, usuarioLogado) {
+export async function concluir(idRecebido, dadosServico, usuarioLogado) {
   const id = validarId(idRecebido);
+  const dados = typeof dadosServico === "string" ? { descricao: dadosServico } : (dadosServico || {});
+  const { descricao } = dados;
   if (typeof descricao !== "string" || descricao.trim() === "") {
     throw new TypeError("Descreva o serviço realizado para concluir a ordem.");
   }
@@ -103,7 +105,11 @@ export async function concluir(idRecebido, descricao, usuarioLogado) {
     throw erro;
   }
 
-  await HistoricoManutencaoService.criar(ordemServico.chamado_id, { descricao }, usuarioLogado);
+  await HistoricoManutencaoService.criar(ordemServico.chamado_id, {
+    descricao,
+    pecas_trocadas: dados.pecas_trocadas,
+    custo: dados.custo,
+  }, usuarioLogado);
   await ChamadoService.atualizarStatus(ordemServico.chamado_id, "CONCLUIDO", usuarioLogado);
   return await OrdemServicoModel.buscarPorId(id);
 }
