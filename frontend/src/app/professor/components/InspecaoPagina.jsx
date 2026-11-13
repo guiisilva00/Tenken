@@ -46,7 +46,7 @@ export function InspecaoPendentePagina() {
   async function salvar(formulario) {
     setSalvando(true);
     try {
-      const resultado = await registrarInspecao({ agendamentoId: item.agendamentoId, etapa: item.etapa, respostas: formulario.respostas, observacoes: formulario.observacoes });
+      const resultado = await registrarInspecao({ agendamentoId: item.agendamentoId, etapa: item.etapa, respostas: formulario.respostas, observacoes: formulario.observacoes, chamadoDescricao: formulario.chamadoDescricao, chamadoSeveridade: formulario.chamadoSeveridade });
       router.replace(`/professor/inspecoes/registro/${resultado.id}`);
       return { ok: true };
     } catch (e) {
@@ -126,7 +126,7 @@ export function RegistroInspecaoPagina() {
         {!item.chamadoId && <p>O equipamento e o histórico desta inspeção serão vinculados ao chamado.</p>}
       </div>
       {item.chamadoId
-        ? <a className={styles.abrirChamado} href={`/professor/chamados#chamado-${item.chamadoId}`}>Abrir chamado</a>
+        ? <a className={styles.abrirChamado} href={`/professor/chamados#chamado-${item.chamadoId}`}>Ver chamado</a>
         : !abrindoChamado
           ? <button className={styles.abrirChamado} type="button" onClick={() => setAbrindoChamado(true)}>Abrir chamado</button>
           : <form className={styles.formularioChamado} onSubmit={salvarChamado}>
