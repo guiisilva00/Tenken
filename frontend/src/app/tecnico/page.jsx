@@ -26,8 +26,8 @@ export default function PaginaTecnico() {
   const usuario = getUsuario();
   const primeiroNome = usuario?.nome?.split(" ")[0] || "técnico";
 
-  const carregar = useCallback(async () => {
-    setCarregando(true);
+  const carregar = useCallback(async ({ silencioso = false } = {}) => {
+    if (!silencioso) setCarregando(true);
     setErro("");
     try {
       const resposta = await apiFetch("/api/tecnico/dashboard");
@@ -36,12 +36,24 @@ export default function PaginaTecnico() {
     } catch (error) {
       setErro(error.message || "Não foi possível carregar os indicadores.");
     } finally {
-      setCarregando(false);
+      if (!silencioso) setCarregando(false);
     }
   }, []);
 
   useEffect(() => {
     carregar();
+    const atualizarPeriodicamente = () => carregar({ silencioso: true });
+    const aoAlterarVisibilidade = () => {
+      if (document.visibilityState === "visible") atualizarPeriodicamente();
+    };
+    const intervalo = window.setInterval(atualizarPeriodicamente, 30000);
+    window.addEventListener("focus", atualizarPeriodicamente);
+    document.addEventListener("visibilitychange", aoAlterarVisibilidade);
+    return () => {
+      window.clearInterval(intervalo);
+      window.removeEventListener("focus", atualizarPeriodicamente);
+      document.removeEventListener("visibilitychange", aoAlterarVisibilidade);
+    };
   }, [carregar]);
 
   const chamados = dashboard?.chamados;
