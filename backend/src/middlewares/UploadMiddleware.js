@@ -12,13 +12,30 @@ const storage = multer.diskStorage({
   filename: (_req, file, cb) => cb(null, `${randomUUID()}${extname(file.originalname).toLowerCase()}`),
 });
 
-export const uploadEvidencia = multer({
+const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: 2 * 1024 * 1024, files: 30 },
   fileFilter: (_req, file, cb) => {
     if (!MIME_TYPES_VALIDOS.includes(file.mimetype)) {
-      return cb(new TypeError("Formato de imagem inválido. Use JPEG, PNG ou WebP."));
+      const erro = new Error("Envie uma imagem JPEG, PNG ou WebP.");
+      erro.status = 415;
+      return cb(erro);
     }
     return cb(null, true);
   },
-}).single("foto");
+});
+
+export function uploadEvidencias(req, res, next) {
+  upload.any()(req, res, (erro) => {
+    if (erro instanceof multer.MulterError && erro.code === "LIMIT_FILE_SIZE") {
+      erro.status = 413;
+      erro.message = "Cada imagem pode ter no máximo 2 MB.";
+    }
+    if (erro instanceof multer.MulterError && erro.code === "LIMIT_FILE_COUNT") {
+      erro.status = 413;
+      erro.message = "Envie no máximo 30 imagens por inspeção.";
+    }
+    if (erro) return next(erro);
+    return next();
+  });
+}

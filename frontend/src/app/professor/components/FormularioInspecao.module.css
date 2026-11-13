@@ -3,6 +3,12 @@
     gap: 15.4px;
 }
 
+.campoFoto { display: grid; gap: 7px; color: #e5dfdf; font-size: 12px; }
+.campoFoto > span:first-child { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.campoFoto small { color: #b1a7a6; font: 9px ui-monospace, monospace; }
+.campoFoto input { width: 100%; min-height: 42px; padding: 8px; border: 1px dashed rgba(245,243,244,.2); border-radius: 9px; background: #101214; color: #c0b7b8; font: inherit; }
+.nomeFoto { overflow-wrap: anywhere; color: #91bda4; }
+
 .aviso {
     margin: 0;
     padding: 9.9px 12.1px;

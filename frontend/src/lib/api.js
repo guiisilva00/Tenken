@@ -9,7 +9,9 @@ export async function apiFetch(path, options = {}) {
     ? path.slice(4)
     : path;
 
-  if (body !== undefined) {
+  const enviarComoFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
+  if (body !== undefined && !enviarComoFormData) {
     cabecalhos.set("Content-Type", "application/json");
   }
 
@@ -20,7 +22,7 @@ export async function apiFetch(path, options = {}) {
   const resposta = await fetch(`${apiUrl}${caminho}`, {
     ...opcoes,
     headers: cabecalhos,
-    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+    ...(body !== undefined ? { body: enviarComoFormData ? body : JSON.stringify(body) } : {}),
   });
 
   let dados = null;

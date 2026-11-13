@@ -6,6 +6,7 @@ import * as ChecklistModeloModel from "../models/ChecklistModeloModel.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 import * as InspecaoModel from "../models/InspecaoModel.js";
 import { pool } from "../config/Database.js";
+import { basename } from "node:path";
 
 export async function listar(professorId) {
   const pendentes = await InspecaoModel.listarPendentes(professorId);
@@ -98,7 +99,7 @@ export async function abrirChamadoDeInspecao(idRecebido, dados, usuario) {
   }
 }
 
-export async function registrar(dados, usuario) {
+export async function registrar(dados, usuario, arquivos = []) {
   const agendamentoId = Number(dados.agendamentoId);
   const { etapa } = dados;
   if (!Number.isInteger(agendamentoId) || agendamentoId <= 0 || !["PRE_USO", "POS_USO"].includes(etapa)) {
@@ -124,6 +125,19 @@ export async function registrar(dados, usuario) {
     .map((resposta) => [Number(resposta.itemId), resposta]));
   if (!itens.length || itens.some((item) => typeof respostas.get(item.id)?.conforme !== "boolean")) {
     throw new TypeError("Responda todos os itens do checklist.");
+  }
+
+  const fotosPorItem = new Map();
+  for (const arquivo of arquivos) {
+    const correspondencia = /^foto_(\d+)$/.exec(arquivo.fieldname);
+    const itemId = correspondencia ? Number(correspondencia[1]) : NaN;
+    if (!Number.isInteger(itemId) || !respostas.has(itemId) || !itens.some((item) => item.id === itemId)) {
+      throw new TypeError("A foto enviada nÃ£o corresponde a um item deste checklist.");
+    }
+    if (fotosPorItem.has(itemId)) {
+      throw new TypeError("Envie no mÃ¡ximo uma foto por item do checklist.");
+    }
+    fotosPorItem.set(itemId, `/uploads/inspecoes/${basename(arquivo.filename)}`);
   }
 
   const reprovada = itens.some((item) => item.critico && !respostas.get(item.id).conforme);
@@ -155,6 +169,7 @@ export async function registrar(dados, usuario) {
       item_id: item.id,
       conforme: respostas.get(item.id).conforme,
       observacao: respostas.get(item.id).observacao || null,
+      caminho_foto: fotosPorItem.get(item.id) || null,
     })), conexao);
 
     await EquipamentoModel.atualizarStatus(

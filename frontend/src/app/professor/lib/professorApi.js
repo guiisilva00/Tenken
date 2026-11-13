@@ -8,4 +8,20 @@ export async function listarInspecoes(){return (await apiFetch("/api/inspecoes")
 export async function listarChamadosProfessor(situacao){const query=situacao?`?situacao=${encodeURIComponent(situacao)}`:"";return (await apiFetch(`/api/chamados/professor${query}`))?.dados??[];}
 export async function abrirChamadoInspecao(id,dados){return (await apiFetch(`/api/inspecoes/${id}/chamado`,{method:"POST",body:dados}))?.dados;}
 export async function buscarRespostasInspecao(id){return (await apiFetch(`/api/inspecoes/${id}/respostas`))?.dados??[];}
-export async function registrarInspecao(dados){return (await apiFetch("/api/inspecoes",{method:"POST",body:dados}))?.dados;}
+export async function registrarInspecao(dados){
+  const respostas = (dados.respostas || []).map(({ foto, ...resposta }) => resposta);
+  const fotos = (dados.respostas || []).filter((resposta) => typeof File !== "undefined" && resposta.foto instanceof File);
+  if (!fotos.length) {
+    return (await apiFetch("/api/inspecoes",{method:"POST",body:{...dados,respostas}}))?.dados;
+  }
+
+  const formulario = new FormData();
+  formulario.append("dados", JSON.stringify({...dados,respostas}));
+  for (const resposta of fotos) formulario.append(`foto_${resposta.itemId}`, resposta.foto);
+  return (await apiFetch("/api/inspecoes",{method:"POST",body:formulario}))?.dados;
+}
+
+export function urlEvidencia(caminho){
+  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/$/, "");
+  return `${apiUrl.replace(/\/api$/, "")}${caminho}`;
+}
