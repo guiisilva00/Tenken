@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { abrirChamadoInspecao, buscarRespostasInspecao, listarInspecoes, registrarInspecao } from "../lib/professorApi";
+import { abrirChamadoInspecao, buscarRespostasInspecao, listarInspecoes, registrarInspecao, urlEvidencia } from "../lib/professorApi";
 import FormularioInspecao from "./FormularioInspecao";
 import styles from "./InspecaoPagina.module.css";
 
@@ -46,7 +46,7 @@ export function InspecaoPendentePagina() {
   async function salvar(formulario) {
     setSalvando(true);
     try {
-      const resultado = await registrarInspecao({ agendamentoId: item.agendamentoId, etapa: item.etapa, respostas: formulario.respostas, observacoes: formulario.observacoes });
+      const resultado = await registrarInspecao({ agendamentoId: item.agendamentoId, etapa: item.etapa, respostas: formulario.respostas, observacoes: formulario.observacoes, chamadoDescricao: formulario.chamadoDescricao, chamadoSeveridade: formulario.chamadoSeveridade });
       router.replace(`/professor/inspecoes/registro/${resultado.id}`);
       return { ok: true };
     } catch (e) {
@@ -137,6 +137,13 @@ export function RegistroInspecaoPagina() {
           </form>}
     </section>}
     {item.observacoes && <section className={styles.observacoes}><h2>Observações</h2><p>{item.observacoes}</p></section>}
+    {respostas.some((resposta) => resposta.caminhoFoto) && <section className={styles.observacoes}>
+      <h2>Evidências fotográficas</h2>
+      {respostas.filter((resposta) => resposta.caminhoFoto).map((resposta) => <a style={{ display: "grid", width: "min(100%, 320px)", gap: 7, marginBottom: 16, color: "#c0b7b8", fontSize: 12 }} href={urlEvidencia(resposta.caminhoFoto)} target="_blank" rel="noreferrer" key={resposta.itemId}>
+        <img style={{ display: "block", width: "100%", maxHeight: 240, objectFit: "contain", border: "1px solid rgba(245,243,244,.12)", borderRadius: 9, background: "#101214" }} src={urlEvidencia(resposta.caminhoFoto)} alt={`Evidência fotográfica: ${resposta.texto}`} />
+        <span>{resposta.texto}</span>
+      </a>)}
+    </section>}
     <section className={styles.listaResposta}>
       <div className={styles.tituloSecao}><h2>Itens avaliados</h2><span>{respostas.length} itens</span></div>
       {respostas.map((r, index) => <article className={`${styles.resposta} ${!r.conforme ? styles.respostaFalha : ""}`} key={r.itemId}>
