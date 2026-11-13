@@ -14,12 +14,25 @@ const PRIORIDADES = [
   { chave: "BAIXA", rotulo: "Baixa", tom: "baixa" },
 ];
 
+const CATEGORIAS_EQUIPAMENTO = [
+  { chave: "BANCADA", rotulo: "Bancadas" },
+  { chave: "ROBO", rotulo: "Robôs" },
+];
+
+const STATUS_EQUIPAMENTO = [
+  { chave: "DISPONIVEL", rotulo: "Disponíveis", tom: "disponivel" },
+  { chave: "RESERVADO", rotulo: "Reservados", tom: "reservado" },
+  { chave: "EM_USO", rotulo: "Em uso", tom: "emUso" },
+  { chave: "EM_MANUTENCAO", rotulo: "Em manutenção", tom: "manutencao" },
+  { chave: "INATIVO", rotulo: "Inativos", tom: "inativo" },
+];
+
 function quantidadePorChave(itens, chave, valor) {
   if (!Array.isArray(itens)) return 0;
   return Number(itens.find((item) => item[chave] === valor)?.total ?? 0);
 }
 
-export default function ResumoChamados({ porStatus, porPrioridade, carregando }) {
+export default function ResumoChamados({ porStatus, porPrioridade, porCategoria, carregando }) {
   const totalStatus = STATUS.reduce((total, item) => total + quantidadePorChave(porStatus, "status", item.chave), 0);
   const totalPrioridade = PRIORIDADES.reduce((total, item) => total + quantidadePorChave(porPrioridade, "severidade", item.chave), 0);
 
@@ -97,6 +110,48 @@ export default function ResumoChamados({ porStatus, porPrioridade, carregando })
           </div>
         )}
         <p className={styles.rodape}>{carregando ? "Atualizando dados" : `${totalPrioridade} chamados aguardam atendimento`}</p>
+      </article>
+
+      <article className={`${styles.painel} ${styles.painelCategorias}`}>
+        <header className={styles.cabecalho}>
+          <div>
+            <p className={styles.sobretitulo}>Condição dos ativos</p>
+            <h2 className={styles.titulo}>Equipamentos por categoria</h2>
+          </div>
+          <span className={`material-symbols-outlined ${styles.icone}`} aria-hidden="true">precision_manufacturing</span>
+        </header>
+        <div className={styles.categorias}>
+          {CATEGORIAS_EQUIPAMENTO.map((categoria) => {
+            const dadosCategoria = porCategoria?.find((item) => item.tipo === categoria.chave);
+            const total = STATUS_EQUIPAMENTO.reduce((soma, item) => soma + quantidadePorChave(dadosCategoria?.por_status, "status", item.chave), 0);
+            return (
+              <section className={styles.categoria} key={categoria.chave}>
+                <div className={styles.tituloCategoria}><strong>{categoria.rotulo}</strong><span>{total} {total === 1 ? "equipamento" : "equipamentos"}</span></div>
+                {total === 0 ? (
+                  <p className={styles.estadoCategoria}>{carregando ? "Carregando…" : "Nenhum equipamento cadastrado"}</p>
+                ) : (
+                  <div className={styles.lista}>
+                    {STATUS_EQUIPAMENTO.map((item) => {
+                      const quantidade = quantidadePorChave(dadosCategoria?.por_status, "status", item.chave);
+                      return (
+                        <div className={styles.linha} key={item.chave}>
+                          <div className={styles.rotuloLinha}>
+                            <span className={`${styles.ponto} ${styles[item.tom]}`} />
+                            <span>{item.rotulo}</span><strong>{quantidade}</strong>
+                          </div>
+                          <div className={styles.trilho} aria-label={`${categoria.rotulo} ${item.rotulo}: ${quantidade}`}>
+                            <span className={`${styles.preenchimento} ${styles[item.tom]}`} style={{ width: `${(quantidade / total) * 100}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
+        <p className={styles.rodape}>{carregando ? "Atualizando dados" : "Status atual do inventário do laboratório"}</p>
       </article>
     </section>
   );

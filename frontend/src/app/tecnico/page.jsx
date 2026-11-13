@@ -134,6 +134,7 @@ export default function PaginaTecnico() {
       <ResumoChamados
         porStatus={status}
         porPrioridade={chamados?.por_severidade_em_aberto}
+        porCategoria={dashboard?.equipamentos?.por_categoria}
         carregando={carregando}
       />
     </div>

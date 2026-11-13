@@ -75,10 +75,22 @@
 .atendimento { background: var(--mahogany-red-2, #ba181b); }
 .pecas { background: #aa8986; }
 .concluido { background: #7c9b84; }
+.disponivel { background: #7c9b84; }
+.reservado { background: #e0bd72; }
+.emUso { background: #748a9b; }
+.manutencao { background: var(--mahogany-red-2, #ba181b); }
+.inativo { background: #777; }
 .critica { background: #ff8d85; }
 .alta { background: var(--mahogany-red-2, #ba181b); }
 .media { background: #aa8986; }
 .baixa { background: #748a9b; }
+
+.painelCategorias { grid-column: 1 / -1; }
+.categorias { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; padding: 18px 0 16px; }
+.categoria { min-width: 0; }
+.tituloCategoria { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; color: var(--white-smoke, #f5f3f4); font-size: 14px; }
+.tituloCategoria span { color: var(--silver, #b1a7a6); font-size: 12px; }
+.estadoCategoria { display: grid; min-height: 110px; margin: 0; place-items: center; color: var(--silver, #b1a7a6); font-size: 13px; text-align: center; }
 
 .rodape {
   margin: 0;
@@ -89,4 +101,5 @@
 }
 
 @media (max-width: 760px) { .grade { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .painelCategorias { grid-column: auto; } .categorias { grid-template-columns: 1fr; gap: 14px; } }
 @media (max-width: 560px) { .painel { padding: 18px 16px 15px; } }
