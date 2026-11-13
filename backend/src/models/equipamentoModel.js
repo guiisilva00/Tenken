@@ -85,6 +85,13 @@ export async function contarPorStatus(tipo) {
   return linhas;
 }
 
+export async function contarPorTipoEStatus() {
+  const [linhas] = await pool.query(
+    "SELECT tipo, status, COUNT(*) AS total FROM equipamentos GROUP BY tipo, status",
+  );
+  return linhas;
+}
+
 export async function contarTotal() {
   const [[{ total }]] = await pool.query("SELECT COUNT(*) AS total FROM equipamentos");
   return Number(total);

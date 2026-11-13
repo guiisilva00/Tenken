@@ -2,12 +2,20 @@ import * as ChamadoModel from "../models/chamadoModel.js";
 import * as EquipamentoModel from "../models/equipamentoModel.js";
 
 export async function gerar(tecnicoId) {
-  const [chamados, equipamentosPorStatus] = await Promise.all([
+  const [chamados, equipamentosPorCategoria] = await Promise.all([
     ChamadoModel.resumoTecnico(tecnicoId),
-    EquipamentoModel.contarPorStatus(),
+    EquipamentoModel.contarPorTipoEStatus(),
   ]);
 
-  const emManutencao = equipamentosPorStatus.find((item) => item.status === "EM_MANUTENCAO");
+  const categorias = ["BANCADA", "ROBO"].map((tipo) => ({
+    tipo,
+    por_status: equipamentosPorCategoria
+      .filter((item) => item.tipo === tipo)
+      .map((item) => ({ status: item.status, total: Number(item.total) })),
+  }));
+  const emManutencao = equipamentosPorCategoria
+    .filter((item) => item.status === "EM_MANUTENCAO")
+    .reduce((total, item) => total + Number(item.total), 0);
 
   return {
     chamados: {
@@ -16,6 +24,6 @@ export async function gerar(tecnicoId) {
       abertos_por_dia: chamados.abertosPorDia,
       concluidos_por_dia: chamados.concluidosPorDia,
     },
-    equipamentos: { em_manutencao: Number(emManutencao?.total ?? 0) },
+    equipamentos: { em_manutencao: emManutencao, por_categoria: categorias },
   };
 }
