@@ -32,8 +32,8 @@
 .resumo { display: -webkit-box; margin: 0; overflow: hidden; color: var(--silver); font-size: 12px; line-height: 1.5; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .detalhes { display: flex; flex-wrap: wrap; gap: 8px 22px; padding-top: 10px; color: var(--silver); border-top: 1px solid var(--border-subtle); font-size: 10px; }
 .detalhes strong { margin-right: 5px; color: var(--dust-grey); font-weight: 600; }
-.botaoDetalhes { display: inline-flex; width: fit-content; align-items: center; gap: 6px; padding: 7px 10px; color: var(--white-smoke); background: var(--surface-high); border: 1px solid var(--border-subtle); border-radius: 4px; cursor: pointer; font: inherit; font-size: 11px; font-weight: 700; }
-.botaoDetalhes:hover { background: var(--surface-highest); }
+.botaoDetalhes { display: inline-flex; width: fit-content; align-items: center; gap: 6px; padding: 7px 10px; color: var(--white-smoke); background: var(--mahogany-red); border: 1px solid var(--mahogany-red-2); border-radius: 4px; cursor: pointer; font: inherit; font-size: 11px; font-weight: 700; transition: background .15s ease; }
+.botaoDetalhes:hover { background: var(--mahogany-red-2); }
 .botaoDetalhes .material-symbols-outlined { font-size: 16px; }
 .modalFundo { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(0, 0, 0, .72); }
 .modal { width: min(100%, 620px); max-height: min(85vh, 720px); overflow-y: auto; padding: 22px; color: var(--white-smoke); background: var(--surface-low, #181c1f); border: 1px solid var(--border-subtle); border-radius: 6px; box-shadow: 0 18px 60px rgba(0, 0, 0, .42); }
