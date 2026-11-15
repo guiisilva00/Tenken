@@ -32,7 +32,10 @@ export async function criar({ nome, professor_id }) {
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT id, nome, professor_id, token_acesso FROM turmas_projetos WHERE id = ?", [id]);
+  const [linhas] = await pool.query(
+    "SELECT id, nome, professor_id, token_acesso FROM turmas_projetos WHERE id = ?",
+    [id],
+  );
   return linhas[0] || null;
 }
 

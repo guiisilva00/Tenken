@@ -37,7 +37,9 @@ function LoginContent() {
 
       const destino = destinosPorPerfil[resultado.dados.usuario?.perfil];
       if (!destino) {
-        setAlerta("Esta conta não tem acesso ao login de usuários. Procure a coordenação.");
+        setAlerta(
+          "Esta conta não tem acesso ao login de usuários. Procure a coordenação.",
+        );
         return;
       }
 
@@ -48,7 +50,10 @@ function LoginContent() {
         401: "Matrícula ou senha inválidas",
         403: "Conta inativa. Procure a coordenação.",
       };
-      setAlerta(mensagens[error.status] ?? "Não foi possível entrar agora. Tente de novo.");
+      setAlerta(
+        mensagens[error.status] ??
+          "Não foi possível entrar agora. Tente de novo.",
+      );
     } finally {
       setEnviando(false);
     }
@@ -56,14 +61,22 @@ function LoginContent() {
 
   return (
     <AuthLayout title="Entrar" subtitle="Acesse com sua matrícula e senha">
-      {cadastroConcluido && <p className={styles.success}>Conta criada. Faça login.</p>}
+      {cadastroConcluido && (
+        <p className={styles.success}>Conta criada. Faça login.</p>
+      )}
       <Link className={styles.backHome} href="/">
         <span aria-hidden="true">←</span> Início
       </Link>
       <form className={styles.form} onSubmit={enviarFormulario}>
-        {alerta && <p className={styles.alert} role="alert">{alerta}</p>}
+        {alerta && (
+          <p className={styles.alert} role="alert">
+            {alerta}
+          </p>
+        )}
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="matricula">Matrícula</label>
+          <label className={styles.label} htmlFor="matricula">
+            Matrícula
+          </label>
           <input
             className={styles.input}
             id="matricula"
@@ -79,7 +92,9 @@ function LoginContent() {
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="senha">Senha</label>
+          <label className={styles.label} htmlFor="senha">
+            Senha
+          </label>
           <div className={styles.passwordField}>
             <input
               className={`${styles.input} ${styles.passwordInput}`}
@@ -117,7 +132,10 @@ function LoginContent() {
           {enviando ? "Entrando" : "Entrar"}
         </button>
         <p className={styles.linkRow}>
-          Ainda não tem matrícula? <Link className={styles.linkStrong} href="/cadastro">Cadastre-se</Link>
+          Ainda não tem matrícula?{" "}
+          <Link className={styles.linkStrong} href="/cadastro">
+            Cadastre-se
+          </Link>
         </p>
       </form>
     </AuthLayout>

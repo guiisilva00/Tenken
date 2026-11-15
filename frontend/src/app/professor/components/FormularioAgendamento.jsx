@@ -8,7 +8,16 @@ function dataLocalISO() {
   return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 }
 
-export default function FormularioAgendamento({ dataInicial, horarioInicial = "09:00", fimInicial = "10:00", equipamentoInicial = "", turmas, equipamentos, onCreate, onCancel }) {
+export default function FormularioAgendamento({
+  dataInicial,
+  horarioInicial = "09:00",
+  fimInicial = "10:00",
+  equipamentoInicial = "",
+  turmas,
+  equipamentos,
+  onCreate,
+  onCancel,
+}) {
   const [form, setForm] = useState({
     atividade: "",
     data: dataInicial,
@@ -27,7 +36,14 @@ export default function FormularioAgendamento({ dataInicial, horarioInicial = "0
 
   async function enviar(evento) {
     evento.preventDefault();
-    if (!form.atividade.trim() || !form.data || !form.inicio || !form.fim || !form.turmaId || !form.equipamentoId) {
+    if (
+      !form.atividade.trim() ||
+      !form.data ||
+      !form.inicio ||
+      !form.fim ||
+      !form.turmaId ||
+      !form.equipamentoId
+    ) {
       setErro("Preencha todos os campos para continuar.");
       return;
     }
@@ -64,24 +80,52 @@ export default function FormularioAgendamento({ dataInicial, horarioInicial = "0
     <form className={styles.formulario} onSubmit={enviar} noValidate>
       <label className={styles.campo} htmlFor="atividade-reserva">
         <span>Atividade</span>
-        <input id="atividade-reserva" value={form.atividade} onChange={(evento) => alterar("atividade", evento.target.value)} maxLength={120} placeholder="Ex.: Prática de robótica" autoFocus />
+        <input
+          id="atividade-reserva"
+          value={form.atividade}
+          onChange={(evento) => alterar("atividade", evento.target.value)}
+          maxLength={120}
+          placeholder="Ex.: Prática de robótica"
+          autoFocus
+        />
       </label>
 
       <label className={styles.campo} htmlFor="turma-reserva">
         <span>Turma ou projeto</span>
-        <select id="turma-reserva" value={form.turmaId} onChange={(evento) => alterar("turmaId", evento.target.value)}>
+        <select
+          id="turma-reserva"
+          value={form.turmaId}
+          onChange={(evento) => alterar("turmaId", evento.target.value)}
+        >
           <option value="">Selecione uma turma</option>
-          {turmas.map((turma) => <option key={turma.id} value={turma.id}>{turma.nome}</option>)}
+          {turmas.map((turma) => (
+            <option key={turma.id} value={turma.id}>
+              {turma.nome}
+            </option>
+          ))}
         </select>
       </label>
 
       <label className={styles.campo} htmlFor="equipamento-reserva">
         <span>Equipamento</span>
-        <select id="equipamento-reserva" value={form.equipamentoId} onChange={(evento) => alterar("equipamentoId", evento.target.value)}>
+        <select
+          id="equipamento-reserva"
+          value={form.equipamentoId}
+          onChange={(evento) => alterar("equipamentoId", evento.target.value)}
+        >
           <option value="">Selecione um equipamento</option>
           {equipamentos.map((equipamento) => (
-            <option key={equipamento.id} value={equipamento.id} disabled={["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status)}>
-              {equipamento.nome}{["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status) ? " · indisponível" : ""}
+            <option
+              key={equipamento.id}
+              value={equipamento.id}
+              disabled={["EM_MANUTENCAO", "INATIVO"].includes(
+                equipamento.status,
+              )}
+            >
+              {equipamento.nome}
+              {["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status)
+                ? " · indisponível"
+                : ""}
             </option>
           ))}
         </select>
@@ -89,18 +133,53 @@ export default function FormularioAgendamento({ dataInicial, horarioInicial = "0
 
       <label className={styles.campo} htmlFor="data-reserva">
         <span>Data</span>
-        <input id="data-reserva" type="date" min={dataLocalISO()} value={form.data} onChange={(evento) => alterar("data", evento.target.value)} />
+        <input
+          id="data-reserva"
+          type="date"
+          min={dataLocalISO()}
+          value={form.data}
+          onChange={(evento) => alterar("data", evento.target.value)}
+        />
       </label>
 
       <div className={styles.horarios}>
-        <label className={styles.campo} htmlFor="inicio-reserva"><span>Início</span><input id="inicio-reserva" type="time" value={form.inicio} onChange={(evento) => alterar("inicio", evento.target.value)} /></label>
-        <label className={styles.campo} htmlFor="fim-reserva"><span>Término</span><input id="fim-reserva" type="time" value={form.fim} onChange={(evento) => alterar("fim", evento.target.value)} /></label>
+        <label className={styles.campo} htmlFor="inicio-reserva">
+          <span>Início</span>
+          <input
+            id="inicio-reserva"
+            type="time"
+            value={form.inicio}
+            onChange={(evento) => alterar("inicio", evento.target.value)}
+          />
+        </label>
+        <label className={styles.campo} htmlFor="fim-reserva">
+          <span>Término</span>
+          <input
+            id="fim-reserva"
+            type="time"
+            value={form.fim}
+            onChange={(evento) => alterar("fim", evento.target.value)}
+          />
+        </label>
       </div>
 
-      {erro && <p className={styles.erro} role="alert">{erro}</p>}
+      {erro && (
+        <p className={styles.erro} role="alert">
+          {erro}
+        </p>
+      )}
       <div className={styles.acoes}>
-        <button className={styles.secundario} type="button" onClick={onCancel} disabled={enviando}>Voltar</button>
-        <button className={styles.primario} type="submit" disabled={enviando}>{enviando ? "Salvando…" : "Criar agendamento"}</button>
+        <button
+          className={styles.secundario}
+          type="button"
+          onClick={onCancel}
+          disabled={enviando}
+        >
+          Voltar
+        </button>
+        <button className={styles.primario} type="submit" disabled={enviando}>
+          {enviando ? "Salvando…" : "Criar agendamento"}
+        </button>
       </div>
     </form>
   );

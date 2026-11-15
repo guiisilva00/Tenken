@@ -50,38 +50,80 @@ export default function AdminLayout({ children }) {
   return (
     <div className={styles.wrapper} data-admin-shell>
       {/* Persistent Technical Sidebar */}
-      <BarraLateral statusApi={statusApi} aberta={menuAberto} onNavegar={() => setMenuAberto(false)} onFechar={() => setMenuAberto(false)} />
-      {menuAberto && <button type="button" className={styles.backdrop} aria-label="Fechar menu" onClick={() => setMenuAberto(false)} />}
+      <BarraLateral
+        statusApi={statusApi}
+        aberta={menuAberto}
+        onNavegar={() => setMenuAberto(false)}
+        onFechar={() => setMenuAberto(false)}
+      />
+      {menuAberto && (
+        <button
+          type="button"
+          className={styles.backdrop}
+          aria-label="Fechar menu"
+          onClick={() => setMenuAberto(false)}
+        />
+      )}
 
       {/* Main Administrative Spine */}
       <div className={styles.contentSpine}>
         {/* Fixed Technical Topbar */}
         <header className={styles.topbar} data-admin-navigation>
-          <button type="button" className={styles.menuBtn} onClick={() => setMenuAberto(true)} aria-label="Abrir menu" aria-expanded={menuAberto}>
+          <button
+            type="button"
+            className={styles.menuBtn}
+            onClick={() => setMenuAberto(true)}
+            aria-label="Abrir menu"
+            aria-expanded={menuAberto}
+          >
             <span className="material-symbols-outlined">menu</span>
           </button>
 
           <nav className={styles.breadcrumb} aria-label="Localização atual">
-              <span>TENKEN</span>
-              <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-              <span>Administração</span>
-              <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-              <strong className={styles.breadcrumbCurrent}>{tituloPagina}</strong>
+            <span>TENKEN</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              chevron_right
+            </span>
+            <span>Administração</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              chevron_right
+            </span>
+            <strong className={styles.breadcrumbCurrent}>{tituloPagina}</strong>
           </nav>
 
           <div className={styles.topbarRight}>
             <div className={styles.userBadge}>
               <div className={styles.userAvatar}>
-                <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>person</span>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: "18px" }}
+                >
+                  person
+                </span>
               </div>
               <div className={styles.userInfo}>
-                <span className={styles.userName}>{usuario?.nome || usuario?.matricula || "Operador"}</span>
+                <span className={styles.userName}>
+                  {usuario?.nome || usuario?.matricula || "Operador"}
+                </span>
                 <span className={styles.userRole}>ADMINISTRADOR</span>
               </div>
             </div>
 
-            <button type="button" className={styles.logoutBtn} onClick={sair} aria-label="Sair da sessão">
-              <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--status-critical, #ef4444)" }}>power_settings_new</span>
+            <button
+              type="button"
+              className={styles.logoutBtn}
+              onClick={sair}
+              aria-label="Sair da sessão"
+            >
+              <span
+                className="material-symbols-outlined"
+                style={{
+                  fontSize: "18px",
+                  color: "var(--status-critical, #ef4444)",
+                }}
+              >
+                power_settings_new
+              </span>
               <span>Sair</span>
             </button>
           </div>
@@ -89,7 +131,9 @@ export default function AdminLayout({ children }) {
 
         {/* Page Main View */}
         <main className={styles.mainView}>
-          {typeof children === "function" ? children({ token, usuario }) : children}
+          {typeof children === "function"
+            ? children({ token, usuario })
+            : children}
         </main>
       </div>
     </div>

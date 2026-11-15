@@ -27,9 +27,13 @@ export async function listar({ limite, offset, perfil, ativo }) {
   const turmas = ids.length ? await listarTurmas(ids) : [];
   const turmasPorAluno = new Map(ids.map((id) => [String(id), []]));
   turmas.forEach(({ aluno_id, turma_id, turma_nome }) => {
-    turmasPorAluno.get(String(aluno_id))?.push({ id: turma_id, nome: turma_nome });
+    turmasPorAluno
+      .get(String(aluno_id))
+      ?.push({ id: turma_id, nome: turma_nome });
   });
-  linhas.forEach((usuario) => { usuario.turmas = turmasPorAluno.get(String(usuario.id)) ?? []; });
+  linhas.forEach((usuario) => {
+    usuario.turmas = turmasPorAluno.get(String(usuario.id)) ?? [];
+  });
   const [[{ total }]] = await pool.query(
     `SELECT COUNT(*) AS total FROM usuarios ${where}`,
     valores,
@@ -55,22 +59,34 @@ export async function buscarPorMatricula(matricula) {
 }
 
 export async function buscarPorEmail(email) {
-  const [linhas] = await pool.query("SELECT id FROM usuarios WHERE email = ? LIMIT 1", [email]);
+  const [linhas] = await pool.query(
+    "SELECT id FROM usuarios WHERE email = ? LIMIT 1",
+    [email],
+  );
   return linhas[0] || null;
 }
 
 export async function atualizarSenha(id, senhaHash) {
-  const [resultado] = await pool.query("UPDATE usuarios SET senha_hash = ? WHERE id = ?", [senhaHash, id]);
+  const [resultado] = await pool.query(
+    "UPDATE usuarios SET senha_hash = ? WHERE id = ?",
+    [senhaHash, id],
+  );
   return resultado.affectedRows > 0;
 }
 
 export async function atualizarPerfil(id, perfil) {
-  const [resultado] = await pool.query("UPDATE usuarios SET perfil = ? WHERE id = ?", [perfil, id]);
+  const [resultado] = await pool.query(
+    "UPDATE usuarios SET perfil = ? WHERE id = ?",
+    [perfil, id],
+  );
   return resultado.affectedRows > 0;
 }
 
 export async function atualizarAtivo(id, ativo) {
-  const [resultado] = await pool.query("UPDATE usuarios SET ativo = ? WHERE id = ?", [ativo, id]);
+  const [resultado] = await pool.query(
+    "UPDATE usuarios SET ativo = ? WHERE id = ?",
+    [ativo, id],
+  );
   return resultado.affectedRows > 0;
 }
 

@@ -24,6 +24,15 @@ export async function criar({ nome, professor_id } = {}) {
   if (!professor || professor.perfil !== "PROFESSOR" || !professor.ativo) {
     throw new TypeError("O responsável deve ser um professor ativo.");
   }
-  const id = await TurmaModel.criar({ nome: nomeLimpo, professor_id: professorId });
-  return { id, nome: nomeLimpo, professor_id: professorId, professor_nome: professor.nome, alunos: 0 };
+  const id = await TurmaModel.criar({
+    nome: nomeLimpo,
+    professor_id: professorId,
+  });
+  return {
+    id,
+    nome: nomeLimpo,
+    professor_id: professorId,
+    professor_nome: professor.nome,
+    alunos: 0,
+  };
 }

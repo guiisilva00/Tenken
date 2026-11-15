@@ -1,6 +1,13 @@
 import { pool } from "../config/Database.js";
 
-export async function listar({ limite, offset, status, severidade, equipamento_id, tecnicoId }) {
+export async function listar({
+  limite,
+  offset,
+  status,
+  severidade,
+  equipamento_id,
+  tecnicoId,
+}) {
   const condicoes = [];
   const valores = [];
 
@@ -43,7 +50,10 @@ export async function listar({ limite, offset, status, severidade, equipamento_i
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT * FROM chamados_manutencao WHERE id = ?", [id]);
+  const [linhas] = await pool.query(
+    "SELECT * FROM chamados_manutencao WHERE id = ?",
+    [id],
+  );
   return linhas[0] || null;
 }
 
@@ -57,7 +67,8 @@ export async function buscarPorInspecao(inspecaoId, db = pool) {
 
 export async function listarDoProfessor(professorId, situacao) {
   const filtros = {
-    EM_ANDAMENTO: "AND c.status IN ('ABERTO', 'EM_ATENDIMENTO', 'AGUARDANDO_PECAS')",
+    EM_ANDAMENTO:
+      "AND c.status IN ('ABERTO', 'EM_ATENDIMENTO', 'AGUARDANDO_PECAS')",
     CONCLUIDO: "AND c.status IN ('CONCLUIDO', 'CANCELADO')",
   };
   const filtroSituacao = situacao ? filtros[situacao] : "";

@@ -39,8 +39,14 @@ function Conteudo({ token }) {
   const [erro, setErro] = useState("");
   const [aviso, setAviso] = useState("");
   const [feedback, setFeedback] = useState(null);
-  const [modalAberto, setModalAberto, fechandoModal, finalizarFechamentoModal] = useModalExit(false);
-  const [modalEdicaoAberto, setModalEdicaoAberto, fechandoEdicao, finalizarFechamentoEdicao] = useModalExit(false);
+  const [modalAberto, setModalAberto, fechandoModal, finalizarFechamentoModal] =
+    useModalExit(false);
+  const [
+    modalEdicaoAberto,
+    setModalEdicaoAberto,
+    fechandoEdicao,
+    finalizarFechamentoEdicao,
+  ] = useModalExit(false);
   const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
   const [turmas, setTurmas] = useState([]);
   const [turmasCarregadas, setTurmasCarregadas] = useState(false);
@@ -48,7 +54,12 @@ function Conteudo({ token }) {
   const [alunoEditado, setAlunoEditado] = useState(null);
   const [salvandoEdicao, setSalvandoEdicao] = useState(false);
   const [erroEdicao, setErroEdicao] = useState("");
-  const [formEdicao, setFormEdicao] = useState({ nome: "", email: "", matricula: "", turmaIds: [] });
+  const [formEdicao, setFormEdicao] = useState({
+    nome: "",
+    email: "",
+    matricula: "",
+    turmaIds: [],
+  });
 
   // Formulário de novo usuário
   const [novoUsuario, setNovoUsuario] = useState({
@@ -81,7 +92,10 @@ function Conteudo({ token }) {
   useEffect(() => {
     chamarApi("/turmas", token)
       .then((dados) => setTurmas(dados.dados ?? dados ?? []))
-      .catch((e) => { setErroTurmas(e.message); setErro(e.message); })
+      .catch((e) => {
+        setErroTurmas(e.message);
+        setErro(e.message);
+      })
       .finally(() => setTurmasCarregadas(true));
   }, [token]);
 
@@ -163,7 +177,10 @@ function Conteudo({ token }) {
     setErro("");
     try {
       // Se for perfil de staff (PROFESSOR ou TECNICO), provisiona via pré-cadastro staff
-      if (novoUsuario.perfil === "PROFESSOR" || novoUsuario.perfil === "TECNICO") {
+      if (
+        novoUsuario.perfil === "PROFESSOR" ||
+        novoUsuario.perfil === "TECNICO"
+      ) {
         await chamarApi("/pre-cadastros", token, {
           method: "POST",
           body: {
@@ -173,7 +190,10 @@ function Conteudo({ token }) {
           },
         });
       }
-      setFeedback({ type: "success", message: `Usuário ${novoUsuario.nome} cadastrado com sucesso.` });
+      setFeedback({
+        type: "success",
+        message: `Usuário ${novoUsuario.nome} cadastrado com sucesso.`,
+      });
 
       setModalAberto(false);
       setNovoUsuario({
@@ -195,10 +215,13 @@ function Conteudo({ token }) {
   const totalBase = usuarios.length;
 
   // Contagem por perfil para os pills
-  const contagemPerfis = usuarios.reduce((counts, usuario) => {
-    if (counts[usuario.perfil] !== undefined) counts[usuario.perfil] += 1;
-    return counts;
-  }, { all: usuarios.length, ALUNO: 0, PROFESSOR: 0, TECNICO: 0, ADMIN: 0 });
+  const contagemPerfis = usuarios.reduce(
+    (counts, usuario) => {
+      if (counts[usuario.perfil] !== undefined) counts[usuario.perfil] += 1;
+      return counts;
+    },
+    { all: usuarios.length, ALUNO: 0, PROFESSOR: 0, TECNICO: 0, ADMIN: 0 },
+  );
 
   // Filtro de busca textual
   const termoBusca = busca.toLowerCase();
@@ -208,7 +231,10 @@ function Conteudo({ token }) {
   });
 
   // Paginação
-  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / ITENS_POR_PAGINA));
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(filtrados.length / ITENS_POR_PAGINA),
+  );
   const paginaAtual = Math.min(pagina, totalPaginas);
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
   const usuariosPagina = filtrados.slice(inicio, inicio + ITENS_POR_PAGINA);
@@ -220,7 +246,8 @@ function Conteudo({ token }) {
         <div className={styles.bannerLeft}>
           <h1 className={styles.title}>Usuários</h1>
           <p className={styles.subtitle}>
-            Cadastre usuários, ajuste o perfil de acesso e consulte quem pode entrar no sistema.
+            Cadastre usuários, ajuste o perfil de acesso e consulte quem pode
+            entrar no sistema.
           </p>
         </div>
 
@@ -233,7 +260,9 @@ function Conteudo({ token }) {
 
           <div className={styles.quickStatCard}>
             <span className={styles.statLabel}>Desativados</span>
-            <span className={`${styles.statNumber} ${styles.statNumberMuted}`}>{totalDesativados}</span>
+            <span className={`${styles.statNumber} ${styles.statNumberMuted}`}>
+              {totalDesativados}
+            </span>
           </div>
 
           <div className={styles.quickStatCard}>
@@ -243,7 +272,11 @@ function Conteudo({ token }) {
         </div>
       </div>
 
-      {erro && <div className={styles.alertError} role="alert">{erro}</div>}
+      {erro && (
+        <div className={styles.alertError} role="alert">
+          {erro}
+        </div>
+      )}
       {aviso && <div className={styles.alertSuccess}>{aviso}</div>}
 
       {/* Command Control Bar: Filters & Actions */}
@@ -271,7 +304,9 @@ function Conteudo({ token }) {
         {/* Search Field & Primary Action */}
         <div className={styles.searchAndAction}>
           <div className={styles.searchWrapper}>
-            <span className={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
+            <span className={`material-symbols-outlined ${styles.searchIcon}`}>
+              search
+            </span>
             <input
               type="text"
               placeholder="Buscar por nome, e-mail ou matrícula..."
@@ -286,7 +321,12 @@ function Conteudo({ token }) {
                 onClick={() => setBusca("")}
                 aria-label="Limpar busca"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>close</span>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: "16px" }}
+                >
+                  close
+                </span>
               </button>
             )}
           </div>
@@ -296,7 +336,12 @@ function Conteudo({ token }) {
             className={styles.newUserBtn}
             onClick={() => setModalAberto(true)}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>add</span>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "18px" }}
+            >
+              add
+            </span>
             <span>Cadastrar usuário</span>
           </button>
         </div>
@@ -304,7 +349,16 @@ function Conteudo({ token }) {
 
       {/* Telemetry Table Frame */}
       <TabelaAdmin
-        columns={["Usuário & Identificação", "E-mail Institucional", "Matrícula", "Turma(s)", "Perfil de Acesso", "Situação", "Data Cadastro", { label: "Ações", align: "right" }]}
+        columns={[
+          "Usuário & Identificação",
+          "E-mail Institucional",
+          "Matrícula",
+          "Turma(s)",
+          "Perfil de Acesso",
+          "Situação",
+          "Data Cadastro",
+          { label: "Ações", align: "right" },
+        ]}
         minWidth="74rem"
         loading={loading}
         loadingMessage="Carregando usuários..."
@@ -318,138 +372,192 @@ function Conteudo({ token }) {
         }}
         tableClassName={styles.table}
       >
-              {usuariosPagina.map((u) => {
-                const iniciais = extrairIniciais(u.nome);
-                const isAdmin = u.perfil === "ADMIN";
-                const isProfessor = u.perfil === "PROFESSOR";
-                const isTecnico = u.perfil === "TECNICO";
+        {usuariosPagina.map((u) => {
+          const iniciais = extrairIniciais(u.nome);
+          const isAdmin = u.perfil === "ADMIN";
+          const isProfessor = u.perfil === "PROFESSOR";
+          const isTecnico = u.perfil === "TECNICO";
 
-                let roleColorClass = styles.roleAluno;
-                if (isAdmin) roleColorClass = styles.roleAdmin;
-                else if (isProfessor) roleColorClass = styles.roleProfessor;
-                else if (isTecnico) roleColorClass = styles.roleTecnico;
+          let roleColorClass = styles.roleAluno;
+          if (isAdmin) roleColorClass = styles.roleAdmin;
+          else if (isProfessor) roleColorClass = styles.roleProfessor;
+          else if (isTecnico) roleColorClass = styles.roleTecnico;
 
-                return (
-                  <tr key={u.id}>
-                    {/* User Identity with Avatar */}
-                    <td>
-                      <div className={styles.userCell}>
-                        <div className={`${styles.avatarBox} ${isAdmin ? styles.avatarAdmin : ""}`}>
-                          {iniciais}
-                        </div>
-                        <div className={styles.userMeta}>
-                          <span className={styles.userName}>{u.nome}</span>
-                          <span className={styles.userDepartment}>{u.perfil || "Operações"}</span>
-                        </div>
-                      </div>
-                    </td>
+          return (
+            <tr key={u.id}>
+              {/* User Identity with Avatar */}
+              <td>
+                <div className={styles.userCell}>
+                  <div
+                    className={`${styles.avatarBox} ${isAdmin ? styles.avatarAdmin : ""}`}
+                  >
+                    {iniciais}
+                  </div>
+                  <div className={styles.userMeta}>
+                    <span className={styles.userName}>{u.nome}</span>
+                    <span className={styles.userDepartment}>
+                      {u.perfil || "Operações"}
+                    </span>
+                  </div>
+                </div>
+              </td>
 
-                    {/* Email */}
-                    <td className={styles.emailCell}>
-                      {u.email}
-                    </td>
+              {/* Email */}
+              <td className={styles.emailCell}>{u.email}</td>
 
-                    {/* Matrícula */}
-                    <td>
-                      <span className={styles.matriculaBadge}>
-                        {u.matricula ?? "—"}
+              {/* Matrícula */}
+              <td>
+                <span className={styles.matriculaBadge}>
+                  {u.matricula ?? "—"}
+                </span>
+              </td>
+
+              <td>
+                {u.turmas?.length ? (
+                  <div className={styles.turmaList}>
+                    {u.turmas.map((turma) => (
+                      <span key={turma.id} className={styles.turmaBadge}>
+                        {turma.nome}
                       </span>
-                    </td>
+                    ))}
+                  </div>
+                ) : (
+                  <span className={styles.noTurma}>Sem turma</span>
+                )}
+              </td>
 
-                    <td>
-                      {u.turmas?.length ? (
-                        <div className={styles.turmaList}>
-                          {u.turmas.map((turma) => <span key={turma.id} className={styles.turmaBadge}>{turma.nome}</span>)}
-                        </div>
-                      ) : <span className={styles.noTurma}>Sem turma</span>}
-                    </td>
+              {/* Perfil Dropdown */}
+              <td>
+                <div className={styles.roleDropdownWrapper}>
+                  <button
+                    type="button"
+                    className={`${styles.roleBadgeBtn} ${roleColorClass}`}
+                    onClick={() =>
+                      setDropdownAbertoId(
+                        dropdownAbertoId === u.id ? null : u.id,
+                      )
+                    }
+                  >
+                    <span className={`${styles.roleDot} ${roleColorClass}`} />
+                    <span>{u.perfil}</span>
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: "14px" }}
+                    >
+                      arrow_drop_down
+                    </span>
+                  </button>
 
-                    {/* Perfil Dropdown */}
-                    <td>
-                      <div className={styles.roleDropdownWrapper}>
-                        <button
-                          type="button"
-                          className={`${styles.roleBadgeBtn} ${roleColorClass}`}
-                          onClick={() => setDropdownAbertoId(dropdownAbertoId === u.id ? null : u.id)}
-                        >
-                          <span className={`${styles.roleDot} ${roleColorClass}`} />
-                          <span>{u.perfil}</span>
-                          <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>
-                            arrow_drop_down
-                          </span>
-                        </button>
-
-                        {dropdownAbertoId === u.id && (
-                          <div className={styles.roleMenu}>
-                            {["ADMIN", "PROFESSOR", "TECNICO", "ALUNO"].map((perfilOpcao) => (
-                              <button
-                                key={perfilOpcao}
-                                type="button"
-                                className={`${styles.roleMenuItem} ${u.perfil === perfilOpcao ? styles.roleMenuItemSelected : ""}`}
-                                onClick={() => alterarPerfil(u, perfilOpcao)}
-                              >
-                                {perfilOpcao}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* Situação */}
-                    <td>
-                      <div className={styles.statusCell}>
-                        <span className={`${styles.statusBadge} ${u.ativo ? styles.statusActive : styles.statusInactive}`}>
-                          <span className={styles.statusDot} />
-                          {u.ativo ? "Ativo" : "Inativo"}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Data Cadastro */}
-                    <td className={styles.dateCell}>
-                      {u.criado_em ? new Date(u.criado_em).toLocaleDateString("pt-BR") : "—"}
-                    </td>
-
-                    {/* Ações */}
-                    <td style={{ textAlign: "right" }}>
-                      <div className={styles.actionsCell}>
-                        {u.perfil === "ALUNO" && (
-                          <button type="button" className={styles.actionBtn} onClick={() => abrirEdicao(u)} disabled={!turmasCarregadas} title="Editar aluno">
-                            <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: "15px" }}>edit_note</span>
-                            <span>Editar</span>
+                  {dropdownAbertoId === u.id && (
+                    <div className={styles.roleMenu}>
+                      {["ADMIN", "PROFESSOR", "TECNICO", "ALUNO"].map(
+                        (perfilOpcao) => (
+                          <button
+                            key={perfilOpcao}
+                            type="button"
+                            className={`${styles.roleMenuItem} ${u.perfil === perfilOpcao ? styles.roleMenuItemSelected : ""}`}
+                            onClick={() => alterarPerfil(u, perfilOpcao)}
+                          >
+                            {perfilOpcao}
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          className={`${styles.actionBtn} ${u.ativo ? styles.actionBtnDanger : styles.actionBtnSuccess}`}
-                          onClick={() => alterarAtivo(u, !u.ativo)}
-                          title={`${u.ativo ? "Inativar" : "Reativar"} usuário`}
-                        >
-                          <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: "15px" }}>
-                            {u.ativo ? "power_settings_new" : "restart_alt"}
-                          </span>
-                          <span>{u.ativo ? "Inativar" : "Reativar"}</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
+              </td>
+
+              {/* Situação */}
+              <td>
+                <div className={styles.statusCell}>
+                  <span
+                    className={`${styles.statusBadge} ${u.ativo ? styles.statusActive : styles.statusInactive}`}
+                  >
+                    <span className={styles.statusDot} />
+                    {u.ativo ? "Ativo" : "Inativo"}
+                  </span>
+                </div>
+              </td>
+
+              {/* Data Cadastro */}
+              <td className={styles.dateCell}>
+                {u.criado_em
+                  ? new Date(u.criado_em).toLocaleDateString("pt-BR")
+                  : "—"}
+              </td>
+
+              {/* Ações */}
+              <td style={{ textAlign: "right" }}>
+                <div className={styles.actionsCell}>
+                  {u.perfil === "ALUNO" && (
+                    <button
+                      type="button"
+                      className={styles.actionBtn}
+                      onClick={() => abrirEdicao(u)}
+                      disabled={!turmasCarregadas}
+                      title="Editar aluno"
+                    >
+                      <span
+                        className="material-symbols-outlined"
+                        aria-hidden="true"
+                        style={{ fontSize: "15px" }}
+                      >
+                        edit_note
+                      </span>
+                      <span>Editar</span>
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className={`${styles.actionBtn} ${u.ativo ? styles.actionBtnDanger : styles.actionBtnSuccess}`}
+                    onClick={() => alterarAtivo(u, !u.ativo)}
+                    title={`${u.ativo ? "Inativar" : "Reativar"} usuário`}
+                  >
+                    <span
+                      className="material-symbols-outlined"
+                      aria-hidden="true"
+                      style={{ fontSize: "15px" }}
+                    >
+                      {u.ativo ? "power_settings_new" : "restart_alt"}
+                    </span>
+                    <span>{u.ativo ? "Inativar" : "Reativar"}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
       </TabelaAdmin>
 
       {/* Modal: Novo Usuário // Cadastramento */}
       {modalAberto && (
-        <div className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoModal ? "fechar-modal-fundo" : ""}`} role="dialog" aria-modal="true" onMouseDown={(event) => { if (event.target === event.currentTarget) setModalAberto(false); }}>
-          <div className={`${styles.modalCard} abrir-modal ${fechandoModal ? "fechar-modal" : ""}`} onAnimationEnd={finalizarFechamentoModal}>
+        <div
+          className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoModal ? "fechar-modal-fundo" : ""}`}
+          role="dialog"
+          aria-modal="true"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setModalAberto(false);
+          }}
+        >
+          <div
+            className={`${styles.modalCard} abrir-modal ${fechandoModal ? "fechar-modal" : ""}`}
+            onAnimationEnd={finalizarFechamentoModal}
+          >
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderTitleRow}>
                 <div className={modalStyles.modalHeaderIcon}>
-                  <span className="material-symbols-outlined" aria-hidden="true">person_add</span>
+                  <span
+                    className="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    person_add
+                  </span>
                 </div>
                 <div>
                   <h2 className={styles.modalTitle}>Adicionar usuário</h2>
-                  <p className={styles.modalDescription}>Preencha os dados para criar um novo acesso ao sistema.</p>
+                  <p className={styles.modalDescription}>
+                    Preencha os dados para criar um novo acesso ao sistema.
+                  </p>
                 </div>
               </div>
               <button
@@ -458,41 +566,58 @@ function Conteudo({ token }) {
                 onClick={() => setModalAberto(false)}
                 aria-label="Fechar"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: "20px" }}
+                >
+                  close
+                </span>
               </button>
             </div>
 
             <form onSubmit={criarUsuario} className={styles.modalForm}>
               <div className={styles.modalField}>
-                  <label className={styles.modalLabel}>Nome</label>
+                <label className={styles.modalLabel}>Nome</label>
                 <input
                   required
                   placeholder="Como devemos chamar essa pessoa?"
                   value={novoUsuario.nome}
-                  onChange={(e) => setNovoUsuario({ ...novoUsuario, nome: e.target.value })}
+                  onChange={(e) =>
+                    setNovoUsuario({ ...novoUsuario, nome: e.target.value })
+                  }
                   className={styles.modalInput}
                 />
               </div>
 
               <div className={styles.modalField}>
-                  <label className={styles.modalLabel}>E-mail</label>
+                <label className={styles.modalLabel}>E-mail</label>
                 <input
                   type="email"
                   required
                   placeholder="nome@instituicao.edu.br"
                   value={novoUsuario.email}
-                  onChange={(e) => setNovoUsuario({ ...novoUsuario, email: e.target.value })}
+                  onChange={(e) =>
+                    setNovoUsuario({ ...novoUsuario, email: e.target.value })
+                  }
                   className={styles.modalInput}
                 />
               </div>
 
               <div className={styles.modalRow}>
                 <div className={styles.modalField} style={{ flex: 1 }}>
-                  <label className={styles.modalLabel}>Matrícula <span className={styles.optionalLabel}>opcional</span></label>
+                  <label className={styles.modalLabel}>
+                    Matrícula{" "}
+                    <span className={styles.optionalLabel}>opcional</span>
+                  </label>
                   <input
                     placeholder="Se houver"
                     value={novoUsuario.matricula}
-                    onChange={(e) => setNovoUsuario({ ...novoUsuario, matricula: e.target.value })}
+                    onChange={(e) =>
+                      setNovoUsuario({
+                        ...novoUsuario,
+                        matricula: e.target.value,
+                      })
+                    }
                     className={styles.modalInput}
                   />
                 </div>
@@ -501,7 +626,9 @@ function Conteudo({ token }) {
                   <label className={styles.modalLabel}>Perfil</label>
                   <select
                     value={novoUsuario.perfil}
-                    onChange={(e) => setNovoUsuario({ ...novoUsuario, perfil: e.target.value })}
+                    onChange={(e) =>
+                      setNovoUsuario({ ...novoUsuario, perfil: e.target.value })
+                    }
                     className={styles.modalSelect}
                   >
                     <option value="ALUNO">Aluno</option>
@@ -521,7 +648,12 @@ function Conteudo({ token }) {
                   Cancelar
                 </button>
                 <button type="submit" className={styles.saveBtn}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>save</span>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: "18px" }}
+                  >
+                    save
+                  </span>
                   <span>Criar acesso</span>
                 </button>
               </div>
@@ -531,52 +663,158 @@ function Conteudo({ token }) {
       )}
 
       {modalEdicaoAberto && alunoEditado && (
-        <div className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoEdicao ? "fechar-modal-fundo" : ""}`} role="dialog" aria-modal="true" aria-labelledby="editar-aluno-titulo" onMouseDown={(event) => { if (event.target === event.currentTarget) setModalEdicaoAberto(false); }}>
-          <div className={`${styles.modalCard} abrir-modal ${fechandoEdicao ? "fechar-modal" : ""}`} onAnimationEnd={finalizarFechamentoEdicao}>
+        <div
+          className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoEdicao ? "fechar-modal-fundo" : ""}`}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="editar-aluno-titulo"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget)
+              setModalEdicaoAberto(false);
+          }}
+        >
+          <div
+            className={`${styles.modalCard} abrir-modal ${fechandoEdicao ? "fechar-modal" : ""}`}
+            onAnimationEnd={finalizarFechamentoEdicao}
+          >
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderTitleRow}>
-                <div className={modalStyles.modalHeaderIcon}><span className="material-symbols-outlined" aria-hidden="true">edit</span></div>
+                <div className={modalStyles.modalHeaderIcon}>
+                  <span
+                    className="material-symbols-outlined"
+                    aria-hidden="true"
+                  >
+                    edit
+                  </span>
+                </div>
                 <div>
-                  <h2 id="editar-aluno-titulo" className={styles.modalTitle}>Editar aluno</h2>
-                  <p className={styles.modalDescription}>Atualize os dados e as turmas vinculadas.</p>
+                  <h2 id="editar-aluno-titulo" className={styles.modalTitle}>
+                    Editar aluno
+                  </h2>
+                  <p className={styles.modalDescription}>
+                    Atualize os dados e as turmas vinculadas.
+                  </p>
                 </div>
               </div>
-              <button type="button" className={styles.modalCloseBtn} onClick={() => setModalEdicaoAberto(false)} aria-label="Fechar edição">
-                <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: "20px" }}>close</span>
+              <button
+                type="button"
+                className={styles.modalCloseBtn}
+                onClick={() => setModalEdicaoAberto(false)}
+                aria-label="Fechar edição"
+              >
+                <span
+                  className="material-symbols-outlined"
+                  aria-hidden="true"
+                  style={{ fontSize: "20px" }}
+                >
+                  close
+                </span>
               </button>
             </div>
             <form onSubmit={salvarEdicao} className={styles.modalForm}>
-              {erroEdicao && <div className={styles.alertError} role="alert">{erroEdicao}</div>}
+              {erroEdicao && (
+                <div className={styles.alertError} role="alert">
+                  {erroEdicao}
+                </div>
+              )}
               <div className={styles.modalField}>
-                <label htmlFor="aluno-nome" className={styles.modalLabel}>Nome</label>
-                <input id="aluno-nome" required value={formEdicao.nome} onChange={(e) => setFormEdicao({ ...formEdicao, nome: e.target.value })} className={styles.modalInput} />
+                <label htmlFor="aluno-nome" className={styles.modalLabel}>
+                  Nome
+                </label>
+                <input
+                  id="aluno-nome"
+                  required
+                  value={formEdicao.nome}
+                  onChange={(e) =>
+                    setFormEdicao({ ...formEdicao, nome: e.target.value })
+                  }
+                  className={styles.modalInput}
+                />
               </div>
               <div className={styles.modalField}>
-                <label htmlFor="aluno-email" className={styles.modalLabel}>E-mail</label>
-                <input id="aluno-email" type="email" required value={formEdicao.email} onChange={(e) => setFormEdicao({ ...formEdicao, email: e.target.value })} className={styles.modalInput} />
+                <label htmlFor="aluno-email" className={styles.modalLabel}>
+                  E-mail
+                </label>
+                <input
+                  id="aluno-email"
+                  type="email"
+                  required
+                  value={formEdicao.email}
+                  onChange={(e) =>
+                    setFormEdicao({ ...formEdicao, email: e.target.value })
+                  }
+                  className={styles.modalInput}
+                />
               </div>
               <div className={styles.modalField}>
-                <label htmlFor="aluno-matricula" className={styles.modalLabel}>Matrícula</label>
-                <input id="aluno-matricula" value={formEdicao.matricula} onChange={(e) => setFormEdicao({ ...formEdicao, matricula: e.target.value })} className={styles.modalInput} />
+                <label htmlFor="aluno-matricula" className={styles.modalLabel}>
+                  Matrícula
+                </label>
+                <input
+                  id="aluno-matricula"
+                  value={formEdicao.matricula}
+                  onChange={(e) =>
+                    setFormEdicao({ ...formEdicao, matricula: e.target.value })
+                  }
+                  className={styles.modalInput}
+                />
               </div>
-              <fieldset className={styles.turmaFieldset} disabled={!turmasCarregadas}>
+              <fieldset
+                className={styles.turmaFieldset}
+                disabled={!turmasCarregadas}
+              >
                 <legend className={styles.modalLabel}>Turmas</legend>
-                {erroTurmas ? <p className={styles.noTurma} role="alert">Não foi possível carregar as turmas: {erroTurmas}</p> : !turmasCarregadas ? <p className={styles.noTurma}>Carregando turmas...</p> : turmas.length ? (
+                {erroTurmas ? (
+                  <p className={styles.noTurma} role="alert">
+                    Não foi possível carregar as turmas: {erroTurmas}
+                  </p>
+                ) : !turmasCarregadas ? (
+                  <p className={styles.noTurma}>Carregando turmas...</p>
+                ) : turmas.length ? (
                   <div className={styles.turmaOptions}>
                     {turmas.map((turma) => (
                       <label key={turma.id} className={styles.turmaOption}>
-                        <input type="checkbox" checked={formEdicao.turmaIds.includes(String(turma.id))} onChange={() => alternarTurma(turma.id)} />
+                        <input
+                          type="checkbox"
+                          checked={formEdicao.turmaIds.includes(
+                            String(turma.id),
+                          )}
+                          onChange={() => alternarTurma(turma.id)}
+                        />
                         <span>{turma.nome}</span>
                       </label>
                     ))}
                   </div>
-                ) : <p className={styles.noTurma}>Nenhuma turma cadastrada.</p>}
+                ) : (
+                  <p className={styles.noTurma}>Nenhuma turma cadastrada.</p>
+                )}
               </fieldset>
               <div className={styles.modalActions}>
-                <button type="button" className={styles.cancelBtn} onClick={() => setModalEdicaoAberto(false)} disabled={salvandoEdicao}>Cancelar</button>
-                <button type="submit" className={styles.saveBtn} disabled={salvandoEdicao || !turmasCarregadas || Boolean(erroTurmas)}>
-                  <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: "18px" }}>{salvandoEdicao ? "hourglass_top" : "save"}</span>
-                  <span>{salvandoEdicao ? "Salvando..." : "Salvar alterações"}</span>
+                <button
+                  type="button"
+                  className={styles.cancelBtn}
+                  onClick={() => setModalEdicaoAberto(false)}
+                  disabled={salvandoEdicao}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className={styles.saveBtn}
+                  disabled={
+                    salvandoEdicao || !turmasCarregadas || Boolean(erroTurmas)
+                  }
+                >
+                  <span
+                    className="material-symbols-outlined"
+                    aria-hidden="true"
+                    style={{ fontSize: "18px" }}
+                  >
+                    {salvandoEdicao ? "hourglass_top" : "save"}
+                  </span>
+                  <span>
+                    {salvandoEdicao ? "Salvando..." : "Salvar alterações"}
+                  </span>
                 </button>
               </div>
             </form>

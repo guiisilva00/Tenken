@@ -22,7 +22,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", verificarScroll);
   }, []);
 
-  if (pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/tecnico" || pathname.startsWith("/tecnico/")) return null;
+  if (
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/") ||
+    pathname === "/tecnico" ||
+    pathname.startsWith("/tecnico/")
+  )
+    return null;
 
   return (
     <header
@@ -32,14 +38,27 @@ export default function Header() {
     >
       <div className={styles.conteudo}>
         <a className={styles.logo} href="#inicio" aria-label="Tenken - início">
-          <Image src="/assets/img/logo-site/logo_horizontal.svg" alt="Tenken" width={360} height={82} />
+          <Image
+            src="/assets/img/logo-site/logo_horizontal.svg"
+            alt="Tenken"
+            width={360}
+            height={82}
+          />
         </a>
 
         <nav className={styles.menu} aria-label="Navegação principal">
-          <a className={styles.link} href="#parceiros">Parceiros</a>
-          <a className={styles.link} href="#sobre">Sobre</a>
-          <a className={styles.link} href="#fluxo">Fluxo</a>
-          <Link className={styles.link} href="/login/">Acessar</Link>
+          <a className={styles.link} href="#parceiros">
+            Parceiros
+          </a>
+          <a className={styles.link} href="#sobre">
+            Sobre
+          </a>
+          <a className={styles.link} href="#fluxo">
+            Fluxo
+          </a>
+          <Link className={styles.link} href="/login/">
+            Acessar
+          </Link>
         </nav>
       </div>
     </header>

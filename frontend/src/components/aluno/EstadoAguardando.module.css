@@ -4,7 +4,9 @@
   color: var(--white-smoke);
   background: linear-gradient(145deg, #161a1d, #101214);
   border: 1px solid #2d343f;
-  box-shadow: 0 24px 80px rgb(0 0 0 / 38%), inset 0 1px rgb(255 255 255 / 3%);
+  box-shadow:
+    0 24px 80px rgb(0 0 0 / 38%),
+    inset 0 1px rgb(255 255 255 / 3%);
 }
 
 .badge {
@@ -113,8 +115,13 @@
   border: 1px solid rgba(177, 167, 166, 0.35);
 }
 
-.cancelar:hover { background: #ba181b; }
-.simular:hover { border-color: #71717a; background: rgb(255 255 255 / 4%); }
+.cancelar:hover {
+  background: #ba181b;
+}
+.simular:hover {
+  border-color: #71717a;
+  background: rgb(255 255 255 / 4%);
+}
 
 .cancelar:focus-visible,
 .simular:focus-visible {

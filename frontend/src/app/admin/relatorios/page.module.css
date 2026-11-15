@@ -150,7 +150,8 @@
   margin-right: 6px;
 }
 
-.periodBtn, .typeBtn {
+.periodBtn,
+.typeBtn {
   padding: 6px 14px;
   border-radius: 4px;
   background: var(--surface-lowest, #0b0f12);
@@ -162,7 +163,8 @@
   transition: all 0.15s ease;
 }
 
-.periodBtn:hover, .typeBtn:hover {
+.periodBtn:hover,
+.typeBtn:hover {
   background: var(--surface-container, #1c2023);
   color: var(--white-smoke, #f5f3f4);
 }
@@ -423,7 +425,9 @@
   }
 }
 
-.chartCardLeft, .chartCardRight, .analysisCard {
+.chartCardLeft,
+.chartCardRight,
+.analysisCard {
   background: var(--surface-low, #181c1f);
   border: 1px solid var(--border-subtle, #22272b);
   border-radius: 4px;
@@ -672,19 +676,72 @@
   gap: 20px;
 }
 
-.printSummary { display: none; }
+.printSummary {
+  display: none;
+}
 
 @media print {
-  :global([data-admin-shell] > :first-child), :global([data-admin-navigation]) { display: none !important; }
-  .container { color: #111; background: #fff; gap: 12px; padding: 0; }
-  .header { padding-top: 0; }
-  .exportWrapper, .filterGroup button, .alertError, .alertSuccess { display: none !important; }
-  .filterBar { display: block; padding: 6px 0; background: #fff; border: 0; box-shadow: none; }
-  .printSummary { display: block; margin: 0; color: #111; font-size: 12px; }
-  .title, .chartTitle, .kpiValue, .barItemName, .barItemVal, .barItemValMuted { color: #111 !important; }
-  .subtitle, .chartSubtitle, .barsFooter, .kpiDesc { color: #444 !important; }
-  .mttrCard, .kpiCard, .chartCardLeft, .chartCardRight, .analysisCard { background: #fff; box-shadow: none; border: 1px solid #bbb; break-inside: avoid; }
-  .bentoSection, .chartsSection, .dualSection { break-inside: avoid; }
+  :global([data-admin-shell] > :first-child),
+  :global([data-admin-navigation]) {
+    display: none !important;
+  }
+  .container {
+    color: #111;
+    background: #fff;
+    gap: 12px;
+    padding: 0;
+  }
+  .header {
+    padding-top: 0;
+  }
+  .exportWrapper,
+  .filterGroup button,
+  .alertError,
+  .alertSuccess {
+    display: none !important;
+  }
+  .filterBar {
+    display: block;
+    padding: 6px 0;
+    background: #fff;
+    border: 0;
+    box-shadow: none;
+  }
+  .printSummary {
+    display: block;
+    margin: 0;
+    color: #111;
+    font-size: 12px;
+  }
+  .title,
+  .chartTitle,
+  .kpiValue,
+  .barItemName,
+  .barItemVal,
+  .barItemValMuted {
+    color: #111 !important;
+  }
+  .subtitle,
+  .chartSubtitle,
+  .barsFooter,
+  .kpiDesc {
+    color: #444 !important;
+  }
+  .mttrCard,
+  .kpiCard,
+  .chartCardLeft,
+  .chartCardRight,
+  .analysisCard {
+    background: #fff;
+    box-shadow: none;
+    border: 1px solid #bbb;
+    break-inside: avoid;
+  }
+  .bentoSection,
+  .chartsSection,
+  .dualSection {
+    break-inside: avoid;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -693,6 +750,20 @@
   }
 }
 
-
 /* Acabamento visual alinhado à visão geral do professor. */
-.mttrCard,.kpiCard,.chartCardLeft,.chartCardRight,.analysisCard { border: 2px solid rgba(245,243,244,.15); border-radius: 15px; background-image: linear-gradient(145deg,rgba(245,243,244,.025),transparent 58%); box-shadow: inset 0 1px rgba(255,255,255,.035),0 12px 28px rgba(0,0,0,.15); }
+.mttrCard,
+.kpiCard,
+.chartCardLeft,
+.chartCardRight,
+.analysisCard {
+  border: 2px solid rgba(245, 243, 244, 0.15);
+  border-radius: 15px;
+  background-image: linear-gradient(
+    145deg,
+    rgba(245, 243, 244, 0.025),
+    transparent 58%
+  );
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 12px 28px rgba(0, 0, 0, 0.15);
+}

@@ -29,26 +29,45 @@ export default function FeedbackModal({ feedback, onClose }) {
   }
 
   return (
-    <div className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`} onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
+    <div
+      className={`${styles.overlay} ${closing ? styles.overlayClosing : ""}`}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) close();
+      }}
+    >
       <section
         className={`${styles.dialog} ${isError ? styles.error : styles.success} ${closing ? styles.dialogClosing : ""}`}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={`${id}-title`}
         aria-describedby={`${id}-message`}
-        onKeyDown={(event) => { if (event.key === "Escape") close(); }}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") close();
+        }}
         onAnimationEnd={finishClose}
       >
         <span className={styles.icon} aria-hidden="true">
-          {isError ? <span className="material-symbols-outlined">close</span> : (
+          {isError ? (
+            <span className="material-symbols-outlined">close</span>
+          ) : (
             <svg className={styles.check} viewBox="0 0 24 24" fill="none">
               <path className={styles.checkPath} d="m4.5 12.5 5 5 10-10" />
             </svg>
           )}
         </span>
-        <h2 id={`${id}-title`}>{feedback.title || (isError ? "Não foi possível concluir" : "Ação concluída")}</h2>
+        <h2 id={`${id}-title`}>
+          {feedback.title ||
+            (isError ? "Não foi possível concluir" : "Ação concluída")}
+        </h2>
         <p id={`${id}-message`}>{message}</p>
-        <button ref={buttonRef} type="button" className={styles.button} onClick={close}>Entendi</button>
+        <button
+          ref={buttonRef}
+          type="button"
+          className={styles.button}
+          onClick={close}
+        >
+          Entendi
+        </button>
       </section>
     </div>
   );

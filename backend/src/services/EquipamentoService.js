@@ -2,8 +2,13 @@ import { validarId } from "../utils/ValidarId.js";
 import Equipamento, { STATUS_VALIDOS } from "../models/Equipamento.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 
-
-export async function listar({ pagina = 1, limite = 20, tipo, localizacao, status } = {}) {
+export async function listar({
+  pagina = 1,
+  limite = 20,
+  tipo,
+  localizacao,
+  status,
+} = {}) {
   const paginaNum = Number(pagina);
   const limiteNum = Number(limite);
 
@@ -15,7 +20,13 @@ export async function listar({ pagina = 1, limite = 20, tipo, localizacao, statu
   }
 
   const offset = (paginaNum - 1) * limiteNum;
-  const { equipamentos, total } = await EquipamentoModel.listar({ limite: limiteNum, offset, tipo, localizacao, status });
+  const { equipamentos, total } = await EquipamentoModel.listar({
+    limite: limiteNum,
+    offset,
+    tipo,
+    localizacao,
+    status,
+  });
 
   return {
     equipamentos,

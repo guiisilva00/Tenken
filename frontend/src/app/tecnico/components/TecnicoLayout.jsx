@@ -10,7 +10,9 @@ import styles from "./TecnicoLayout.module.css";
 export default function TecnicoLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  const tituloPagina = pathname.startsWith("/tecnico/chamados") ? "Ordens de serviço" : "Visão geral";
+  const tituloPagina = pathname.startsWith("/tecnico/chamados")
+    ? "Ordens de serviço"
+    : "Visão geral";
   const [usuario, setUsuario] = useState(null);
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -38,12 +40,25 @@ export default function TecnicoLayout({ children }) {
 
   return (
     <div className={styles.shell}>
-      <aside className={`${styles.sidebar} ${menuAberto ? styles.sidebarAberta : ""}`}>
+      <aside
+        className={`${styles.sidebar} ${menuAberto ? styles.sidebarAberta : ""}`}
+      >
         <div className={styles.brand}>
           <Link href="/tecnico" aria-label="Tenken — painel técnico">
-            <Image src="/assets/img/logo-site/logo_horizontal.svg" alt="Tenken" width={160} height={38} priority />
+            <Image
+              src="/assets/img/logo-site/logo_horizontal.svg"
+              alt="Tenken"
+              width={160}
+              height={38}
+              priority
+            />
           </Link>
-          <button type="button" className={styles.closeMenu} onClick={() => setMenuAberto(false)} aria-label="Fechar menu">
+          <button
+            type="button"
+            className={styles.closeMenu}
+            onClick={() => setMenuAberto(false)}
+            aria-label="Fechar menu"
+          >
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
@@ -62,10 +77,14 @@ export default function TecnicoLayout({ children }) {
           <Link
             href="/tecnico/chamados"
             className={`${styles.navLink} ${pathname.startsWith("/tecnico/chamados") ? styles.navLinkAtivo : ""}`}
-            aria-current={pathname.startsWith("/tecnico/chamados") ? "page" : undefined}
+            aria-current={
+              pathname.startsWith("/tecnico/chamados") ? "page" : undefined
+            }
             onClick={() => setMenuAberto(false)}
           >
-            <span className="material-symbols-outlined">confirmation_number</span>
+            <span className="material-symbols-outlined">
+              confirmation_number
+            </span>
             <span>Ordens de serviço</span>
           </Link>
         </nav>
@@ -76,27 +95,49 @@ export default function TecnicoLayout({ children }) {
         </div>
       </aside>
 
-      {menuAberto && <button type="button" className={styles.backdrop} onClick={() => setMenuAberto(false)} aria-label="Fechar menu" />}
+      {menuAberto && (
+        <button
+          type="button"
+          className={styles.backdrop}
+          onClick={() => setMenuAberto(false)}
+          aria-label="Fechar menu"
+        />
+      )}
 
       <div className={styles.content}>
         <header className={styles.topbar}>
-          <button type="button" className={styles.menuButton} onClick={() => setMenuAberto(true)} aria-label="Abrir menu">
+          <button
+            type="button"
+            className={styles.menuButton}
+            onClick={() => setMenuAberto(true)}
+            aria-label="Abrir menu"
+          >
             <span className="material-symbols-outlined">menu</span>
           </button>
           <nav className={styles.trilha} aria-label="Localização atual">
             <span>TENKEN</span>
-            <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              chevron_right
+            </span>
             <span>Operação Técnica</span>
-            <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              chevron_right
+            </span>
             <strong>{tituloPagina}</strong>
           </nav>
           <div className={styles.account}>
-            <span className={styles.avatar}><span className="material-symbols-outlined">engineering</span></span>
+            <span className={styles.avatar}>
+              <span className="material-symbols-outlined">engineering</span>
+            </span>
             <span className={styles.accountInfo}>
               <strong>{usuario.nome || usuario.matricula || "Técnico"}</strong>
               <small>TÉCNICO</small>
             </span>
-            <button type="button" className={styles.logoutButton} onClick={sair}>
+            <button
+              type="button"
+              className={styles.logoutButton}
+              onClick={sair}
+            >
               <span className="material-symbols-outlined">logout</span>
               <span>Sair</span>
             </button>

@@ -29,7 +29,11 @@ export default function DashboardPage() {
             <h1>Bem-vindo, {usuario.nome}</h1>
             <p>Matrícula: {usuario.matricula}</p>
             <p>Perfil: {usuario.perfil}</p>
-            <button className={styles.logoutButton} type="button" onClick={sair}>
+            <button
+              className={styles.logoutButton}
+              type="button"
+              onClick={sair}
+            >
               Sair
             </button>
           </section>

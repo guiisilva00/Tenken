@@ -12,14 +12,14 @@ function gerarCodigo(perfil) {
   return `${prefixo}-${sufixo}`;
 }
 
-
 export async function listar() {
   return await PreCadastroStaffModel.listar();
 }
 
 export async function criar({ nome, email, perfil }) {
   const nomeLimpo = typeof nome === "string" ? nome.trim() : "";
-  const emailLimpo = typeof email === "string" ? email.trim().toLowerCase() : "";
+  const emailLimpo =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
 
   if (nomeLimpo.length < 3) {
     throw new TypeError("Nome deve ter no mínimo 3 caracteres.");
@@ -34,13 +34,24 @@ export async function criar({ nome, email, perfil }) {
   for (let tentativa = 1; tentativa <= 5; tentativa += 1) {
     const codigo = gerarCodigo(perfil);
     try {
-      return await PreCadastroStaffModel.criar({ nome: nomeLimpo, email: emailLimpo, perfil, codigo });
+      return await PreCadastroStaffModel.criar({
+        nome: nomeLimpo,
+        email: emailLimpo,
+        perfil,
+        codigo,
+      });
     } catch (erro) {
-      if (erro.code === "ER_DUP_ENTRY" && erro.sqlMessage?.includes("codigo") && tentativa < 5) {
+      if (
+        erro.code === "ER_DUP_ENTRY" &&
+        erro.sqlMessage?.includes("codigo") &&
+        tentativa < 5
+      ) {
         continue;
       }
       if (erro.code === "ER_DUP_ENTRY") {
-        const erroConflito = new Error("Já existe um pré-cadastro para este e-mail.");
+        const erroConflito = new Error(
+          "Já existe um pré-cadastro para este e-mail.",
+        );
         erroConflito.status = 409;
         throw erroConflito;
       }
@@ -71,7 +82,10 @@ export async function ativar({ codigo, senha, confirmarSenha }) {
   }
 
   const senhaHash = await bcrypt.hash(senha, 12);
-  const resultado = await PreCadastroStaffModel.ativar(codigo.trim(), senhaHash);
+  const resultado = await PreCadastroStaffModel.ativar(
+    codigo.trim(),
+    senhaHash,
+  );
 
   if (resultado.status === "nao_encontrado") {
     throw new Error("Código não encontrado.");

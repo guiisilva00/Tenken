@@ -10,7 +10,8 @@ const META_MTTR_HORAS = 5;
 
 function calcularDatasPeriodo(opcao) {
   const agora = new Date();
-  const dataLocal = (data) => `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
+  const dataLocal = (data) =>
+    `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
   const hojeStr = dataLocal(agora);
 
   if (opcao === "30d") {
@@ -62,24 +63,34 @@ function Conteudo({ token }) {
     } finally {
       setLoading(false);
     }
-  }, [token, datas, tipoFiltro]);
+  }, [token, datas.inicio, datas.fim, tipoFiltro]);
 
   useEffect(() => {
     carregarRelatorio();
   }, [carregarRelatorio]);
 
   // Mostra apenas dados recebidos do relatório.
-  const equipamentosPorStatus = Array.isArray(relatorio?.equipamentos_por_status) ? relatorio.equipamentos_por_status : [];
-  const totalAtivosMonitorados = equipamentosPorStatus.reduce((soma, item) => soma + Number(item.total ?? 0), 0);
-  const equipamentosOperacionais = equipamentosPorStatus.find(
-    (item) => ["OPERACIONAL", "DISPONIVEL"].includes(String(item.status).toUpperCase()),
+  const equipamentosPorStatus = Array.isArray(
+    relatorio?.equipamentos_por_status,
+  )
+    ? relatorio.equipamentos_por_status
+    : [];
+  const totalAtivosMonitorados = equipamentosPorStatus.reduce(
+    (soma, item) => soma + Number(item.total ?? 0),
+    0,
   );
-  const eficienciaGeral = totalAtivosMonitorados && equipamentosOperacionais
-    ? (Number(equipamentosOperacionais.total ?? 0) / totalAtivosMonitorados) * 100
-    : null;
+  const equipamentosOperacionais = equipamentosPorStatus.find((item) =>
+    ["OPERACIONAL", "DISPONIVEL"].includes(String(item.status).toUpperCase()),
+  );
+  const eficienciaGeral =
+    totalAtivosMonitorados && equipamentosOperacionais
+      ? (Number(equipamentosOperacionais.total ?? 0) / totalAtivosMonitorados) *
+        100
+      : null;
 
   const mttrValor = relatorio?.mttr_horas ?? null;
-  const mttrPercentualSla = mttrValor === null ? 0 : Math.min(100, (mttrValor / META_MTTR_HORAS) * 100);
+  const mttrPercentualSla =
+    mttrValor === null ? 0 : Math.min(100, (mttrValor / META_MTTR_HORAS) * 100);
 
   function exportarCsv() {
     setMenuExportarAberto(false);
@@ -91,7 +102,10 @@ function Conteudo({ token }) {
     linhas.push([`Tipo: ${tipoFiltro === "all" ? "Todos" : tipoFiltro}`]);
     linhas.push([]);
     linhas.push(["Tempo médio para conserto (horas)", mttrValor ?? ""]);
-    linhas.push(["Equipamentos disponíveis (%)", eficienciaGeral === null ? "" : eficienciaGeral.toFixed(1)]);
+    linhas.push([
+      "Equipamentos disponíveis (%)",
+      eficienciaGeral === null ? "" : eficienciaGeral.toFixed(1),
+    ]);
     linhas.push(["Total Ativos", totalAtivosMonitorados]);
     linhas.push([]);
 
@@ -102,16 +116,28 @@ function Conteudo({ token }) {
       linhas.push([]);
     }
 
-    bloco("Status de Equipamentos", relatorio.equipamentos_por_status, [["Status", "status"], ["Total", "total"]]);
-    bloco("Falhas por Equipamento", relatorio.ranking_falhas, [["Equipamento", "equipamento_nome"], ["Total Falhas", "total"]]);
-    bloco("Uso por Equipamento", relatorio.ranking_uso, [["Equipamento", "equipamento_nome"], ["Agendamentos", "total_agendamentos"], ["Horas Reservadas (h)", "horas_reservadas"]]);
+    bloco("Status de Equipamentos", relatorio.equipamentos_por_status, [
+      ["Status", "status"],
+      ["Total", "total"],
+    ]);
+    bloco("Falhas por Equipamento", relatorio.ranking_falhas, [
+      ["Equipamento", "equipamento_nome"],
+      ["Total Falhas", "total"],
+    ]);
+    bloco("Uso por Equipamento", relatorio.ranking_uso, [
+      ["Equipamento", "equipamento_nome"],
+      ["Agendamentos", "total_agendamentos"],
+      ["Horas Reservadas (h)", "horas_reservadas"],
+    ]);
     bloco("Taxa de Ocupação", relatorio.taxa_ocupacao, [
       ["Equipamento", "equipamento_nome"],
       ["Horas Reservadas", "horas_reservadas"],
       ["Ocupação (%)", "taxa_ocupacao_percentual"],
     ]);
 
-    const csv = linhas.map((l) => l.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const csv = linhas
+      .map((l) => l.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
     const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -130,17 +156,29 @@ function Conteudo({ token }) {
   }
 
   // Lista de falhas para o gráfico de barras.
-  const listaFalhas = Array.isArray(relatorio?.ranking_falhas) ? relatorio.ranking_falhas : [];
+  const listaFalhas = Array.isArray(relatorio?.ranking_falhas)
+    ? relatorio.ranking_falhas
+    : [];
 
-  const maxFalhas = listaFalhas.reduce((m, item) => Math.max(m, Number(item.total ?? 0)), 0) || 1;
+  const maxFalhas =
+    listaFalhas.reduce((m, item) => Math.max(m, Number(item.total ?? 0)), 0) ||
+    1;
 
   // Lista de uso em horas
-  const listaUso = Array.isArray(relatorio?.ranking_uso) ? relatorio.ranking_uso : [];
+  const listaUso = Array.isArray(relatorio?.ranking_uso)
+    ? relatorio.ranking_uso
+    : [];
 
-  const maxUso = listaUso.reduce((m, item) => Math.max(m, Number(item.horas_reservadas ?? 0)), 0) || 1;
+  const maxUso =
+    listaUso.reduce(
+      (m, item) => Math.max(m, Number(item.horas_reservadas ?? 0)),
+      0,
+    ) || 1;
 
   // Taxa de ocupação
-  const listaOcupacao = Array.isArray(relatorio?.taxa_ocupacao) ? relatorio.taxa_ocupacao : [];
+  const listaOcupacao = Array.isArray(relatorio?.taxa_ocupacao)
+    ? relatorio.taxa_ocupacao
+    : [];
 
   return (
     <div className={styles.container}>
@@ -149,7 +187,10 @@ function Conteudo({ token }) {
         <div className={styles.headerRow}>
           <div className={styles.headerTitles}>
             <h1 className={styles.title}>Relatórios e Indicadores</h1>
-            <p className={styles.subtitle}>Consulte o uso, a situação e os chamados dos equipamentos no período escolhido.</p>
+            <p className={styles.subtitle}>
+              Consulte o uso, a situação e os chamados dos equipamentos no
+              período escolhido.
+            </p>
           </div>
 
           {/* Export Controls Dropdown */}
@@ -159,22 +200,49 @@ function Conteudo({ token }) {
               className={styles.exportBtn}
               onClick={() => setMenuExportarAberto(!menuExportarAberto)}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>file_download</span>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "18px" }}
+              >
+                file_download
+              </span>
               <span>Exportar Relatório (PDF/CSV)</span>
-              <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>expand_more</span>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "16px" }}
+              >
+                expand_more
+              </span>
             </button>
 
             {menuExportarAberto && (
               <div className={styles.exportMenu}>
-                <button type="button" className={styles.exportMenuItem} onClick={exportarPdf}>
+                <button
+                  type="button"
+                  className={styles.exportMenuItem}
+                  onClick={exportarPdf}
+                >
                   <span>Documento PDF (.pdf)</span>
-                  <span className="material-symbols-outlined" style={{ fontSize: "16px", color: "var(--mahogany-red)" }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: "16px", color: "var(--mahogany-red)" }}
+                  >
                     picture_as_pdf
                   </span>
                 </button>
-                <button type="button" className={styles.exportMenuItem} onClick={exportarCsv}>
+                <button
+                  type="button"
+                  className={styles.exportMenuItem}
+                  onClick={exportarCsv}
+                >
                   <span>Planilha CSV (.csv)</span>
-                  <span className="material-symbols-outlined" style={{ fontSize: "16px", color: "var(--accent-tertiary)" }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{
+                      fontSize: "16px",
+                      color: "var(--accent-tertiary)",
+                    }}
+                  >
                     table_view
                   </span>
                 </button>
@@ -185,7 +253,10 @@ function Conteudo({ token }) {
 
         {/* Filter Control Bar */}
         <div className={styles.filterBar}>
-          <p className={styles.printSummary}>Período: {datas.inicio} a {datas.fim} · Tipo: {tipoFiltro === "all" ? "Todos" : tipoFiltro}</p>
+          <p className={styles.printSummary}>
+            Período: {datas.inicio} a {datas.fim} · Tipo:{" "}
+            {tipoFiltro === "all" ? "Todos" : tipoFiltro}
+          </p>
           {/* Period Selector */}
           <div className={styles.filterGroup}>
             <span className={styles.filterLabel}>Período:</span>
@@ -240,7 +311,11 @@ function Conteudo({ token }) {
         </div>
       </header>
 
-      {erro && <div className={styles.alertError} role="alert">{erro}</div>}
+      {erro && (
+        <div className={styles.alertError} role="alert">
+          {erro}
+        </div>
+      )}
       {aviso && <div className={styles.alertSuccess}>{aviso}</div>}
 
       {/* SECTION 2: TELEMETRY OVERVIEW BENTO (MTTR + CORE METRICS) */}
@@ -250,16 +325,25 @@ function Conteudo({ token }) {
           <div className={styles.mttrCardGlow} />
           <div className={styles.mttrHeader}>
             <div className={styles.mttrHeaderLeft}>
-              <span className="material-symbols-outlined" style={{ fontSize: "20px", color: "#ffb4ac" }}>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "20px", color: "#ffb4ac" }}
+              >
                 build_circle
               </span>
-            <span className={styles.mttrCardTag}>Tempo médio para conserto</span>
+              <span className={styles.mttrCardTag}>
+                Tempo médio para conserto
+              </span>
             </div>
-            <span className={styles.mttrSubtitle}>Tempo médio entre o início e a conclusão do chamado</span>
+            <span className={styles.mttrSubtitle}>
+              Tempo médio entre o início e a conclusão do chamado
+            </span>
           </div>
 
           <div className={styles.mttrValueRow}>
-            <span className={styles.mttrNumber}>{typeof mttrValor === "number" ? mttrValor.toFixed(1) : "—"}</span>
+            <span className={styles.mttrNumber}>
+              {typeof mttrValor === "number" ? mttrValor.toFixed(1) : "—"}
+            </span>
             <span className={styles.mttrUnit}>horas</span>
           </div>
 
@@ -268,7 +352,11 @@ function Conteudo({ token }) {
               <div className={styles.mttrTrend}>
                 <span>Indicador calculado no período selecionado</span>
               </div>
-              <span className={styles.mttrGoal}>{mttrValor === null ? "Sem dados no período" : `Referência: até ${META_MTTR_HORAS}h`}</span>
+              <span className={styles.mttrGoal}>
+                {mttrValor === null
+                  ? "Sem dados no período"
+                  : `Referência: até ${META_MTTR_HORAS}h`}
+              </span>
             </div>
             <div className={styles.slaTrack}>
               <div
@@ -286,7 +374,10 @@ function Conteudo({ token }) {
           <div className={styles.kpiCard}>
             <div className={styles.kpiTop}>
               <span className={styles.kpiTag}>Disponibilidade atual</span>
-              <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--silver)" }}>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "18px", color: "var(--silver)" }}
+              >
                 speed
               </span>
             </div>
@@ -295,13 +386,20 @@ function Conteudo({ token }) {
                 {eficienciaGeral === null ? "—" : eficienciaGeral.toFixed(1)}
                 <span className={styles.kpiPercent}>%</span>
               </span>
-              <span className={styles.kpiDesc}>Equipamentos operacionais no tipo selecionado</span>
+              <span className={styles.kpiDesc}>
+                Equipamentos operacionais no tipo selecionado
+              </span>
             </div>
             <div className={styles.kpiStatusRow}>
-              <span className="material-symbols-outlined" style={{ fontSize: "14px", color: "var(--status-ok)" }}>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "14px", color: "var(--status-ok)" }}
+              >
                 done_all
               </span>
-              <span style={{ color: "#a7f3d0" }}>Status atual dos equipamentos</span>
+              <span style={{ color: "#a7f3d0" }}>
+                Status atual dos equipamentos
+              </span>
             </div>
           </div>
 
@@ -309,7 +407,10 @@ function Conteudo({ token }) {
           <div className={styles.kpiCard}>
             <div className={styles.kpiTop}>
               <span className={styles.kpiTag}>Equipamentos Cadastrados</span>
-              <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--silver)" }}>
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: "18px", color: "var(--silver)" }}
+              >
                 grid_view
               </span>
             </div>
@@ -334,16 +435,26 @@ function Conteudo({ token }) {
         <div className={styles.chartCardLeft}>
           <div className={styles.chartHeader}>
             <div className={styles.chartTitles}>
-              <h2 className={styles.chartTitle}>Status Geral de Equipamentos</h2>
-              <span className={styles.chartSubtitle}>Total: {totalAtivosMonitorados} equipamentos</span>
+              <h2 className={styles.chartTitle}>
+                Status Geral de Equipamentos
+              </h2>
+              <span className={styles.chartSubtitle}>
+                Total: {totalAtivosMonitorados} equipamentos
+              </span>
             </div>
-            <span className="material-symbols-outlined" style={{ fontSize: "20px", color: "var(--silver)" }}>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "20px", color: "var(--silver)" }}
+            >
               pie_chart
             </span>
           </div>
 
           <div className={styles.donutBody}>
-            <p className={styles.chartSubtitle}>A situação dos equipamentos aparecerá aqui quando houver dados disponíveis.</p>
+            <p className={styles.chartSubtitle}>
+              A situação dos equipamentos aparecerá aqui quando houver dados
+              disponíveis.
+            </p>
           </div>
         </div>
 
@@ -352,9 +463,14 @@ function Conteudo({ token }) {
           <div className={styles.chartHeader}>
             <div className={styles.chartTitles}>
               <h2 className={styles.chartTitle}>Falhas por Equipamento</h2>
-              <span className={styles.chartSubtitle}>Equipamentos que mais apresentaram problemas</span>
+              <span className={styles.chartSubtitle}>
+                Equipamentos que mais apresentaram problemas
+              </span>
             </div>
-            <span className="material-symbols-outlined" style={{ fontSize: "20px", color: "var(--status-critical)" }}>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "20px", color: "var(--status-critical)" }}
+            >
               warning
             </span>
           </div>
@@ -366,7 +482,10 @@ function Conteudo({ token }) {
               return (
                 <div key={idx} className={styles.barItem}>
                   <div className={styles.barItemHeader}>
-                    <span className={styles.barItemName}>{item.equipamento_nome || `Equipamento ${item.equipamento_id}`}</span>
+                    <span className={styles.barItemName}>
+                      {item.equipamento_nome ||
+                        `Equipamento ${item.equipamento_id}`}
+                    </span>
                     <span className={styles.barItemVal}>{val} falhas</span>
                   </div>
                   <div className={styles.barItemTrack}>
@@ -393,9 +512,14 @@ function Conteudo({ token }) {
           <div className={styles.chartHeader}>
             <div className={styles.chartTitles}>
               <h2 className={styles.chartTitle}>Uso por Equipamento</h2>
-              <span className={styles.chartSubtitle}>Horas acumuladas no período selecionado</span>
+              <span className={styles.chartSubtitle}>
+                Horas acumuladas no período selecionado
+              </span>
             </div>
-            <span className="material-symbols-outlined" style={{ fontSize: "20px", color: "var(--silver)" }}>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "20px", color: "var(--silver)" }}
+            >
               schedule
             </span>
           </div>
@@ -407,7 +531,10 @@ function Conteudo({ token }) {
               return (
                 <div key={idx} className={styles.barItem}>
                   <div className={styles.barItemHeader}>
-                    <span className={styles.barItemName}>{item.equipamento_nome || `Equipamento ${item.equipamento_id}`}</span>
+                    <span className={styles.barItemName}>
+                      {item.equipamento_nome ||
+                        `Equipamento ${item.equipamento_id}`}
+                    </span>
                     <span className={styles.barItemValMuted}>{val} horas</span>
                   </div>
                   <div className={styles.barItemTrack}>
@@ -423,7 +550,9 @@ function Conteudo({ token }) {
 
           <div className={styles.barsFooter}>
             <span>Horas reservadas no período</span>
-            <span className={styles.barsFooterActive}>No período escolhido</span>
+            <span className={styles.barsFooterActive}>
+              No período escolhido
+            </span>
           </div>
         </div>
 
@@ -431,29 +560,47 @@ function Conteudo({ token }) {
         <div className={styles.analysisCard}>
           <div className={styles.chartHeader}>
             <div className={styles.chartTitles}>
-              <h2 className={styles.chartTitle}>Taxa de Ocupação por Equipamento</h2>
-              <span className={styles.chartSubtitle}>Horas reservadas ÷ horas do período</span>
+              <h2 className={styles.chartTitle}>
+                Taxa de Ocupação por Equipamento
+              </h2>
+              <span className={styles.chartSubtitle}>
+                Horas reservadas ÷ horas do período
+              </span>
             </div>
-            <span className="material-symbols-outlined" style={{ fontSize: "20px", color: "var(--silver)" }}>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "20px", color: "var(--silver)" }}
+            >
               percent
             </span>
           </div>
 
           <div className={styles.barsList}>
             {listaOcupacao.slice(0, 5).map((item, idx) => {
-              const val = Number(item.taxa ?? item.taxa_ocupacao_percentual ?? 0);
+              const val = Number(
+                item.taxa ?? item.taxa_ocupacao_percentual ?? 0,
+              );
               const isOver = val >= 85;
               return (
                 <div key={idx} className={styles.barItem}>
                   <div className={styles.barItemHeader}>
-                    <span className={styles.barItemName}>{item.equipamento_nome || `Equipamento ${item.equipamento_id}`}</span>
-                    <span className={isOver ? styles.barItemValCritical : styles.barItemVal}>
+                    <span className={styles.barItemName}>
+                      {item.equipamento_nome ||
+                        `Equipamento ${item.equipamento_id}`}
+                    </span>
+                    <span
+                      className={
+                        isOver ? styles.barItemValCritical : styles.barItemVal
+                      }
+                    >
                       {val}% {isOver && "⚠️"}
                     </span>
                   </div>
                   <div className={styles.barItemTrack}>
                     <div
-                      className={isOver ? styles.barItemFillCritical : styles.barItemFill}
+                      className={
+                        isOver ? styles.barItemFillCritical : styles.barItemFill
+                      }
                       style={{ width: `${val}%` }}
                     />
                   </div>
@@ -464,7 +611,9 @@ function Conteudo({ token }) {
 
           <div className={styles.barsFooter}>
             <span>Ocupação dos equipamentos</span>
-            <span className={styles.barsFooterActive}>No período escolhido</span>
+            <span className={styles.barsFooterActive}>
+              No período escolhido
+            </span>
           </div>
         </div>
       </div>

@@ -5,7 +5,8 @@ import SmoothScroll from "../components/SmoothScroll";
 
 export const metadata = {
   title: "Tenken",
-  description: "Tenken organiza o uso, a inspeção e a manutenção de equipamentos de laboratórios educacionais.",
+  description:
+    "Tenken organiza o uso, a inspeção e a manutenção de equipamentos de laboratórios educacionais.",
 };
 
 export default function RootLayout({ children }) {
@@ -18,9 +19,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

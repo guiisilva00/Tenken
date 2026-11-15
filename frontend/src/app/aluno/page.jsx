@@ -29,12 +29,20 @@ export default function PaginaVinculacaoAluno() {
           <section className={styles.formulario}>
             <p className={styles.eyebrow}>VINCULAÇÃO DE SESSÃO</p>
             <h1 className={styles.titulo}>Acesso à bancada do laboratório</h1>
-            <p className={styles.descricao}>Insira seu nome, turma e o token compartilhado pelo professor para solicitar acesso aos equipamentos da aula.</p>
+            <p className={styles.descricao}>
+              Insira seu nome, turma e o token compartilhado pelo professor para
+              solicitar acesso aos equipamentos da aula.
+            </p>
             <FormularioVinculo onEnviar={enviarSolicitacao} />
           </section>
         )}
         {etapa === "WAITING" && solicitacao && (
-          <EstadoAguardando sessao={solicitacao} token={solicitacao.token} onCancelar={() => setEtapa("FORM")} onSimularAprovacao={() => setEtapa("APPROVED")} />
+          <EstadoAguardando
+            sessao={solicitacao}
+            token={solicitacao.token}
+            onCancelar={() => setEtapa("FORM")}
+            onSimularAprovacao={() => setEtapa("APPROVED")}
+          />
         )}
       </div>
     </main>

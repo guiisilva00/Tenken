@@ -8,8 +8,12 @@ export function useModalExit(closedValue = false) {
   const valueRef = useRef(closedValue);
 
   function setValue(nextValue) {
-    const next = typeof nextValue === "function" ? nextValue(valueRef.current) : nextValue;
-    if (Object.is(next, closedValue) && !Object.is(valueRef.current, closedValue)) {
+    const next =
+      typeof nextValue === "function" ? nextValue(valueRef.current) : nextValue;
+    if (
+      Object.is(next, closedValue) &&
+      !Object.is(valueRef.current, closedValue)
+    ) {
       setClosing(true);
       return;
     }

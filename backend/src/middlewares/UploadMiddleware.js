@@ -9,7 +9,8 @@ const MIME_TYPES_VALIDOS = ["image/jpeg", "image/png", "image/webp"];
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, DIRETORIO_UPLOADS),
-  filename: (_req, file, cb) => cb(null, `${randomUUID()}${extname(file.originalname).toLowerCase()}`),
+  filename: (_req, file, cb) =>
+    cb(null, `${randomUUID()}${extname(file.originalname).toLowerCase()}`),
 });
 
 const upload = multer({
@@ -31,7 +32,10 @@ export function uploadEvidencias(req, res, next) {
       erro.status = 413;
       erro.message = "Cada imagem pode ter no máximo 2 MB.";
     }
-    if (erro instanceof multer.MulterError && erro.code === "LIMIT_FILE_COUNT") {
+    if (
+      erro instanceof multer.MulterError &&
+      erro.code === "LIMIT_FILE_COUNT"
+    ) {
       erro.status = 413;
       erro.message = "Envie no máximo 30 imagens por inspeção.";
     }

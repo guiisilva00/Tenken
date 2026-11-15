@@ -1,64 +1,394 @@
-.pagina { width: min(100%, 1080px); margin: 0 auto; color: #f5f3f4; }
-.voltar { display: inline-flex; margin-bottom: 22px; color: #b1a7a6; font-size: 13px; text-decoration: none; }
-.voltar:hover { color: #fff; }
-.cabecalho { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
-.eyebrow { margin: 0 0 8px; color: #b1a7a6; font: 10px/1.4 ui-monospace, monospace; letter-spacing: .2em; }
-.cabecalho h1 { margin: 0; font-size: clamp(25px, 3vw, 34px); font-weight: 600; letter-spacing: -.04em; }
-.subtitulo { margin: 8px 0 0; color: #aaa2a3; font-size: 15px; }
-.estado { flex: 0 0 auto; padding: 7px 10px; border: 1px solid rgba(214,174,107,.3); color: #d6ae6b; font: 10px ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
-.contexto { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); margin-bottom: 20px; border: 1px solid rgba(102,7,8,.65); background: #161a1d; }
-.contexto > div { display: grid; min-width: 0; align-content: center; gap: 7px; padding: 15px 17px; border-right: 1px solid rgba(245,243,244,.07); }
-.contexto > div:last-child { border: 0; }
-.contexto span { color: #b1a7a6; font: 9px ui-monospace,monospace; letter-spacing: .12em; text-transform: uppercase; }
-.contexto strong { overflow-wrap: anywhere; color: #f5f3f4; font-size: 13px; font-weight: 500; }
-.aviso { display: flex; gap: 12px; margin-bottom: 18px; padding: 13px 15px; border: 1px solid rgba(177,167,166,.16); background: rgba(255,255,255,.025); color: #b1a7a6; }
-.aviso > span { color: #d6ae6b; }
-.aviso p { margin: 0; font-size: 13px; line-height: 1.55; }
-.carregando { padding: 30px 0; color: #b1a7a6; }
-.erro { padding: 14px; border: 1px solid rgba(194,103,105,.4); color: #e08b8d; }
-.resultado { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 18px; padding: 20px; border: 1px solid rgba(121,182,155,.3); background: rgba(121,182,155,.06); }
-.resultado > div p { margin: 0 0 5px; color: #91bda4; font: 9px ui-monospace,monospace; letter-spacing: .15em; }
-.resultado h2 { margin: 0; color: #a7d2bb; font-size: 22px; font-weight: 600; }
-.resultado > span { color: #b1a7a6; font-size: 12px; }
-.reprovado { border-color: rgba(194,103,105,.4); background: rgba(164,22,26,.08); }
-.reprovado > div p,.reprovado h2 { color: #d58a8c; }
-.ressalva { border-color: rgba(214,174,107,.35); background: rgba(214,174,107,.05); }
-.ressalva > div p,.ressalva h2 { color: #d6ae6b; }
-.chamadoInspecao { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 18px; padding: 18px; border: 1px solid rgba(194,103,105,.42); background: rgba(164,22,26,.07); }
-.chamadoInspecao h2 { margin: 0; color: #f0c7c8; font-size: 17px; }
-.chamadoInspecao > div > p:last-child { margin: 7px 0 0; color: #b9adae; font-size: 12px; }
-.chamadoInspecao > div > p:last-child strong { color: #eee8e8; font-weight: 600; }
-.abrirChamado { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; padding: 0 15px; border: 1px solid #a4161a; background: #a4161a; color: #fff; font: inherit; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: pointer; }
-.abrirChamado:hover { background: #ba181b; }
-.formularioChamado { display: grid; width: min(100%, 430px); gap: 12px; }
-.formularioChamado label { display: grid; gap: 6px; color: #e5dfdf; font-size: 12px; }
-.formularioChamado label span { display: flex; gap: 8px; }
-.formularioChamado label small { color: #d58a8c; font: 9px ui-monospace,monospace; }
-.formularioChamado textarea,.formularioChamado select { width: 100%; min-height: 40px; padding: 9px; border: 1px solid rgba(245,243,244,.15); background: #101214; color: #f5f3f4; font: inherit; }
-.formularioChamado textarea { resize: vertical; }
-.acoesChamado { display: flex; justify-content: flex-end; gap: 8px; }
-.acoesChamado button { min-height: 38px; padding: 0 12px; border: 1px solid rgba(245,243,244,.16); background: transparent; color: #eee8e8; font: inherit; font-size: 12px; cursor: pointer; }
-.acoesChamado button[type="submit"] { border-color: #a4161a; background: #a4161a; }
-.acoesChamado button:disabled { opacity: .6; cursor: wait; }
-.observacoes,.listaResposta { margin-top: 18px; border: 1px solid rgba(102,7,8,.55); background: #161a1d; }
-.observacoes { padding: 17px; }
-.observacoes h2,.tituloSecao h2 { margin: 0; color: #f5f3f4; font-size: 17px; font-weight: 600; }
-.observacoes p { margin: 9px 0 0; color: #d3d3d3; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
-.tituloSecao { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 17px; border-bottom: 1px solid rgba(245,243,244,.07); }
-.tituloSecao span { color: #b1a7a6; font: 10px ui-monospace,monospace; }
-.resposta { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px; border-bottom: 1px solid rgba(245,243,244,.07); }
-.resposta:last-child { border-bottom: 0; }
-.respostaTexto { display: flex; align-items: flex-start; gap: 13px; min-width: 0; }
-.numero { display: grid; width: 31px; height: 31px; flex: 0 0 31px; place-items: center; border: 1px solid rgba(245,243,244,.14); color: #b1a7a6; font: 11px ui-monospace,monospace; }
-.categoria { margin: 0 0 5px; color: #b1a7a6; font: 9px ui-monospace,monospace; letter-spacing: .12em; }
-.resposta h3 { margin: 0; color: #e5dfdf; font-size: 14px; font-weight: 500; line-height: 1.5; }
-.respostaFalha { background: rgba(214,174,107,.035); }
-.conforme,.naoConforme { flex: 0 0 auto; font-size: 12px; font-weight: 500; }
-.conforme { color: #91bda4; }
-.naoConforme { color: #d58a8c; }
-.observacaoItem { margin: 8px 0 0; color: #aaa2a3; font-size: 12px; white-space: pre-wrap; }
-@media(max-width:760px) { .contexto { grid-template-columns: repeat(2,minmax(0,1fr)); } .contexto > div:nth-child(2) { border-right: 0; } .contexto > div:nth-child(-n+2) { border-bottom: 1px solid rgba(245,243,244,.07); } }
-@media(max-width:520px) { .cabecalho { flex-direction: column; } .contexto > div { padding: 12px; } .resposta { align-items: flex-start; flex-direction: column; gap: 12px; } .resultado { align-items: flex-start; flex-direction: column; } .chamadoInspecao { align-items: flex-start; flex-direction: column; } .formularioChamado { width: 100%; } }
+.pagina {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  color: #f5f3f4;
+}
+.voltar {
+  display: inline-flex;
+  margin-bottom: 22px;
+  color: #b1a7a6;
+  font-size: 13px;
+  text-decoration: none;
+}
+.voltar:hover {
+  color: #fff;
+}
+.cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: #b1a7a6;
+  font:
+    10px/1.4 ui-monospace,
+    monospace;
+  letter-spacing: 0.2em;
+}
+.cabecalho h1 {
+  margin: 0;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+.subtitulo {
+  margin: 8px 0 0;
+  color: #aaa2a3;
+  font-size: 15px;
+}
+.estado {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid rgba(214, 174, 107, 0.3);
+  color: #d6ae6b;
+  font:
+    10px ui-monospace,
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.contexto {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 20px;
+  border: 1px solid rgba(102, 7, 8, 0.65);
+  background: #161a1d;
+}
+.contexto > div {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  gap: 7px;
+  padding: 15px 17px;
+  border-right: 1px solid rgba(245, 243, 244, 0.07);
+}
+.contexto > div:last-child {
+  border: 0;
+}
+.contexto span {
+  color: #b1a7a6;
+  font:
+    9px ui-monospace,
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.contexto strong {
+  overflow-wrap: anywhere;
+  color: #f5f3f4;
+  font-size: 13px;
+  font-weight: 500;
+}
+.aviso {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  border: 1px solid rgba(177, 167, 166, 0.16);
+  background: rgba(255, 255, 255, 0.025);
+  color: #b1a7a6;
+}
+.aviso > span {
+  color: #d6ae6b;
+}
+.aviso p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.carregando {
+  padding: 30px 0;
+  color: #b1a7a6;
+}
+.erro {
+  padding: 14px;
+  border: 1px solid rgba(194, 103, 105, 0.4);
+  color: #e08b8d;
+}
+.resultado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 20px;
+  border: 1px solid rgba(121, 182, 155, 0.3);
+  background: rgba(121, 182, 155, 0.06);
+}
+.resultado > div p {
+  margin: 0 0 5px;
+  color: #91bda4;
+  font:
+    9px ui-monospace,
+    monospace;
+  letter-spacing: 0.15em;
+}
+.resultado h2 {
+  margin: 0;
+  color: #a7d2bb;
+  font-size: 22px;
+  font-weight: 600;
+}
+.resultado > span {
+  color: #b1a7a6;
+  font-size: 12px;
+}
+.reprovado {
+  border-color: rgba(194, 103, 105, 0.4);
+  background: rgba(164, 22, 26, 0.08);
+}
+.reprovado > div p,
+.reprovado h2 {
+  color: #d58a8c;
+}
+.ressalva {
+  border-color: rgba(214, 174, 107, 0.35);
+  background: rgba(214, 174, 107, 0.05);
+}
+.ressalva > div p,
+.ressalva h2 {
+  color: #d6ae6b;
+}
+.chamadoInspecao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(194, 103, 105, 0.42);
+  background: rgba(164, 22, 26, 0.07);
+}
+.chamadoInspecao h2 {
+  margin: 0;
+  color: #f0c7c8;
+  font-size: 17px;
+}
+.chamadoInspecao > div > p:last-child {
+  margin: 7px 0 0;
+  color: #b9adae;
+  font-size: 12px;
+}
+.chamadoInspecao > div > p:last-child strong {
+  color: #eee8e8;
+  font-weight: 600;
+}
+.abrirChamado {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  border: 1px solid #a4161a;
+  background: #a4161a;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.abrirChamado:hover {
+  background: #ba181b;
+}
+.formularioChamado {
+  display: grid;
+  width: min(100%, 430px);
+  gap: 12px;
+}
+.formularioChamado label {
+  display: grid;
+  gap: 6px;
+  color: #e5dfdf;
+  font-size: 12px;
+}
+.formularioChamado label span {
+  display: flex;
+  gap: 8px;
+}
+.formularioChamado label small {
+  color: #d58a8c;
+  font:
+    9px ui-monospace,
+    monospace;
+}
+.formularioChamado textarea,
+.formularioChamado select {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px;
+  border: 1px solid rgba(245, 243, 244, 0.15);
+  background: #101214;
+  color: #f5f3f4;
+  font: inherit;
+}
+.formularioChamado textarea {
+  resize: vertical;
+}
+.acoesChamado {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.acoesChamado button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(245, 243, 244, 0.16);
+  background: transparent;
+  color: #eee8e8;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.acoesChamado button[type="submit"] {
+  border-color: #a4161a;
+  background: #a4161a;
+}
+.acoesChamado button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.observacoes,
+.listaResposta {
+  margin-top: 18px;
+  border: 1px solid rgba(102, 7, 8, 0.55);
+  background: #161a1d;
+}
+.observacoes {
+  padding: 17px;
+}
+.observacoes h2,
+.tituloSecao h2 {
+  margin: 0;
+  color: #f5f3f4;
+  font-size: 17px;
+  font-weight: 600;
+}
+.observacoes p {
+  margin: 9px 0 0;
+  color: #d3d3d3;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.tituloSecao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px;
+  border-bottom: 1px solid rgba(245, 243, 244, 0.07);
+}
+.tituloSecao span {
+  color: #b1a7a6;
+  font:
+    10px ui-monospace,
+    monospace;
+}
+.resposta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px;
+  border-bottom: 1px solid rgba(245, 243, 244, 0.07);
+}
+.resposta:last-child {
+  border-bottom: 0;
+}
+.respostaTexto {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  min-width: 0;
+}
+.numero {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  place-items: center;
+  border: 1px solid rgba(245, 243, 244, 0.14);
+  color: #b1a7a6;
+  font:
+    11px ui-monospace,
+    monospace;
+}
+.categoria {
+  margin: 0 0 5px;
+  color: #b1a7a6;
+  font:
+    9px ui-monospace,
+    monospace;
+  letter-spacing: 0.12em;
+}
+.resposta h3 {
+  margin: 0;
+  color: #e5dfdf;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.respostaFalha {
+  background: rgba(214, 174, 107, 0.035);
+}
+.conforme,
+.naoConforme {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 500;
+}
+.conforme {
+  color: #91bda4;
+}
+.naoConforme {
+  color: #d58a8c;
+}
+.observacaoItem {
+  margin: 8px 0 0;
+  color: #aaa2a3;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+@media (max-width: 760px) {
+  .contexto {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .contexto > div:nth-child(2) {
+    border-right: 0;
+  }
+  .contexto > div:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(245, 243, 244, 0.07);
+  }
+}
+@media (max-width: 520px) {
+  .cabecalho {
+    flex-direction: column;
+  }
+  .contexto > div {
+    padding: 12px;
+  }
+  .resposta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .resultado {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .chamadoInspecao {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .formularioChamado {
+    width: 100%;
+  }
+}
 
 .voltar {
   color: #c0b7b8;
@@ -74,7 +404,7 @@
 
 .cabecalho h1 {
   font-weight: 700;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
 }
 
 .subtitulo {
@@ -83,20 +413,23 @@
 
 .estado {
   border-radius: 999px;
-  background: rgba(214, 174, 107, .055);
+  background: rgba(214, 174, 107, 0.055);
   font-weight: 700;
 }
 
 .contexto {
   overflow: hidden;
-  border: 2px solid rgba(245, 243, 244, .12);
+  border: 2px solid rgba(245, 243, 244, 0.12);
   border-radius: 15px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .03), transparent 58%), #161a1d;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 9px 22px rgba(0, 0, 0, .13);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.03), transparent 58%), #161a1d;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 9px 22px rgba(0, 0, 0, 0.13);
 }
 
 .contexto > div {
-  border-right-color: rgba(245, 243, 244, .1);
+  border-right-color: rgba(245, 243, 244, 0.1);
 }
 
 .contexto span,
@@ -109,16 +442,22 @@
 }
 
 .aviso {
-  border: 1px solid rgba(214, 174, 107, .23);
+  border: 1px solid rgba(214, 174, 107, 0.23);
   border-radius: 12px;
-  background: linear-gradient(100deg, rgba(214, 174, 107, .07), rgba(214, 174, 107, .02));
+  background: linear-gradient(
+    100deg,
+    rgba(214, 174, 107, 0.07),
+    rgba(214, 174, 107, 0.02)
+  );
   color: #d0c7c8;
 }
 
 .resultado {
   border-width: 2px;
   border-radius: 15px;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 9px 22px rgba(0, 0, 0, .14);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 9px 22px rgba(0, 0, 0, 0.14);
 }
 
 .resultado h2 {
@@ -135,13 +474,23 @@
   overflow: hidden;
   border-width: 2px;
   border-radius: 15px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .025), transparent 48%), #161a1d;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .025), 0 9px 22px rgba(0, 0, 0, .12);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.025), transparent 48%),
+    #161a1d;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.025),
+    0 9px 22px rgba(0, 0, 0, 0.12);
 }
 
 .chamadoInspecao {
-  border-color: rgba(194, 103, 105, .48);
-  background: linear-gradient(110deg, rgba(164, 22, 26, .09), rgba(245, 243, 244, .015)), #161a1d;
+  border-color: rgba(194, 103, 105, 0.48);
+  background:
+    linear-gradient(
+      110deg,
+      rgba(164, 22, 26, 0.09),
+      rgba(245, 243, 244, 0.015)
+    ),
+    #161a1d;
 }
 
 .chamadoInspecao h2,
@@ -158,7 +507,9 @@
 .abrirChamado {
   border-radius: 10px;
   background: linear-gradient(115deg, #a4161a, #8f1318);
-  box-shadow: 0 6px 16px rgba(164, 22, 26, .2), inset 0 1px rgba(255, 255, 255, .1);
+  box-shadow:
+    0 6px 16px rgba(164, 22, 26, 0.2),
+    inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .abrirChamado:hover {
@@ -167,14 +518,14 @@
 
 .formularioChamado textarea,
 .formularioChamado select {
-  border-color: rgba(245, 243, 244, .17);
+  border-color: rgba(245, 243, 244, 0.17);
   border-radius: 10px;
   color: #f5f3f4;
 }
 
 .formularioChamado textarea:focus-visible,
 .formularioChamado select:focus-visible {
-  outline: 2px solid rgba(186, 24, 27, .38);
+  outline: 2px solid rgba(186, 24, 27, 0.38);
   outline-offset: 2px;
 }
 
@@ -188,11 +539,11 @@
 }
 
 .tituloSecao {
-  border-bottom-color: rgba(245, 243, 244, .1);
+  border-bottom-color: rgba(245, 243, 244, 0.1);
 }
 
 .resposta {
-  border-bottom-color: rgba(245, 243, 244, .09);
+  border-bottom-color: rgba(245, 243, 244, 0.09);
 }
 
 .resposta h3 {

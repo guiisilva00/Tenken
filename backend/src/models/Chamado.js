@@ -1,6 +1,12 @@
 const TIPOS_VALIDOS = ["CORRETIVO", "PREVENTIVO"];
 const SEVERIDADES_VALIDAS = ["BAIXA", "MEDIA", "ALTA", "CRITICA"];
-const STATUS_VALIDOS = ["ABERTO", "EM_ATENDIMENTO", "AGUARDANDO_PECAS", "CONCLUIDO", "CANCELADO"];
+const STATUS_VALIDOS = [
+  "ABERTO",
+  "EM_ATENDIMENTO",
+  "AGUARDANDO_PECAS",
+  "CONCLUIDO",
+  "CANCELADO",
+];
 
 export default class Chamado {
   constructor({
@@ -20,7 +26,10 @@ export default class Chamado {
     if (!Number.isInteger(equipamento_id) || equipamento_id <= 0) {
       throw new TypeError("ID do equipamento deve ser um inteiro positivo.");
     }
-    if (inspecao_id !== null && (!Number.isInteger(inspecao_id) || inspecao_id <= 0)) {
+    if (
+      inspecao_id !== null &&
+      (!Number.isInteger(inspecao_id) || inspecao_id <= 0)
+    ) {
       throw new TypeError("ID da inspeção deve ser um inteiro positivo.");
     }
     if (!Number.isInteger(solicitante_id) || solicitante_id <= 0) {
@@ -36,10 +45,14 @@ export default class Chamado {
       throw new TypeError(`Tipo deve ser um de: ${TIPOS_VALIDOS.join(", ")}.`);
     }
     if (!SEVERIDADES_VALIDAS.includes(severidade)) {
-      throw new TypeError(`Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`);
+      throw new TypeError(
+        `Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`,
+      );
     }
     if (!STATUS_VALIDOS.includes(status)) {
-      throw new TypeError(`Status deve ser um de: ${STATUS_VALIDOS.join(", ")}.`);
+      throw new TypeError(
+        `Status deve ser um de: ${STATUS_VALIDOS.join(", ")}.`,
+      );
     }
 
     this.id = id;

@@ -3,7 +3,11 @@ import { pool } from "../config/Database.js";
 export async function listar({ limite, offset, tipo, localizacao, status }) {
   const filtros = [];
   const valores = [];
-  for (const [campo, valor] of [["tipo", tipo], ["localizacao", localizacao], ["status", status]]) {
+  for (const [campo, valor] of [
+    ["tipo", tipo],
+    ["localizacao", localizacao],
+    ["status", status],
+  ]) {
     if (valor) {
       filtros.push(`${campo} = ?`);
       valores.push(valor);
@@ -14,13 +18,18 @@ export async function listar({ limite, offset, tipo, localizacao, status }) {
     `SELECT * FROM equipamentos ${where} ORDER BY id LIMIT ? OFFSET ?`,
     [...valores, limite, offset],
   );
-  const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM equipamentos ${where}`, valores);
+  const [[{ total }]] = await pool.query(
+    `SELECT COUNT(*) AS total FROM equipamentos ${where}`,
+    valores,
+  );
 
   return { equipamentos: linhas, total: Number(total) };
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT * FROM equipamentos WHERE id = ?", [id]);
+  const [linhas] = await pool.query("SELECT * FROM equipamentos WHERE id = ?", [
+    id,
+  ]);
   return linhas[0] || null;
 }
 
@@ -86,6 +95,8 @@ export async function contarPorStatus(tipo) {
 }
 
 export async function contarTotal() {
-  const [[{ total }]] = await pool.query("SELECT COUNT(*) AS total FROM equipamentos");
+  const [[{ total }]] = await pool.query(
+    "SELECT COUNT(*) AS total FROM equipamentos",
+  );
   return Number(total);
 }

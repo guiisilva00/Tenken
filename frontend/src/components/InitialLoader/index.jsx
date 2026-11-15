@@ -29,7 +29,11 @@ export default function InitialLoader() {
 
 export function LoadingIndicator() {
   return (
-    <div className={styles.overlay} role="status" aria-label="Carregando o sistema Tenken">
+    <div
+      className={styles.overlay}
+      role="status"
+      aria-label="Carregando o sistema Tenken"
+    >
       <div className={styles.conteudo}>
         <div className={styles.spinner} aria-hidden="true">
           {SIMBOLOS.map((simbolo, i) => (

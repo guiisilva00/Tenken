@@ -6,7 +6,10 @@ import {
   listar,
   revogar,
 } from "../controllers/PreCadastroStaffController.js";
-import { authMiddleware, requirePerfil } from "../middlewares/AuthMiddleware.js";
+import {
+  authMiddleware,
+  requirePerfil,
+} from "../middlewares/AuthMiddleware.js";
 
 const router = Router();
 

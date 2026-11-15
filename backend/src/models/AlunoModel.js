@@ -28,7 +28,13 @@ export async function criarCheckin(agendamentoId, alunoId) {
   );
 }
 
-export async function criarPreMatricula({ nome, email, cpf, telefone, matricula }) {
+export async function criarPreMatricula({
+  nome,
+  email,
+  cpf,
+  telefone,
+  matricula,
+}) {
   await pool.execute(
     `INSERT INTO pre_matriculas_alunos
       (nome, email, cpf, telefone, matricula)

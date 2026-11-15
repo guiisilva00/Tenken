@@ -1,7 +1,29 @@
-.pagina { display: flex; min-height: 100vh; background: var(--onyx); color: var(--white-smoke); font-family: "DM Sans", sans-serif; }
-.principal { flex: 1; min-width: 0; padding: 40px clamp(24px, 4vw, 48px); overflow-y: auto; }
-@media (max-width: 860px) { .pagina { flex-direction: column; } }
-
+.pagina {
+  display: flex;
+  min-height: 100vh;
+  background: var(--onyx);
+  color: var(--white-smoke);
+  font-family: "DM Sans", sans-serif;
+}
+.principal {
+  flex: 1;
+  min-width: 0;
+  padding: 40px clamp(24px, 4vw, 48px);
+  overflow-y: auto;
+}
+@media (max-width: 860px) {
+  .pagina {
+    flex-direction: column;
+  }
+}
 
 /* Acabamento visual alinhado à visão geral do professor. */
-.pagina { background: radial-gradient(ellipse at 96% 0%,rgba(164,22,26,.08),transparent 38%),var(--onyx); }
+.pagina {
+  background:
+    radial-gradient(
+      ellipse at 96% 0%,
+      rgba(164, 22, 26, 0.08),
+      transparent 38%
+    ),
+    var(--onyx);
+}

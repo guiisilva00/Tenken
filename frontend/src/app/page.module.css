@@ -80,7 +80,8 @@
 
 .api {
   color: #334155;
-  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
   font-size: 14px;
   overflow-wrap: anywhere;
 }

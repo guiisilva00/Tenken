@@ -48,7 +48,10 @@ app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.use("/api/tecnico/dashboard", tecnicoDashboardRoutes);
 app.use("/api/turmas", turmaRoutes);
 app.use((request, response) => {
-  response.status(404).json({ sucesso: false, mensagem: `Rota ${request.method} ${request.originalUrl} não existe.` });
+  response.status(404).json({
+    sucesso: false,
+    mensagem: `Rota ${request.method} ${request.originalUrl} não existe.`,
+  });
 });
 app.use(errorHandler);
 

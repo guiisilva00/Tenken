@@ -17,8 +17,8 @@ export default function EstadoAguardando({
         Solicitação enviada
       </h1>
       <p className={styles.descricao}>
-        Sua solicitação foi enviada ao painel do laboratório. Aguarde a liberação
-        para iniciar a inspeção.
+        Sua solicitação foi enviada ao painel do laboratório. Aguarde a
+        liberação para iniciar a inspeção.
       </p>
 
       <dl className={styles.dados}>

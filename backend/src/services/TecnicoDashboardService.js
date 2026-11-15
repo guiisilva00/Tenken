@@ -7,7 +7,9 @@ export async function gerar(tecnicoId) {
     EquipamentoModel.contarPorStatus(),
   ]);
 
-  const emManutencao = equipamentosPorStatus.find((item) => item.status === "EM_MANUTENCAO");
+  const emManutencao = equipamentosPorStatus.find(
+    (item) => item.status === "EM_MANUTENCAO",
+  );
 
   return {
     chamados: {

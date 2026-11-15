@@ -10,17 +10,23 @@ import styles from "./page.module.css";
 
 function totalPorChave(itens, chave, valor) {
   if (!Array.isArray(itens)) return 0;
-  const normalizar = (texto) => String(texto ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toUpperCase();
-  const item = itens.find((linha) => normalizar(linha[chave]) === normalizar(valor));
+  const normalizar = (texto) =>
+    String(texto ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toUpperCase();
+  const item = itens.find(
+    (linha) => normalizar(linha[chave]) === normalizar(valor),
+  );
   return Number(item?.total ?? item?.quantidade ?? item?.count ?? 0);
 }
 
 function somarStatus(itens, statusDesejados) {
-  return statusDesejados.reduce((total, status) => total + totalPorChave(itens, "status", status), 0);
+  return statusDesejados.reduce(
+    (total, status) => total + totalPorChave(itens, "status", status),
+    0,
+  );
 }
 
 export default function PaginaTecnico() {
@@ -53,10 +59,20 @@ export default function PaginaTecnico() {
 
   const chamados = dashboard?.chamados;
   const status = chamados?.por_status;
-  const ativos = somarStatus(status, ["ABERTO", "EM_ATENDIMENTO", "AGUARDANDO_PECAS"]);
-  const criticos = totalPorChave(chamados?.por_severidade_em_aberto, "severidade", "CRITICA");
+  const ativos = somarStatus(status, [
+    "ABERTO",
+    "EM_ATENDIMENTO",
+    "AGUARDANDO_PECAS",
+  ]);
+  const criticos = totalPorChave(
+    chamados?.por_severidade_em_aberto,
+    "severidade",
+    "CRITICA",
+  );
   const concluidos = totalPorChave(status, "status", "CONCLUIDO");
-  const equipamentosEmManutencao = Number(dashboard?.equipamentos?.em_manutencao ?? 0);
+  const equipamentosEmManutencao = Number(
+    dashboard?.equipamentos?.em_manutencao ?? 0,
+  );
 
   const indicadores = [
     {
@@ -98,29 +114,63 @@ export default function PaginaTecnico() {
     <div className={styles.container}>
       <header className={styles.header}>
         <div>
-          {dataAtual ? <p className={styles.dataHoje}>{dataPorExtenso(dataAtual)}</p> : null}
-          <h1 className={styles.titulo}>{dataAtual ? `${saudacaoPorHorario(dataAtual)}, ${primeiroNome}.` : "Visão geral"}</h1>
+          {dataAtual ? (
+            <p className={styles.dataHoje}>{dataPorExtenso(dataAtual)}</p>
+          ) : null}
+          <h1 className={styles.titulo}>
+            {dataAtual
+              ? `${saudacaoPorHorario(dataAtual)}, ${primeiroNome}.`
+              : "Visão geral"}
+          </h1>
           <p className={styles.atualizacao}>
-            <span className="material-symbols-outlined" aria-hidden="true">schedule</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              schedule
+            </span>
             <span>Dados atualizados:</span>
-            <strong>{atualizadoEm ? atualizadoEm.toLocaleTimeString("pt-BR") : "Aguardando dados"}</strong>
+            <strong>
+              {atualizadoEm
+                ? atualizadoEm.toLocaleTimeString("pt-BR")
+                : "Aguardando dados"}
+            </strong>
           </p>
-          <p className={styles.descricao}>Acompanhe os chamados atribuídos e a condição dos equipamentos.</p>
+          <p className={styles.descricao}>
+            Acompanhe os chamados atribuídos e a condição dos equipamentos.
+          </p>
         </div>
-        <button type="button" className={styles.botaoAtualizar} onClick={carregar} disabled={carregando}>
-          <span className={`material-symbols-outlined ${carregando ? styles.girando : ""}`}>sync</span>
+        <button
+          type="button"
+          className={styles.botaoAtualizar}
+          onClick={carregar}
+          disabled={carregando}
+        >
+          <span
+            className={`material-symbols-outlined ${carregando ? styles.girando : ""}`}
+          >
+            sync
+          </span>
           {carregando ? "Atualizando..." : "Atualizar resumo"}
         </button>
       </header>
 
-      {erro && <p className={styles.erro} role="alert">{erro}</p>}
+      {erro && (
+        <p className={styles.erro} role="alert">
+          {erro}
+        </p>
+      )}
 
-      <section className={styles.gradeIndicadores} aria-label="Indicadores do técnico">
+      <section
+        className={styles.gradeIndicadores}
+        aria-label="Indicadores do técnico"
+      >
         {indicadores.map((indicador, indice) => (
           <CartaoMetrica
             key={indicador.titulo}
             estilo={{ animationDelay: `${indice * 0.05}s` }}
-            icone={<span className="material-symbols-outlined">{indicador.icone}</span>}
+            icone={
+              <span className="material-symbols-outlined">
+                {indicador.icone}
+              </span>
+            }
             categoria={indicador.categoria}
             titulo={indicador.titulo}
             valor={carregando && !dashboard ? "—" : indicador.valor}

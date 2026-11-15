@@ -3,12 +3,16 @@ import * as ChamadoModel from "../models/ChamadoModel.js";
 import * as HistoricoManutencaoModel from "../models/HistoricoManutencaoModel.js";
 import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
 
-
 async function validarAtribuicaoTecnico(chamado, usuarioLogado) {
-  if (usuarioLogado?.perfil === "TECNICO" && Number(chamado.tecnico_id) !== Number(usuarioLogado.id)) {
+  if (
+    usuarioLogado?.perfil === "TECNICO" &&
+    Number(chamado.tecnico_id) !== Number(usuarioLogado.id)
+  ) {
     const ordemServico = await OrdemServicoModel.buscarPorChamado(chamado.id);
     if (!ordemServico) {
-      const erro = new Error("Você só pode acessar o histórico de chamados atribuídos a você ou vinculados a uma ordem de serviço.");
+      const erro = new Error(
+        "Você só pode acessar o histórico de chamados atribuídos a você ou vinculados a uma ordem de serviço.",
+      );
       erro.status = 403;
       throw erro;
     }
@@ -46,7 +50,10 @@ export async function criar(chamadoIdRecebido, dados, usuarioLogado) {
     chamado_id: chamadoId,
     tecnico_id: Number(usuarioLogado.id),
     descricao: dados.descricao.trim(),
-    pecas_trocadas: typeof dados.pecas_trocadas === "string" ? dados.pecas_trocadas.trim() : null,
+    pecas_trocadas:
+      typeof dados.pecas_trocadas === "string"
+        ? dados.pecas_trocadas.trim()
+        : null,
     custo,
   });
 }

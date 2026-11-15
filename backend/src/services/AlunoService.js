@@ -12,7 +12,9 @@ function erroComStatus(mensagem, status) {
 }
 
 function erroDeValidacao(errors) {
-  const erro = new TypeError(errors[0]?.message || "Confira os dados informados.");
+  const erro = new TypeError(
+    errors[0]?.message || "Confira os dados informados.",
+  );
   erro.errors = errors;
   return erro;
 }
@@ -27,26 +29,32 @@ export async function solicitarAcesso(token, alunoId) {
   if (!turma) throw erroComStatus("Token não encontrado.", 404);
 
   const agendamento = await AlunoModel.buscarAgendamentoAtivo(turma.id);
-  if (!agendamento) throw erroComStatus("Não há aula ativa para esta turma agora.", 422);
-  if (!await AlunoModel.pertenceATurma(turma.id, alunoId)) {
+  if (!agendamento)
+    throw erroComStatus("Não há aula ativa para esta turma agora.", 422);
+  if (!(await AlunoModel.pertenceATurma(turma.id, alunoId))) {
     throw erroComStatus("Aluno não pertence a esta turma.", 403);
   }
 
   try {
     await AlunoModel.criarCheckin(agendamento.id, alunoId);
   } catch (erro) {
-    if (erro.code === "ER_DUP_ENTRY") throw erroComStatus("Solicitação já registrada.", 409);
+    if (erro.code === "ER_DUP_ENTRY")
+      throw erroComStatus("Solicitação já registrada.", 409);
     throw erro;
   }
 
-  return { status: "AGUARDANDO_APROVACAO", turma: { id: turma.id, nome: turma.nome } };
+  return {
+    status: "AGUARDANDO_APROVACAO",
+    turma: { id: turma.id, nome: turma.nome },
+  };
 }
 
 export async function gerarMatricula(body = {}) {
   const nome = typeof body.nome === "string" ? body.nome.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const cpf = typeof body.cpf === "string" ? body.cpf.trim() : "";
-  const telefone = typeof body.telefone === "string" ? body.telefone.trim() : "";
+  const telefone =
+    typeof body.telefone === "string" ? body.telefone.trim() : "";
   const errors = [];
 
   if (!nome) errors.push({ field: "nome", message: "Nome é obrigatório" });
@@ -56,24 +64,44 @@ export async function gerarMatricula(body = {}) {
   }
   for (const campo of ["email", "cpf", "telefone"]) {
     if (body[campo] != null && typeof body[campo] !== "string") {
-      errors.push({ field: campo, message: `${campo === "email" ? "Email" : campo === "cpf" ? "CPF" : "Telefone"} deve ser um texto` });
+      errors.push({
+        field: campo,
+        message: `${campo === "email" ? "Email" : campo === "cpf" ? "CPF" : "Telefone"} deve ser um texto`,
+      });
     }
   }
   if (errors.length) throw erroDeValidacao(errors);
 
-  for (let tentativa = 1; tentativa <= MAX_TENTATIVAS_MATRICULA; tentativa += 1) {
+  for (
+    let tentativa = 1;
+    tentativa <= MAX_TENTATIVAS_MATRICULA;
+    tentativa += 1
+  ) {
     const matricula = gerarCodigoMatricula();
     try {
-      await AlunoModel.criarPreMatricula({ nome, email, cpf, telefone: telefone || null, matricula });
+      await AlunoModel.criarPreMatricula({
+        nome,
+        email,
+        cpf,
+        telefone: telefone || null,
+        matricula,
+      });
       return { matricula, nome };
     } catch (erro) {
       if (erro.code !== "ER_DUP_ENTRY") throw erro;
-      const detalhe = `${erro.sqlMessage ?? ""} ${erro.message ?? ""}`.toLowerCase();
+      const detalhe =
+        `${erro.sqlMessage ?? ""} ${erro.message ?? ""}`.toLowerCase();
       if (detalhe.includes("matricula")) {
         if (tentativa < MAX_TENTATIVAS_MATRICULA) continue;
-        throw erroComStatus("Não foi possível gerar uma matrícula única. Tente novamente.", 409);
+        throw erroComStatus(
+          "Não foi possível gerar uma matrícula única. Tente novamente.",
+          409,
+        );
       }
-      throw erroComStatus("Já existe uma solicitação de matrícula para estes dados.", 409);
+      throw erroComStatus(
+        "Já existe uma solicitação de matrícula para estes dados.",
+        409,
+      );
     }
   }
 }
@@ -85,19 +113,31 @@ export async function cadastrarAluno(body = {}) {
     errors.push({ field: "matricula", message: "Matrícula é obrigatória" });
   }
   if (typeof senha !== "string" || senha.length < 8) {
-    errors.push({ field: "senha", message: "A senha deve ter no mínimo 8 caracteres" });
+    errors.push({
+      field: "senha",
+      message: "A senha deve ter no mínimo 8 caracteres",
+    });
   }
   if (typeof confirmarSenha !== "string" || confirmarSenha !== senha) {
-    errors.push({ field: "confirmarSenha", message: "A confirmação deve ser igual à senha" });
+    errors.push({
+      field: "confirmarSenha",
+      message: "A confirmação deve ser igual à senha",
+    });
   }
   if (errors.length) throw erroDeValidacao(errors);
 
   const senhaHash = await bcrypt.hash(senha, 12);
   try {
-    return await AlunoModel.cadastrar({ matricula: matricula.trim(), senhaHash });
+    return await AlunoModel.cadastrar({
+      matricula: matricula.trim(),
+      senhaHash,
+    });
   } catch (erro) {
     if (erro.code === "ER_DUP_ENTRY") {
-      throw erroComStatus("Não foi possível concluir o cadastro com os dados informados.", 409);
+      throw erroComStatus(
+        "Não foi possível concluir o cadastro com os dados informados.",
+        409,
+      );
     }
     throw erro;
   }

@@ -17,7 +17,7 @@
   color: var(--silver, #b1a7a6);
   font-size: var(--professor-font-supporting);
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
 }
 
 .cabecalhoPagina h1 {
@@ -25,7 +25,7 @@
   color: var(--white-smoke, #f5f3f4);
   font-size: var(--admin-font-page-title);
   font-weight: 600;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
 }
 
 .subtitulo {
@@ -47,24 +47,24 @@
   align-content: center;
   gap: 6.6px;
   padding: 14.3px 16.5px;
-  border: 1px solid rgba(245, 243, 244, .09);
+  border: 1px solid rgba(245, 243, 244, 0.09);
   background: var(--carbon-black, #161a1d);
 }
 
-.metrica>span {
+.metrica > span {
   color: #aaa2a3;
   font-size: var(--professor-font-supporting);
 }
 
-.metrica>strong {
+.metrica > strong {
   color: var(--white-smoke, #f5f3f4);
   font-size: 30px;
   font-weight: 600;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
   line-height: 1;
 }
 
-.metrica>small {
+.metrica > small {
   color: #898182;
   font-size: var(--professor-font-caption);
 }
@@ -73,7 +73,7 @@
   border-left: 2px solid #d6ae6b;
 }
 
-.metricaPendente>strong {
+.metricaPendente > strong {
   color: #d6ae6b;
 }
 
@@ -81,12 +81,12 @@
   border-left: 2px solid #c26769;
 }
 
-.metricaRessalva>strong {
+.metricaRessalva > strong {
   color: #d58a8c;
 }
 
 .painel {
-  border: 1px solid rgba(245, 243, 244, .09);
+  border: 1px solid rgba(245, 243, 244, 0.09);
   background: #141719;
 }
 
@@ -96,7 +96,7 @@
   justify-content: space-between;
   gap: 17.6px;
   padding: 18.7px 19.8px;
-  border-bottom: 1px solid rgba(245, 243, 244, .07);
+  border-bottom: 1px solid rgba(245, 243, 244, 0.07);
 }
 
 .cabecalhoPainel h2 {
@@ -122,7 +122,7 @@
   display: flex;
   gap: 5.5px;
   padding: 13.2px 19.8px;
-  border-bottom: 1px solid rgba(245, 243, 244, .07);
+  border-bottom: 1px solid rgba(245, 243, 244, 0.07);
 }
 
 .filtros button {
@@ -141,8 +141,8 @@
 }
 
 .filtros button.filtroAtivo {
-  border-color: rgba(164, 22, 26, .38);
-  background: rgba(164, 22, 26, .12);
+  border-color: rgba(164, 22, 26, 0.38);
+  background: rgba(164, 22, 26, 0.12);
   color: #e5babc;
 }
 
@@ -161,11 +161,11 @@
 .tabela thead th {
   height: 40.7px;
   padding: 0 13.2px;
-  border-bottom: 1px solid rgba(245, 243, 244, .08);
+  border-bottom: 1px solid rgba(245, 243, 244, 0.08);
   color: #8f8788;
   font-size: var(--professor-font-caption);
   font-weight: 700;
-  letter-spacing: .07em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -178,7 +178,7 @@
 .tabela tbody td {
   height: 67.1px;
   padding: 8.8px 13.2px;
-  border-bottom: 1px solid rgba(245, 243, 244, .055);
+  border-bottom: 1px solid rgba(245, 243, 244, 0.055);
   color: #bdb6b7;
   font-size: var(--professor-font-supporting);
 }
@@ -215,30 +215,30 @@
   align-items: center;
   min-height: 23.1px;
   padding: 0 7.7px;
-  border: 1px solid rgba(245, 243, 244, .1);
+  border: 1px solid rgba(245, 243, 244, 0.1);
   font-size: var(--professor-font-caption);
   white-space: nowrap;
 }
 
 .resultadoRealizado {
-  border-color: rgba(121, 182, 155, .2);
+  border-color: rgba(121, 182, 155, 0.2);
   color: #91bda4;
 }
 
 .resultadoPendente {
-  border-color: rgba(214, 174, 107, .22);
+  border-color: rgba(214, 174, 107, 0.22);
   color: #d6ae6b;
 }
 
 .resultadoReprovado {
-  border-color: rgba(194, 103, 105, .32);
+  border-color: rgba(194, 103, 105, 0.32);
   color: #d58a8c;
 }
 
 .botaoAcao {
   min-height: 29.7px;
   padding: 0 8.8px;
-  border: 1px solid rgba(245, 243, 244, .12);
+  border: 1px solid rgba(245, 243, 244, 0.12);
   background: transparent;
   color: #b8b0b1;
   font: inherit;
@@ -247,7 +247,7 @@
 }
 
 .botaoAcao:hover {
-  border-color: rgba(245, 243, 244, .3);
+  border-color: rgba(245, 243, 244, 0.3);
   color: #fff;
 }
 
@@ -260,7 +260,7 @@
   text-align: center;
 }
 
-.estadoVazio>span {
+.estadoVazio > span {
   color: #9b5558;
   font-size: 28.8px;
 }
@@ -282,7 +282,7 @@
 .notaDados {
   margin: 0;
   padding: 11px 19.8px;
-  border-top: 1px solid rgba(245, 243, 244, .07);
+  border-top: 1px solid rgba(245, 243, 244, 0.07);
   color: #81797a;
   font-size: var(--professor-font-caption);
 }
@@ -303,8 +303,8 @@
   gap: 13.2px;
   margin: -10px 0 14px;
   padding: 11px 14.3px;
-  border: 1px solid rgba(121, 182, 155, .24);
-  background: rgba(121, 182, 155, .07);
+  border: 1px solid rgba(121, 182, 155, 0.24);
+  background: rgba(121, 182, 155, 0.07);
   color: #a7d2bb;
   font-size: var(--professor-font-body);
 }
@@ -328,7 +328,7 @@
   gap: 5.5px;
   margin: 0;
   padding: 12.1px;
-  border: 1px solid rgba(245, 243, 244, .08);
+  border: 1px solid rgba(245, 243, 244, 0.08);
 }
 
 .detalheInspecao p span,
@@ -360,7 +360,7 @@
   gap: 13.2px;
   margin: 0;
   padding: 9.9px 0;
-  border-top: 1px solid rgba(245, 243, 244, .07);
+  border-top: 1px solid rgba(245, 243, 244, 0.07);
   color: #c5bebe;
   font-size: var(--professor-font-supporting);
 }
@@ -383,7 +383,7 @@
   gap: 6.6px;
   margin: 12px 0 0;
   padding: 11px;
-  border: 1px solid rgba(245, 243, 244, .08);
+  border: 1px solid rgba(245, 243, 244, 0.08);
   color: #d9d3d3;
   font-size: var(--professor-font-body);
   line-height: 1.5;
@@ -398,7 +398,7 @@
 .rodapeDetalhes button {
   min-height: 37.4px;
   padding: 0 13.2px;
-  border: 1px solid rgba(245, 243, 244, .15);
+  border: 1px solid rgba(245, 243, 244, 0.15);
   background: transparent;
   color: #e6e0e0;
   font: inherit;
@@ -444,11 +444,11 @@
     padding: 11px;
   }
 
-  .metrica>span {
+  .metrica > span {
     font-size: var(--professor-font-caption);
   }
 
-  .metrica>strong {
+  .metrica > strong {
     font-size: 26.4px;
   }
 
@@ -477,10 +477,14 @@
 }
 
 .metrica {
-  border: 2px solid rgba(245, 243, 244, .12);
+  border: 2px solid rgba(245, 243, 244, 0.12);
   border-radius: 15px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .035), transparent 58%), #161a1d;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 9px 22px rgba(0, 0, 0, .14);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.035), transparent 58%),
+    #161a1d;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 9px 22px rgba(0, 0, 0, 0.14);
 }
 
 .metrica > span {
@@ -494,14 +498,18 @@
 
 .painel {
   overflow: hidden;
-  border: 2px solid rgba(245, 243, 244, .14);
+  border: 2px solid rgba(245, 243, 244, 0.14);
   border-radius: 17px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .025), transparent 45%), #141719;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 13px 30px rgba(0, 0, 0, .15);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.025), transparent 45%),
+    #141719;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 13px 30px rgba(0, 0, 0, 0.15);
 }
 
 .cabecalhoPainel {
-  border-bottom-color: rgba(245, 243, 244, .11);
+  border-bottom-color: rgba(245, 243, 244, 0.11);
 }
 
 .cabecalhoPainel h2 {
@@ -510,17 +518,24 @@
 }
 
 .filtros button {
-  border-color: rgba(245, 243, 244, .16);
+  border-color: rgba(245, 243, 244, 0.16);
   border-radius: 999px;
   color: #c8bfc0;
-  transition: border-color .18s ease, background .18s ease, color .18s ease;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .filtros button:hover,
 .filtros button.filtroAtivo {
-  border-color: rgba(164, 22, 26, .72);
+  border-color: rgba(164, 22, 26, 0.72);
   border-radius: 999px;
-  background: linear-gradient(110deg, rgba(164, 22, 26, .19), rgba(164, 22, 26, .07));
+  background: linear-gradient(
+    110deg,
+    rgba(164, 22, 26, 0.19),
+    rgba(164, 22, 26, 0.07)
+  );
   color: #fff;
 }
 
@@ -537,13 +552,13 @@
 }
 
 .tabela thead th {
-  border-bottom-color: rgba(245, 243, 244, .13);
+  border-bottom-color: rgba(245, 243, 244, 0.13);
   color: #c6bdbd;
   font-weight: 700;
 }
 
 .tabela tbody td {
-  border-bottom-color: rgba(245, 243, 244, .09);
+  border-bottom-color: rgba(245, 243, 244, 0.09);
   color: #d0c8c8;
 }
 
@@ -563,12 +578,15 @@
 .rodapeDetalhes button {
   border-radius: 10px;
   font-weight: 600;
-  transition: border-color .18s ease, background .18s ease, color .18s ease;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .botaoAcao:hover,
 .rodapeDetalhes button:hover {
-  background: rgba(164, 22, 26, .09);
+  background: rgba(164, 22, 26, 0.09);
 }
 
 .estadoVazio {
@@ -582,14 +600,14 @@
 
 .mensagemSucesso {
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
 }
 
 .detalheInspecao p,
 .observacoes {
-  border-color: rgba(245, 243, 244, .12);
+  border-color: rgba(245, 243, 244, 0.12);
   border-radius: 11px;
-  background: rgba(245, 243, 244, .02);
+  background: rgba(245, 243, 244, 0.02);
 }
 
 .detalheInspecao p span,
@@ -607,16 +625,40 @@
   color: #f0ebeb;
   font-weight: 700;
 }
-.resultadoRessalva { border-color: rgba(214,174,107,.3); color: #d6ae6b; }
-.painel { overflow: hidden; }
-.tabela tbody tr:hover { background: rgba(245,243,244,.025); }
-.botaoAcao:focus-visible, .filtros button:focus-visible, .mensagemSucesso button:focus-visible, .rodapeDetalhes button:focus-visible { outline: 2px solid #ba181b; outline-offset: 2px; }
+.resultadoRessalva {
+  border-color: rgba(214, 174, 107, 0.3);
+  color: #d6ae6b;
+}
+.painel {
+  overflow: hidden;
+}
+.tabela tbody tr:hover {
+  background: rgba(245, 243, 244, 0.025);
+}
+.botaoAcao:focus-visible,
+.filtros button:focus-visible,
+.mensagemSucesso button:focus-visible,
+.rodapeDetalhes button:focus-visible {
+  outline: 2px solid #ba181b;
+  outline-offset: 2px;
+}
 @media (max-width: 720px) {
- .filtros { overflow-x: auto; }
- .tabela { min-width: 760px; }
- .respostas p { align-items: flex-start; }
+  .filtros {
+    overflow-x: auto;
+  }
+  .tabela {
+    min-width: 760px;
+  }
+  .respostas p {
+    align-items: flex-start;
+  }
 }
 @media (max-width: 520px) {
- .respostas p { flex-direction: column; gap: 5px; }
- .mensagemSucesso { align-items: flex-start; }
+  .respostas p {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .mensagemSucesso {
+    align-items: flex-start;
+  }
 }

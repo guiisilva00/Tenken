@@ -16,31 +16,160 @@
   user-select: none;
 }
 
-.topSection { display: flex; flex-direction: column; }
-.brandHeader { display: flex; height: 64px; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid rgb(255 255 255 / 4%); background: var(--surface-lowest, #0b0f12); }
-.brandLink { display: flex; align-items: center; text-decoration: none; }
-.brandLogo { display: block; width: 190px; max-width: 100%; height: 42px; object-fit: contain; object-position: left center; }
-.mobileCloseBtn { display: none; }
-.sectionHeading { padding: 18px 24px 8px; }
-.sectionHeading span { color: var(--silver, #b1a7a6); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.navMenu { display: flex; flex-direction: column; gap: 4px; padding: 0 16px; }
-.navItem { display: flex; min-height: 42px; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 4px; color: var(--silver, #b1a7a6); font-size: 14px; font-weight: 500; text-decoration: none; transition: background .15s ease, color .15s ease; }
-.navIcon { display: block; width: 20px; height: 20px; flex: 0 0 20px; color: currentColor; }
-.navLabel { letter-spacing: .01em; }
-.navItem:hover { background: var(--surface-container, #1c2023); color: var(--white-smoke, #f5f3f4); }
-.navItemActive { background: var(--mahogany-red, #a4161a); box-shadow: 0 2px 8px rgba(164, 22, 26, .4); color: #fff; font-weight: 700; }
-.footer { padding: 16px; border-top: 1px solid rgb(255 255 255 / 4%); background: var(--surface-lowest, #0b0f12); }
-.telemetryCard { display: flex; min-height: 40px; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-subtle, #22272b); border-radius: 4px; background: var(--surface-low, #181c1f); }
-.pulseDot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981; animation: pulseAnim 2s infinite ease-in-out; }
-.telemetryText { color: var(--silver, #b1a7a6); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-@keyframes pulseAnim { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.85); } }
-
-@media (max-width: 1024px) {
-  .barra { z-index: 60; transform: translateX(-100%); transition: transform .2s ease; }
-  .barraAberta { transform: translateX(0); }
-  .brandHeader { padding: 0 16px; }
-  .brandLogo { width: 176px; }
-  .mobileCloseBtn { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--border-subtle, #22272b); background: transparent; color: var(--white-smoke, #f5f3f4); cursor: pointer; }
+.topSection {
+  display: flex;
+  flex-direction: column;
+}
+.brandHeader {
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid rgb(255 255 255 / 4%);
+  background: var(--surface-lowest, #0b0f12);
+}
+.brandLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.brandLogo {
+  display: block;
+  width: 190px;
+  max-width: 100%;
+  height: 42px;
+  object-fit: contain;
+  object-position: left center;
+}
+.mobileCloseBtn {
+  display: none;
+}
+.sectionHeading {
+  padding: 18px 24px 8px;
+}
+.sectionHeading span {
+  color: var(--silver, #b1a7a6);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 16px;
+}
+.navItem {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  color: var(--silver, #b1a7a6);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.navIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  color: currentColor;
+}
+.navLabel {
+  letter-spacing: 0.01em;
+}
+.navItem:hover {
+  background: var(--surface-container, #1c2023);
+  color: var(--white-smoke, #f5f3f4);
+}
+.navItemActive {
+  background: var(--mahogany-red, #a4161a);
+  box-shadow: 0 2px 8px rgba(164, 22, 26, 0.4);
+  color: #fff;
+  font-weight: 700;
+}
+.footer {
+  padding: 16px;
+  border-top: 1px solid rgb(255 255 255 / 4%);
+  background: var(--surface-lowest, #0b0f12);
+}
+.telemetryCard {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle, #22272b);
+  border-radius: 4px;
+  background: var(--surface-low, #181c1f);
+}
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: pulseAnim 2s infinite ease-in-out;
+}
+.telemetryText {
+  color: var(--silver, #b1a7a6);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@keyframes pulseAnim {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
 }
 
-@media (prefers-reduced-motion: reduce) { .pulseDot, .barra { animation: none; transition: none; } }
+@media (max-width: 1024px) {
+  .barra {
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .barraAberta {
+    transform: translateX(0);
+  }
+  .brandHeader {
+    padding: 0 16px;
+  }
+  .brandLogo {
+    width: 176px;
+  }
+  .mobileCloseBtn {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border: 1px solid var(--border-subtle, #22272b);
+    background: transparent;
+    color: var(--white-smoke, #f5f3f4);
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseDot,
+  .barra {
+    animation: none;
+    transition: none;
+  }
+}

@@ -3,13 +3,15 @@
   inset: 0 0 auto;
   z-index: 1000;
   width: 100%;
-  background: rgba(11, 9, 10, .96);
-  border-bottom: 1px solid rgba(177, 167, 166, .2);
+  background: rgba(11, 9, 10, 0.96);
+  border-bottom: 1px solid rgba(177, 167, 166, 0.2);
   backdrop-filter: blur(8px);
   opacity: 0;
   transform: translateY(-100%);
   pointer-events: none;
-  transition: opacity 200ms, transform 200ms;
+  transition:
+    opacity 200ms,
+    transform 200ms;
 }
 
 .visivel {
@@ -44,11 +46,13 @@
   color: var(--white-smoke);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
   text-decoration: none;
   text-transform: uppercase;
-  opacity: .78;
-  transition: color 180ms, opacity 180ms;
+  opacity: 0.78;
+  transition:
+    color 180ms,
+    opacity 180ms;
 }
 
 .link:hover {

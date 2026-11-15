@@ -40,7 +40,9 @@ export async function listarPorProfessor(professorId) {
      FROM agendamentos a JOIN turmas_projetos t ON t.id=a.turma_id
      JOIN equipamentos e ON e.id=a.equipamento_id
      LEFT JOIN inspecoes i ON i.agendamento_id=a.id AND i.etapa='PRE_USO'
-     WHERE a.responsavel_id=? ORDER BY a.inicio DESC`, [professorId]);
+     WHERE a.responsavel_id=? ORDER BY a.inicio DESC`,
+    [professorId],
+  );
   return linhas;
 }
 
@@ -53,26 +55,56 @@ export async function buscarDetalhado(id) {
        a.status, a.token_acesso AS token, i.resultado AS preUsoResultado
      FROM agendamentos a JOIN turmas_projetos t ON t.id=a.turma_id
      JOIN equipamentos e ON e.id=a.equipamento_id
-     LEFT JOIN inspecoes i ON i.agendamento_id=a.id AND i.etapa='PRE_USO' WHERE a.id=?`, [id]);
+     LEFT JOIN inspecoes i ON i.agendamento_id=a.id AND i.etapa='PRE_USO' WHERE a.id=?`,
+    [id],
+  );
   return linhas[0] || null;
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT id, responsavel_id, equipamento_id, turma_id, status FROM agendamentos WHERE id=?", [id]);
+  const [linhas] = await pool.query(
+    "SELECT id, responsavel_id, equipamento_id, turma_id, status FROM agendamentos WHERE id=?",
+    [id],
+  );
   return linhas[0] || null;
 }
 
 export async function verificarConflito(equipamentoId, inicio, fim) {
-  const [linhas] = await pool.query("SELECT id FROM agendamentos WHERE equipamento_id=? AND status NOT IN ('CANCELADO','CONCLUIDO') AND inicio < ? AND fim > ? LIMIT 1", [equipamentoId, fim, inicio]);
+  const [linhas] = await pool.query(
+    "SELECT id FROM agendamentos WHERE equipamento_id=? AND status NOT IN ('CANCELADO','CONCLUIDO') AND inicio < ? AND fim > ? LIMIT 1",
+    [equipamentoId, fim, inicio],
+  );
   return linhas.length > 0;
 }
 
-export async function criar({ responsavel_id, equipamento_id, turma_id, atividade, inicio, fim, token_acesso }) {
-  const [resultado] = await pool.query(`INSERT INTO agendamentos (responsavel_id,equipamento_id,turma_id,atividade,inicio,fim,token_acesso,status) VALUES (?,?,?,?,?,?,?,'CONFIRMADO')`, [responsavel_id,equipamento_id,turma_id,atividade,inicio,fim,token_acesso]);
+export async function criar({
+  responsavel_id,
+  equipamento_id,
+  turma_id,
+  atividade,
+  inicio,
+  fim,
+  token_acesso,
+}) {
+  const [resultado] = await pool.query(
+    `INSERT INTO agendamentos (responsavel_id,equipamento_id,turma_id,atividade,inicio,fim,token_acesso,status) VALUES (?,?,?,?,?,?,?,'CONFIRMADO')`,
+    [
+      responsavel_id,
+      equipamento_id,
+      turma_id,
+      atividade,
+      inicio,
+      fim,
+      token_acesso,
+    ],
+  );
   return resultado.insertId;
 }
 
 export async function atualizarStatus(id, status, db = pool) {
-  const [resultado] = await db.query("UPDATE agendamentos SET status=? WHERE id=?", [status,id]);
+  const [resultado] = await db.query(
+    "UPDATE agendamentos SET status=? WHERE id=?",
+    [status, id],
+  );
   return resultado.affectedRows > 0;
 }

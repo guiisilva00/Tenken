@@ -62,18 +62,33 @@ export default function ProfessorLayout({ children, titulo }) {
     router.replace("/login");
   }
 
-  if (verificando || !usuario) return <main className={styles.loading}>Verificando acesso...</main>;
+  if (verificando || !usuario)
+    return <main className={styles.loading}>Verificando acesso...</main>;
 
   return (
     <div className={styles.wrapper}>
-        <BarraLateralProfessor usuario={usuario} aberta={menuAberto} onFechar={() => setMenuAberto(false)} />
-        {menuAberto && (
-          <button type="button" className={styles.backdrop} onClick={() => setMenuAberto(false)} aria-label="Fechar menu" />
-        )}
-        <div className={styles.contentSpine}>
-          <BarraSuperiorProfessor titulo={titulo} usuario={usuario} onSair={sair} onAbrirMenu={() => setMenuAberto(true)} />
-          <main className={styles.mainView}>{children}</main>
-        </div>
+      <BarraLateralProfessor
+        usuario={usuario}
+        aberta={menuAberto}
+        onFechar={() => setMenuAberto(false)}
+      />
+      {menuAberto && (
+        <button
+          type="button"
+          className={styles.backdrop}
+          onClick={() => setMenuAberto(false)}
+          aria-label="Fechar menu"
+        />
+      )}
+      <div className={styles.contentSpine}>
+        <BarraSuperiorProfessor
+          titulo={titulo}
+          usuario={usuario}
+          onSair={sair}
+          onAbrirMenu={() => setMenuAberto(true)}
+        />
+        <main className={styles.mainView}>{children}</main>
       </div>
+    </div>
   );
 }

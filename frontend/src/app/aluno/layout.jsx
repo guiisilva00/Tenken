@@ -34,7 +34,9 @@ export default function LayoutAluno({ children }) {
     }
 
     setRotaLiberada(false);
-    if (window.sessionStorage.getItem("tenken-aluno-bancada-liberada") === "true") {
+    if (
+      window.sessionStorage.getItem("tenken-aluno-bancada-liberada") === "true"
+    ) {
       setRotaLiberada(true);
       return;
     }
@@ -50,35 +52,88 @@ export default function LayoutAluno({ children }) {
 
   return (
     <AuthGuard>
-      {pathname === "/aluno" ? children : rotaLiberada ? (
+      {pathname === "/aluno" ? (
+        children
+      ) : rotaLiberada ? (
         <div className={styles.wrapper}>
-          <BarraLateral aberta={menuAberto} onNavegar={() => setMenuAberto(false)} onFechar={() => setMenuAberto(false)} />
-          {menuAberto && <button type="button" className={styles.backdrop} aria-label="Fechar menu" onClick={() => setMenuAberto(false)} />}
+          <BarraLateral
+            aberta={menuAberto}
+            onNavegar={() => setMenuAberto(false)}
+            onFechar={() => setMenuAberto(false)}
+          />
+          {menuAberto && (
+            <button
+              type="button"
+              className={styles.backdrop}
+              aria-label="Fechar menu"
+              onClick={() => setMenuAberto(false)}
+            />
+          )}
 
           <div className={styles.contentSpine}>
             <header className={styles.topbar}>
-              <button type="button" className={styles.menuBtn} onClick={() => setMenuAberto(true)} aria-label="Abrir menu" aria-expanded={menuAberto}>
-                <span className="material-symbols-outlined" aria-hidden="true">menu</span>
+              <button
+                type="button"
+                className={styles.menuBtn}
+                onClick={() => setMenuAberto(true)}
+                aria-label="Abrir menu"
+                aria-expanded={menuAberto}
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  menu
+                </span>
               </button>
 
               <nav className={styles.breadcrumb} aria-label="Localização atual">
                 <span>TENKEN</span>
-                <span className={`material-symbols-outlined ${styles.breadcrumbSeparator}`} aria-hidden="true">chevron_right</span>
+                <span
+                  className={`material-symbols-outlined ${styles.breadcrumbSeparator}`}
+                  aria-hidden="true"
+                >
+                  chevron_right
+                </span>
                 <span>Área do Aluno</span>
-                <span className={`material-symbols-outlined ${styles.breadcrumbSeparator}`} aria-hidden="true">chevron_right</span>
-                <strong className={styles.breadcrumbCurrent}>{titulosPagina[pathname] || "Área do Aluno"}</strong>
+                <span
+                  className={`material-symbols-outlined ${styles.breadcrumbSeparator}`}
+                  aria-hidden="true"
+                >
+                  chevron_right
+                </span>
+                <strong className={styles.breadcrumbCurrent}>
+                  {titulosPagina[pathname] || "Área do Aluno"}
+                </strong>
               </nav>
 
               <div className={styles.topbarRight}>
                 <div className={styles.userBadge}>
-                  <div className={styles.userAvatar}><span className="material-symbols-outlined" style={{ fontSize: 18 }} aria-hidden="true">person</span></div>
+                  <div className={styles.userAvatar}>
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 18 }}
+                      aria-hidden="true"
+                    >
+                      person
+                    </span>
+                  </div>
                   <div className={styles.userInfo}>
-                    <span className={styles.userName}>{usuario?.nome || usuario?.matricula || sessaoAluno.nome}</span>
+                    <span className={styles.userName}>
+                      {usuario?.nome || usuario?.matricula || sessaoAluno.nome}
+                    </span>
                     <span className={styles.userRole}>ALUNO</span>
                   </div>
                 </div>
-                <button type="button" className={styles.logoutBtn} onClick={sair} aria-label="Sair da sessão">
-                  <span className={`material-symbols-outlined ${styles.logoutIcon}`} aria-hidden="true">power_settings_new</span>
+                <button
+                  type="button"
+                  className={styles.logoutBtn}
+                  onClick={sair}
+                  aria-label="Sair da sessão"
+                >
+                  <span
+                    className={`material-symbols-outlined ${styles.logoutIcon}`}
+                    aria-hidden="true"
+                  >
+                    power_settings_new
+                  </span>
                   <span>Sair</span>
                 </button>
               </div>

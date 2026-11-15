@@ -99,8 +99,15 @@
 }
 
 @keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
 }
 
 .statusText {
@@ -172,7 +179,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .logoutBtn:hover {
@@ -189,26 +198,77 @@
   background: var(--onyx, #0b090a);
 }
 
-.backdrop { display: none; }
-.menuBtn { display: none; }
+.backdrop {
+  display: none;
+}
+.menuBtn {
+  display: none;
+}
 @media (max-width: 1024px) {
-  .contentSpine { padding-left: 0; }
-  .topbar { left: 0; padding: 0 20px; }
-  .menuBtn { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--border-subtle, #22272b); background: var(--surface-low, #181c1f); color: var(--white-smoke, #f5f3f4); cursor: pointer; }
-  .backdrop { display: block; position: fixed; inset: 0; z-index: 45; border: 0; background: rgba(0,0,0,.62); }
-  .mainView { padding: 20px 20px 36px; }
+  .contentSpine {
+    padding-left: 0;
+  }
+  .topbar {
+    left: 0;
+    padding: 0 20px;
+  }
+  .menuBtn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-subtle, #22272b);
+    background: var(--surface-low, #181c1f);
+    color: var(--white-smoke, #f5f3f4);
+    cursor: pointer;
+  }
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    border: 0;
+    background: rgba(0, 0, 0, 0.62);
+  }
+  .mainView {
+    padding: 20px 20px 36px;
+  }
 }
 @media (max-width: 560px) {
-  .topbar { padding: 0 12px; }
-  .topbarRight { gap: 8px; }
-  .userBadge { padding-right: 6px; }
-  .userInfo { display: none; }
-  .logoutBtn { padding: 8px; font-size: 0; }
-  .mainView { padding: 18px 14px 28px; }
+  .topbar {
+    padding: 0 12px;
+  }
+  .topbarRight {
+    gap: 8px;
+  }
+  .userBadge {
+    padding-right: 6px;
+  }
+  .userInfo {
+    display: none;
+  }
+  .logoutBtn {
+    padding: 8px;
+    font-size: 0;
+  }
+  .mainView {
+    padding: 18px 14px 28px;
+  }
 }
 
-
 /* Acabamento visual alinhado à visão geral do professor. */
-.topbar { border-bottom-color: rgba(245,243,244,.14); background: linear-gradient(90deg,rgba(164,22,26,.07),transparent 52%),rgba(11,15,18,.94); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
-.statusPill,.userBadge { border-radius: 12px; border-color: rgba(245,243,244,.14); }
-.menuBtn { border-radius: 10px; }
+.topbar {
+  border-bottom-color: rgba(245, 243, 244, 0.14);
+  background:
+    linear-gradient(90deg, rgba(164, 22, 26, 0.07), transparent 52%),
+    rgba(11, 15, 18, 0.94);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.statusPill,
+.userBadge {
+  border-radius: 12px;
+  border-color: rgba(245, 243, 244, 0.14);
+}
+.menuBtn {
+  border-radius: 10px;
+}

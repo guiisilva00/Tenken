@@ -43,7 +43,7 @@
     z-index: 45;
     display: block;
     inset: 0;
-    background: rgba(0, 0, 0, .6);
+    background: rgba(0, 0, 0, 0.6);
     border: 0;
   }
   .wrapper {
@@ -69,12 +69,20 @@
 
 .wrapper {
   background:
-    radial-gradient(ellipse at 94% 8%, rgba(164, 22, 26, .045), transparent 32%),
+    radial-gradient(
+      ellipse at 94% 8%,
+      rgba(164, 22, 26, 0.045),
+      transparent 32%
+    ),
     var(--onyx, #0b090a);
 }
 
 .mainView {
-  background-image: radial-gradient(ellipse at 100% 0%, rgba(164, 22, 26, .025), transparent 38%);
+  background-image: radial-gradient(
+    ellipse at 100% 0%,
+    rgba(164, 22, 26, 0.025),
+    transparent 38%
+  );
 }
 
 .loading {

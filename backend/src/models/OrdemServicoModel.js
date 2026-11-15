@@ -9,7 +9,10 @@ export async function buscarPorChamado(chamadoId) {
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT * FROM ordens_servico WHERE id = ?", [id]);
+  const [linhas] = await pool.query(
+    "SELECT * FROM ordens_servico WHERE id = ?",
+    [id],
+  );
   return linhas[0] || null;
 }
 
@@ -53,7 +56,13 @@ export async function criar({ chamado_id, numero, emitida_por }) {
     "INSERT INTO ordens_servico (chamado_id, numero, emitida_por) VALUES (?, ?, ?)",
     [chamado_id, numero, emitida_por],
   );
-  return { id: resultado.insertId, chamado_id, numero, emitida_por, status: "EMITIDA" };
+  return {
+    id: resultado.insertId,
+    chamado_id,
+    numero,
+    emitida_por,
+    status: "EMITIDA",
+  };
 }
 
 export async function atualizarStatus(id, status) {

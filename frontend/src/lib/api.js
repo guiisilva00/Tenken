@@ -4,12 +4,14 @@ export async function apiFetch(path, options = {}) {
   const { body, headers: cabecalhosOriginais, ...opcoes } = options;
   const cabecalhos = new Headers(cabecalhosOriginais);
   const token = getToken();
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/$/, "");
-  const caminho = apiUrl.endsWith("/api") && path.startsWith("/api/")
-    ? path.slice(4)
-    : path;
+  const apiUrl = (
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
+  ).replace(/\/$/, "");
+  const caminho =
+    apiUrl.endsWith("/api") && path.startsWith("/api/") ? path.slice(4) : path;
 
-  const enviarComoFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  const enviarComoFormData =
+    typeof FormData !== "undefined" && body instanceof FormData;
 
   if (body !== undefined && !enviarComoFormData) {
     cabecalhos.set("Content-Type", "application/json");
@@ -22,7 +24,9 @@ export async function apiFetch(path, options = {}) {
   const resposta = await fetch(`${apiUrl}${caminho}`, {
     ...opcoes,
     headers: cabecalhos,
-    ...(body !== undefined ? { body: enviarComoFormData ? body : JSON.stringify(body) } : {}),
+    ...(body !== undefined
+      ? { body: enviarComoFormData ? body : JSON.stringify(body) }
+      : {}),
   });
 
   let dados = null;
@@ -38,13 +42,27 @@ export async function apiFetch(path, options = {}) {
   }
 
   if (!resposta.ok) {
-    const erro = new Error(dados?.message || dados?.mensagem || dados?.erro || "Não foi possível concluir a solicitação.");
+    const erro = new Error(
+      dados?.message ||
+        dados?.mensagem ||
+        dados?.erro ||
+        "Não foi possível concluir a solicitação.",
+    );
     erro.status = resposta.status;
     erro.errors = Array.isArray(dados?.errors)
-      ? dados.errors.filter((item) => item && typeof item.field === "string" && typeof item.message === "string")
+      ? dados.errors.filter(
+          (item) =>
+            item &&
+            typeof item.field === "string" &&
+            typeof item.message === "string",
+        )
       : [];
 
-    if (resposta.status === 401 && path !== "/api/usuarios/login" && typeof window !== "undefined") {
+    if (
+      resposta.status === 401 &&
+      path !== "/api/usuarios/login" &&
+      typeof window !== "undefined"
+    ) {
       clearSession();
       window.location.assign("/login");
     }

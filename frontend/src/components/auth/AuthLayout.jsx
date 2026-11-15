@@ -57,4 +57,3 @@ export default function AuthLayout({ children, title, subtitle }) {
     </main>
   );
 }
-

@@ -13,5 +13,8 @@
     "next": "16.4.2",
     "react": "latest",
     "react-dom": "latest"
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1"
   }
 }

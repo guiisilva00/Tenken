@@ -14,7 +14,13 @@ export function formatarPercentual(parte, total) {
 }
 
 export function nomeItem(item, index) {
-  return item.status ?? item.severidade ?? item.nome ?? item.nivel ?? `Item ${index + 1}`;
+  return (
+    item.status ??
+    item.severidade ??
+    item.nome ??
+    item.nivel ??
+    `Item ${index + 1}`
+  );
 }
 
 export function valorItem(item) {

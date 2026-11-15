@@ -28,7 +28,14 @@ export async function criar({ nome, email, perfil, codigo }) {
     "INSERT INTO pre_cadastros_staff (nome, email, perfil, codigo) VALUES (?, ?, ?, ?)",
     [nome, email, perfil, codigo],
   );
-  return { id: resultado.insertId, nome, email, perfil, codigo, utilizada: false };
+  return {
+    id: resultado.insertId,
+    nome,
+    email,
+    perfil,
+    codigo,
+    utilizada: false,
+  };
 }
 
 export async function revogar(id) {

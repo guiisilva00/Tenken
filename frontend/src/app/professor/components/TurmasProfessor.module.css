@@ -17,7 +17,7 @@
   color: var(--silver, #b1a7a6);
   font-size: var(--professor-font-supporting);
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
 }
 
 .cabecalhoPagina h1 {
@@ -25,7 +25,7 @@
   color: var(--white-smoke, #f5f3f4);
   font-size: var(--admin-font-page-title);
   font-weight: 600;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
 }
 
 .subtitulo {
@@ -47,30 +47,30 @@
   align-content: center;
   gap: 6.6px;
   padding: 14.3px 16.5px;
-  border: 1px solid rgba(245, 243, 244, .09);
+  border: 1px solid rgba(245, 243, 244, 0.09);
   background: var(--carbon-black, #161a1d);
 }
 
-.metrica>span {
+.metrica > span {
   color: #aaa2a3;
   font-size: var(--professor-font-supporting);
 }
 
-.metrica>strong {
+.metrica > strong {
   color: var(--white-smoke, #f5f3f4);
   font-size: 30px;
   font-weight: 600;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
   line-height: 1;
 }
 
-.metrica>small {
+.metrica > small {
   color: #898182;
   font-size: var(--professor-font-caption);
 }
 
 .painel {
-  border: 1px solid rgba(245, 243, 244, .09);
+  border: 1px solid rgba(245, 243, 244, 0.09);
   background: #141719;
 }
 
@@ -80,7 +80,7 @@
   justify-content: space-between;
   gap: 17.6px;
   padding: 18.7px 19.8px;
-  border-bottom: 1px solid rgba(245, 243, 244, .07);
+  border-bottom: 1px solid rgba(245, 243, 244, 0.07);
 }
 
 .cabecalhoPainel h2 {
@@ -110,12 +110,12 @@
   gap: 8.8px;
   margin: 13px 18px;
   padding: 0 11px;
-  border: 1px solid rgba(245, 243, 244, .12);
+  border: 1px solid rgba(245, 243, 244, 0.12);
   background: #101214;
   color: #938b8c;
 }
 
-.busca>span {
+.busca > span {
   font-size: 22.4px;
 }
 
@@ -143,7 +143,7 @@
   min-height: 84.7px;
   align-items: center;
   gap: 19.8px;
-  border-top: 1px solid rgba(245, 243, 244, .06);
+  border-top: 1px solid rgba(245, 243, 244, 0.06);
 }
 
 .identidadeTurma {
@@ -159,23 +159,23 @@
   height: 34.1px;
   flex: 0 0 31px;
   place-items: center;
-  background: rgba(164, 22, 26, .14);
+  background: rgba(164, 22, 26, 0.14);
   color: #d47678;
   font-size: 15.8px;
   font-weight: 700;
 }
 
 .itemTurma:nth-child(3n + 2) .marcaTurma {
-  background: rgba(131, 168, 200, .11);
+  background: rgba(131, 168, 200, 0.11);
   color: #9bb7cf;
 }
 
 .itemTurma:nth-child(3n) .marcaTurma {
-  background: rgba(214, 174, 107, .1);
+  background: rgba(214, 174, 107, 0.1);
   color: #d6ae6b;
 }
 
-.identidadeTurma>div {
+.identidadeTurma > div {
   min-width: 0;
 }
 
@@ -189,7 +189,7 @@
   white-space: nowrap;
 }
 
-.identidadeTurma>div>span {
+.identidadeTurma > div > span {
   display: block;
   margin-top: 4px;
   color: #91898a;
@@ -203,11 +203,11 @@
   gap: 4.4px;
 }
 
-.proximaAtividade>span {
+.proximaAtividade > span {
   color: #8f8788;
   font-size: var(--professor-font-caption);
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
 }
 
 .proximaAtividade strong {
@@ -229,7 +229,7 @@
 
 .botaoDetalhes {
   min-height: 31.9px;
-  border: 1px solid rgba(245, 243, 244, .12);
+  border: 1px solid rgba(245, 243, 244, 0.12);
   background: transparent;
   color: #b8b0b1;
   font: inherit;
@@ -247,7 +247,7 @@
 }
 
 .botaoDetalhes:hover {
-  border-color: rgba(245, 243, 244, .3);
+  border-color: rgba(245, 243, 244, 0.3);
   color: #fff;
 }
 
@@ -260,7 +260,7 @@
   text-align: center;
 }
 
-.estadoVazio>span {
+.estadoVazio > span {
   color: #9b5558;
   font-size: 28.8px;
 }
@@ -281,7 +281,7 @@
 .notaDados {
   margin: 0;
   padding: 11px 19.8px;
-  border-top: 1px solid rgba(245, 243, 244, .07);
+  border-top: 1px solid rgba(245, 243, 244, 0.07);
   color: #81797a;
   font-size: var(--professor-font-caption);
 }
@@ -297,7 +297,7 @@
   gap: 5.5px;
   margin: 0;
   padding: 12.1px;
-  border: 1px solid rgba(245, 243, 244, .08);
+  border: 1px solid rgba(245, 243, 244, 0.08);
 }
 
 .detalhesTurma p span,
@@ -329,7 +329,7 @@
   gap: 5.5px;
   margin: 0;
   padding: 9.9px 0;
-  border-top: 1px solid rgba(245, 243, 244, .07);
+  border-top: 1px solid rgba(245, 243, 244, 0.07);
 }
 
 .listaAtividades .semAtividade {
@@ -346,7 +346,7 @@
 .rodapeDetalhes button {
   min-height: 37.4px;
   padding: 0 13.2px;
-  border: 1px solid rgba(245, 243, 244, .15);
+  border: 1px solid rgba(245, 243, 244, 0.15);
   background: transparent;
   color: #e6e0e0;
   font: inherit;
@@ -393,11 +393,11 @@
     padding: 11px;
   }
 
-  .metrica>span {
+  .metrica > span {
     font-size: var(--professor-font-caption);
   }
 
-  .metrica>strong {
+  .metrica > strong {
     font-size: 26.4px;
   }
 
@@ -447,10 +447,14 @@
 }
 
 .metrica {
-  border: 2px solid rgba(245, 243, 244, .12);
+  border: 2px solid rgba(245, 243, 244, 0.12);
   border-radius: 15px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .035), transparent 58%), #161a1d;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 9px 22px rgba(0, 0, 0, .14);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.035), transparent 58%),
+    #161a1d;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 9px 22px rgba(0, 0, 0, 0.14);
 }
 
 .metrica > span {
@@ -464,14 +468,18 @@
 
 .painel {
   overflow: hidden;
-  border: 2px solid rgba(245, 243, 244, .14);
+  border: 2px solid rgba(245, 243, 244, 0.14);
   border-radius: 17px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .025), transparent 45%), #141719;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 13px 30px rgba(0, 0, 0, .15);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.025), transparent 45%),
+    #141719;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 13px 30px rgba(0, 0, 0, 0.15);
 }
 
 .cabecalhoPainel {
-  border-bottom-color: rgba(245, 243, 244, .11);
+  border-bottom-color: rgba(245, 243, 244, 0.11);
 }
 
 .cabecalhoPainel h2 {
@@ -480,9 +488,10 @@
 }
 
 .busca {
-  border-color: rgba(245, 243, 244, .17);
+  border-color: rgba(245, 243, 244, 0.17);
   border-radius: 10px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .025), transparent), #101214;
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.025), transparent), #101214;
   color: #c0b7b8;
 }
 
@@ -491,7 +500,7 @@
 }
 
 .busca:focus-within {
-  outline: 2px solid rgba(186, 24, 27, .38);
+  outline: 2px solid rgba(186, 24, 27, 0.38);
   outline-offset: 2px;
 }
 
@@ -504,24 +513,32 @@
 .itemTurma {
   min-height: 75px;
   padding: 11px 13px;
-  border: 1px solid rgba(245, 243, 244, .12);
+  border: 1px solid rgba(245, 243, 244, 0.12);
   border-radius: 12px;
-  background: linear-gradient(110deg, rgba(245, 243, 244, .03), transparent 72%), rgba(16, 18, 20, .55);
-  transition: border-color .18s ease, background .18s ease;
+  background:
+    linear-gradient(110deg, rgba(245, 243, 244, 0.03), transparent 72%),
+    rgba(16, 18, 20, 0.55);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
 }
 
 .itemTurma:hover {
-  border-color: rgba(164, 22, 26, .36);
-  background: linear-gradient(110deg, rgba(164, 22, 26, .065), rgba(245, 243, 244, .015));
+  border-color: rgba(164, 22, 26, 0.36);
+  background: linear-gradient(
+    110deg,
+    rgba(164, 22, 26, 0.065),
+    rgba(245, 243, 244, 0.015)
+  );
 }
 
 .marcaTurma {
   width: 36px;
   height: 36px;
   flex-basis: 36px;
-  border: 1px solid rgba(164, 22, 26, .22);
+  border: 1px solid rgba(164, 22, 26, 0.22);
   border-radius: 11px;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .05);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .identidadeTurma h3 {
@@ -540,13 +557,16 @@
   border-radius: 9px;
   color: #e4dddd;
   font-weight: 600;
-  transition: border-color .18s ease, background .18s ease, color .18s ease;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .botaoDetalhes:hover,
 .rodapeDetalhes button:hover {
-  border-color: rgba(164, 22, 26, .5);
-  background: rgba(164, 22, 26, .08);
+  border-color: rgba(164, 22, 26, 0.5);
+  background: rgba(164, 22, 26, 0.08);
   color: #fff;
 }
 
@@ -567,9 +587,9 @@
 }
 
 .detalhesTurma p {
-  border-color: rgba(245, 243, 244, .12);
+  border-color: rgba(245, 243, 244, 0.12);
   border-radius: 11px;
-  background: rgba(245, 243, 244, .02);
+  background: rgba(245, 243, 244, 0.02);
 }
 
 .detalhesTurma p span,

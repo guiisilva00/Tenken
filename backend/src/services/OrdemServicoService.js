@@ -5,9 +5,14 @@ import * as HistoricoManutencaoService from "./HistoricoManutencaoService.js";
 import * as ChamadoService from "./ChamadoService.js";
 
 const STATUS_VALIDOS = ["EMITIDA", "EM_EXECUCAO", "FINALIZADA", "CANCELADA"];
-const STATUS_CHAMADO_VALIDOS = ["ABERTO", "EM_ATENDIMENTO", "AGUARDANDO_PECAS", "CONCLUIDO", "CANCELADO"];
+const STATUS_CHAMADO_VALIDOS = [
+  "ABERTO",
+  "EM_ATENDIMENTO",
+  "AGUARDANDO_PECAS",
+  "CONCLUIDO",
+  "CANCELADO",
+];
 const SEVERIDADES_VALIDAS = ["BAIXA", "MEDIA", "ALTA", "CRITICA"];
-
 
 async function gerarNumero() {
   const ano = new Date().getFullYear();
@@ -26,7 +31,9 @@ export async function emitir(chamadoIdRecebido, usuarioLogado) {
 
   const existente = await OrdemServicoModel.buscarPorChamado(chamadoId);
   if (existente) {
-    const erroConflito = new Error(`O chamado ${chamadoId} já possui uma ordem de serviço.`);
+    const erroConflito = new Error(
+      `O chamado ${chamadoId} já possui uma ordem de serviço.`,
+    );
     erroConflito.status = 409;
     throw erroConflito;
   }
@@ -47,11 +54,15 @@ export async function listarParaTecnicos(usuarioLogado, filtros = {}) {
   }
   const status = filtros.status;
   if (status !== undefined && !STATUS_CHAMADO_VALIDOS.includes(status)) {
-    throw new TypeError(`Status deve ser um de: ${STATUS_CHAMADO_VALIDOS.join(", ")}.`);
+    throw new TypeError(
+      `Status deve ser um de: ${STATUS_CHAMADO_VALIDOS.join(", ")}.`,
+    );
   }
   const severidade = filtros.severidade;
   if (severidade !== undefined && !SEVERIDADES_VALIDAS.includes(severidade)) {
-    throw new TypeError(`Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`);
+    throw new TypeError(
+      `Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`,
+    );
   }
   return await OrdemServicoModel.listarTodas({ status, severidade });
 }
@@ -97,7 +108,15 @@ export async function concluir(idRecebido, descricao, usuarioLogado) {
     throw erro;
   }
 
-  await HistoricoManutencaoService.criar(ordemServico.chamado_id, { descricao }, usuarioLogado);
-  await ChamadoService.atualizarStatus(ordemServico.chamado_id, "CONCLUIDO", usuarioLogado);
+  await HistoricoManutencaoService.criar(
+    ordemServico.chamado_id,
+    { descricao },
+    usuarioLogado,
+  );
+  await ChamadoService.atualizarStatus(
+    ordemServico.chamado_id,
+    "CONCLUIDO",
+    usuarioLogado,
+  );
   return await OrdemServicoModel.buscarPorId(id);
 }

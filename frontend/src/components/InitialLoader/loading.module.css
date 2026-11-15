@@ -109,7 +109,8 @@
 }
 
 @keyframes pulsar {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(0.65);
     opacity: 0.15;
     filter: drop-shadow(0 0 0px transparent);

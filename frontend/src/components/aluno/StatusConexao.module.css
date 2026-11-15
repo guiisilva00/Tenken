@@ -19,7 +19,9 @@
   color: #ffb703;
 }
 
-.desconectado { color: #a1a1aa; }
+.desconectado {
+  color: #a1a1aa;
+}
 
 .ponto {
   position: relative;

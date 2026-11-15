@@ -1,5 +1,8 @@
 import { validarId } from "../utils/ValidarId.js";
-import Chamado, { SEVERIDADES_VALIDAS, STATUS_VALIDOS } from "../models/Chamado.js";
+import Chamado, {
+  SEVERIDADES_VALIDAS,
+  STATUS_VALIDOS,
+} from "../models/Chamado.js";
 import * as ChamadoModel from "../models/ChamadoModel.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 import * as UsuarioModel from "../models/UsuarioModel.js";
@@ -7,8 +10,10 @@ import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
 
 const PERFIS_PODEM_ABRIR_CHAMADO = ["ADMIN", "PROFESSOR", "TECNICO"];
 
-
-export async function listar({ pagina = 1, limite = 10, status, severidade, equipamento_id } = {}, usuarioLogado) {
+export async function listar(
+  { pagina = 1, limite = 10, status, severidade, equipamento_id } = {},
+  usuarioLogado,
+) {
   const paginaNum = Number(pagina);
   const limiteNum = Number(limite);
 
@@ -22,14 +27,20 @@ export async function listar({ pagina = 1, limite = 10, status, severidade, equi
     throw new TypeError(`Status deve ser um de: ${STATUS_VALIDOS.join(", ")}.`);
   }
   if (severidade !== undefined && !SEVERIDADES_VALIDAS.includes(severidade)) {
-    throw new TypeError(`Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`);
+    throw new TypeError(
+      `Severidade deve ser uma de: ${SEVERIDADES_VALIDAS.join(", ")}.`,
+    );
   }
 
   const offset = (paginaNum - 1) * limiteNum;
-  const equipamentoIdFiltro = equipamento_id !== undefined ? validarId(equipamento_id, "ID do equipamento") : undefined;
-  const tecnicoId = usuarioLogado?.perfil === "TECNICO"
-    ? validarId(usuarioLogado.id, "ID do técnico")
-    : undefined;
+  const equipamentoIdFiltro =
+    equipamento_id !== undefined
+      ? validarId(equipamento_id, "ID do equipamento")
+      : undefined;
+  const tecnicoId =
+    usuarioLogado?.perfil === "TECNICO"
+      ? validarId(usuarioLogado.id, "ID do técnico")
+      : undefined;
 
   const { chamados, total } = await ChamadoModel.listar({
     limite: limiteNum,
@@ -42,7 +53,12 @@ export async function listar({ pagina = 1, limite = 10, status, severidade, equi
 
   return {
     chamados,
-    paginacao: { pagina: paginaNum, limite: limiteNum, total, totalPaginas: Math.ceil(total / limiteNum) },
+    paginacao: {
+      pagina: paginaNum,
+      limite: limiteNum,
+      total,
+      totalPaginas: Math.ceil(total / limiteNum),
+    },
   };
 }
 
@@ -52,10 +68,16 @@ export async function listarDoProfessor(situacao, usuarioLogado) {
     erro.status = 403;
     throw erro;
   }
-  if (situacao !== undefined && !["EM_ANDAMENTO", "CONCLUIDO"].includes(situacao)) {
+  if (
+    situacao !== undefined &&
+    !["EM_ANDAMENTO", "CONCLUIDO"].includes(situacao)
+  ) {
     throw new TypeError("Situação deve ser EM_ANDAMENTO ou CONCLUIDO.");
   }
-  return ChamadoModel.listarDoProfessor(validarId(usuarioLogado.id, "ID do professor"), situacao);
+  return ChamadoModel.listarDoProfessor(
+    validarId(usuarioLogado.id, "ID do professor"),
+    situacao,
+  );
 }
 
 export async function buscarPorId(idRecebido) {
@@ -102,10 +124,15 @@ export async function atualizarStatus(idRecebido, status, usuarioLogado) {
   if (!chamado) {
     throw new Error(`Chamado ${id} não encontrado.`);
   }
-  if (usuarioLogado?.perfil === "TECNICO" && Number(chamado.tecnico_id) !== Number(usuarioLogado.id)) {
+  if (
+    usuarioLogado?.perfil === "TECNICO" &&
+    Number(chamado.tecnico_id) !== Number(usuarioLogado.id)
+  ) {
     const ordemServico = await OrdemServicoModel.buscarPorChamado(id);
     if (!ordemServico) {
-      const erro = new Error("Você só pode atualizar chamados atribuídos a você ou vinculados a uma ordem de serviço.");
+      const erro = new Error(
+        "Você só pode atualizar chamados atribuídos a você ou vinculados a uma ordem de serviço.",
+      );
       erro.status = 403;
       throw erro;
     }
@@ -121,14 +148,24 @@ export async function atualizarStatus(idRecebido, status, usuarioLogado) {
     CANCELADO: "CANCELADA",
   };
   if (statusOrdemPorChamado[status]) {
-    await OrdemServicoModel.atualizarStatusPorChamado(id, statusOrdemPorChamado[status]);
+    await OrdemServicoModel.atualizarStatusPorChamado(
+      id,
+      statusOrdemPorChamado[status],
+    );
   }
   if (status === "CONCLUIDO") {
-    const chamadosAtivos = await ChamadoModel.contarAtivosPorEquipamento(chamado.equipamento_id);
+    const chamadosAtivos = await ChamadoModel.contarAtivosPorEquipamento(
+      chamado.equipamento_id,
+    );
     if (chamadosAtivos === 0) {
-      const equipamento = await EquipamentoModel.buscarPorId(chamado.equipamento_id);
+      const equipamento = await EquipamentoModel.buscarPorId(
+        chamado.equipamento_id,
+      );
       if (equipamento?.status === "EM_MANUTENCAO") {
-        await EquipamentoModel.atualizarStatus(chamado.equipamento_id, "DISPONIVEL");
+        await EquipamentoModel.atualizarStatus(
+          chamado.equipamento_id,
+          "DISPONIVEL",
+        );
       }
     }
   }

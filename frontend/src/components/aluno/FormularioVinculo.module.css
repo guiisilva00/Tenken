@@ -7,7 +7,11 @@
   color: #f5f3f4;
 }
 
-.textInput, .selectInput { width: 100%; box-sizing: border-box; }
+.textInput,
+.selectInput {
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .textInput::placeholder {
   color: #a1a1aa;

@@ -43,14 +43,45 @@ export default function FormularioVinculo({ onEnviar }) {
   return (
     <form className={authForm.form} onSubmit={enviar} noValidate>
       <div className={authForm.field}>
-        <label className={authForm.label} htmlFor="nome-aluno">Nome completo</label>
-        <input className={`${authForm.input} ${styles.textInput}`} id="nome-aluno" name="nome" type="text" placeholder="Digite seu nome completo" value={nome} onChange={(evento) => { setNome(evento.target.value); setErro(""); }} autoComplete="name" required />
+        <label className={authForm.label} htmlFor="nome-aluno">
+          Nome completo
+        </label>
+        <input
+          className={`${authForm.input} ${styles.textInput}`}
+          id="nome-aluno"
+          name="nome"
+          type="text"
+          placeholder="Digite seu nome completo"
+          value={nome}
+          onChange={(evento) => {
+            setNome(evento.target.value);
+            setErro("");
+          }}
+          autoComplete="name"
+          required
+        />
       </div>
       <div className={authForm.field}>
-        <label className={authForm.label} htmlFor="turma-aluno">Turma</label>
-        <select className={`${authForm.input} ${styles.selectInput}`} id="turma-aluno" name="turma" value={turma} onChange={(evento) => { setTurma(evento.target.value); setErro(""); }} required>
+        <label className={authForm.label} htmlFor="turma-aluno">
+          Turma
+        </label>
+        <select
+          className={`${authForm.input} ${styles.selectInput}`}
+          id="turma-aluno"
+          name="turma"
+          value={turma}
+          onChange={(evento) => {
+            setTurma(evento.target.value);
+            setErro("");
+          }}
+          required
+        >
           <option value="">Selecione sua turma</option>
-          {turmasDisponiveis.map((opcao) => <option key={opcao} value={opcao}>{opcao}</option>)}
+          {turmasDisponiveis.map((opcao) => (
+            <option key={opcao} value={opcao}>
+              {opcao}
+            </option>
+          ))}
         </select>
       </div>
       <div className={authForm.field}>

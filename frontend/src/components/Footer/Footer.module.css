@@ -1,7 +1,7 @@
 .footer {
   color: var(--silver);
   background: var(--onyx);
-  border-top: 1px solid rgba(177, 167, 166, .18);
+  border-top: 1px solid rgba(177, 167, 166, 0.18);
 }
 
 .footer p {
@@ -38,7 +38,7 @@
   color: var(--white-smoke);
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 

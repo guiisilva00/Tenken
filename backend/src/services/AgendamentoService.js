@@ -19,7 +19,11 @@ function dataISOValida(data) {
   if (!partes) return false;
   const [, ano, mes, dia] = partes.map(Number);
   const validada = new Date(Date.UTC(ano, mes - 1, dia));
-  return validada.getUTCFullYear() === ano && validada.getUTCMonth() === mes - 1 && validada.getUTCDate() === dia;
+  return (
+    validada.getUTCFullYear() === ano &&
+    validada.getUTCMonth() === mes - 1 &&
+    validada.getUTCDate() === dia
+  );
 }
 
 export async function listarPorProfessor(id) {
@@ -36,7 +40,9 @@ export async function criar(dados, usuario) {
   if (!dataISOValida(data))
     throw new TypeError("Informe uma data vÃ¡lida para o agendamento.");
   if (data < dataLocalISO())
-    throw new TypeError("NÃ£o Ã© possÃ­vel criar agendamentos em dias anteriores a hoje.");
+    throw new TypeError(
+      "NÃ£o Ã© possÃ­vel criar agendamentos em dias anteriores a hoje.",
+    );
   const turma = await TurmaModel.buscarPorId(turmaId);
   if (!turma || Number(turma.professor_id) !== Number(usuario.id))
     throw new TypeError("A turma não está vinculada a este professor.");
@@ -53,7 +59,8 @@ export async function criar(dados, usuario) {
         if (error.code !== "ER_DUP_ENTRY" || tentativa === 4) throw error;
       }
     }
-    if (!turma.token_acesso) throw new Error("Nao foi possivel definir token unico para turma.");
+    if (!turma.token_acesso)
+      throw new Error("Nao foi possivel definir token unico para turma.");
   }
   const equipamento = await EquipamentoModel.buscarPorId(equipamentoId);
   if (!equipamento || ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status))

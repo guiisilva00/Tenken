@@ -18,18 +18,18 @@
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
-  letter-spacing: .2em;
+  letter-spacing: 0.2em;
 }
 
 .cabecalhoPagina h1 {
   margin: 0;
   font-size: clamp(20px, 2vw, 26px);
   font-weight: 600;
-  letter-spacing: -.025em;
+  letter-spacing: -0.025em;
 }
 
 .resumoPeriodo {
-  border: 1px solid rgba(228, 228, 231, .12);
+  border: 1px solid rgba(228, 228, 231, 0.12);
   padding: 7px 10px;
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -43,7 +43,7 @@
   gap: 12px;
   margin-bottom: 15px;
   padding: 14px;
-  border: 1px solid rgba(228, 228, 231, .09);
+  border: 1px solid rgba(228, 228, 231, 0.09);
   background: #121318;
 }
 
@@ -55,7 +55,7 @@
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -63,7 +63,7 @@
   width: 100%;
   height: 40px;
   padding: 0 30px 0 10px;
-  border: 1px solid rgba(228, 228, 231, .12);
+  border: 1px solid rgba(228, 228, 231, 0.12);
   border-radius: 0;
   outline: 0;
   background: #09090b;
@@ -94,7 +94,7 @@
   font: inherit;
   font-size: 13px;
   font-weight: 600;
-  transition: background .15s ease;
+  transition: background 0.15s ease;
 }
 
 .botaoPrimario:hover {
@@ -107,7 +107,7 @@
 
 .painelAgenda {
   overflow: hidden;
-  border: 1px solid rgba(63, 22, 25, .75);
+  border: 1px solid rgba(63, 22, 25, 0.75);
   background: #121318;
 }
 
@@ -118,7 +118,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 10px 17px;
-  border-bottom: 1px solid rgba(228, 228, 231, .07);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.07);
 }
 
 .navegacaoPeriodo {
@@ -134,14 +134,14 @@
   height: 30px;
   flex: 0 0 30px;
   place-items: center;
-  border: 1px solid rgba(228, 228, 231, .12);
+  border: 1px solid rgba(228, 228, 231, 0.12);
   background: transparent;
   color: #a1a1aa;
 }
 
 .navegacaoPeriodo button:hover {
   color: #fff;
-  border-color: rgba(228, 228, 231, .3);
+  border-color: rgba(228, 228, 231, 0.3);
 }
 
 .navegacaoPeriodo button span {
@@ -164,7 +164,7 @@
   border: 1px solid;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
-  letter-spacing: .06em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -177,14 +177,14 @@
 }
 
 .laboratorioAtivo {
-  border-color: rgba(16, 185, 129, .3);
-  background: rgba(16, 185, 129, .08);
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
   color: #6ee7b7;
 }
 
 .laboratorioInativo {
-  border-color: rgba(197, 31, 38, .35);
-  background: rgba(197, 31, 38, .08);
+  border-color: rgba(197, 31, 38, 0.35);
+  background: rgba(197, 31, 38, 0.08);
   color: #fca5a5;
 }
 
@@ -192,7 +192,7 @@
   display: flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid rgba(228, 228, 231, .12);
+  border: 1px solid rgba(228, 228, 231, 0.12);
   background: #09090b;
 }
 
@@ -204,7 +204,9 @@
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
-  transition: color .15s ease, background .15s ease;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
 .alternadorVisualizacao button:hover {
@@ -222,7 +224,7 @@
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
-  border-bottom: 1px solid rgba(228, 228, 231, .07);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.07);
 }
 
 .busca {
@@ -232,12 +234,12 @@
   align-items: center;
   gap: 8px;
   padding: 0 10px;
-  border: 1px solid rgba(228, 228, 231, .12);
+  border: 1px solid rgba(228, 228, 231, 0.12);
   background: #09090b;
   color: #a1a1aa;
 }
 
-.busca>span {
+.busca > span {
   font-size: 18px;
 }
 
@@ -279,12 +281,12 @@
   min-height: 48px;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid rgba(228, 228, 231, .06);
-  border-bottom: 1px solid rgba(228, 228, 231, .07);
+  border-right: 1px solid rgba(228, 228, 231, 0.06);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.07);
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -316,14 +318,14 @@
 }
 
 .colunaHoras {
-  border-right: 1px solid rgba(228, 228, 231, .07);
+  border-right: 1px solid rgba(228, 228, 231, 0.07);
 }
 
 .rotuloHora {
   height: 62px;
   padding: 8px 9px 0;
-  border-right: 1px solid rgba(228, 228, 231, .025);
-  border-bottom: 1px solid rgba(228, 228, 231, .07);
+  border-right: 1px solid rgba(228, 228, 231, 0.025);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.07);
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
@@ -331,14 +333,20 @@
 
 .colunaAgenda {
   min-width: 0;
-  border-right: 1px solid rgba(228, 228, 231, .06);
+  border-right: 1px solid rgba(228, 228, 231, 0.06);
 }
 
 .agendaDia {
   position: relative;
   height: calc(8 * 62px);
   overflow: hidden;
-  background: repeating-linear-gradient(to bottom, transparent 0, transparent 61px, rgba(228, 228, 231, .07) 61px, rgba(228, 228, 231, .07) 62px);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 61px,
+    rgba(228, 228, 231, 0.07) 61px,
+    rgba(228, 228, 231, 0.07) 62px
+  );
 }
 
 .slotVazio {
@@ -356,11 +364,11 @@
 .slotVazio span {
   display: inline-block;
   padding: 4px 7px;
-  border: 1px dashed rgba(16, 185, 129, .45);
-  background: rgba(16, 185, 129, .05);
+  border: 1px dashed rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.05);
   font-size: 10px;
   opacity: 0;
-  transition: opacity .12s ease;
+  transition: opacity 0.12s ease;
 }
 
 .slotVazio:hover span,
@@ -369,11 +377,15 @@
 }
 
 .slotVazio:hover {
-  background: rgba(16, 185, 129, .035);
+  background: rgba(16, 185, 129, 0.035);
 }
 
-.slotVazio:disabled { cursor: not-allowed; }
-.slotVazio:disabled span { display: none; }
+.slotVazio:disabled {
+  cursor: not-allowed;
+}
+.slotVazio:disabled span {
+  display: none;
+}
 
 .evento {
   position: absolute;
@@ -389,7 +401,7 @@
   border: 0;
   border-left: 3px solid;
   text-align: left;
-  transition: filter .12s ease;
+  transition: filter 0.12s ease;
 }
 
 .evento:hover {
@@ -428,7 +440,7 @@
 
 .eventoConfirmado {
   border-left-color: #38bdf8;
-  background: rgba(14, 165, 233, .17);
+  background: rgba(14, 165, 233, 0.17);
 }
 
 .eventoConfirmado span {
@@ -437,7 +449,7 @@
 
 .eventoEmAndamento {
   border-left-color: #34d399;
-  background: rgba(16, 185, 129, .16);
+  background: rgba(16, 185, 129, 0.16);
 }
 
 .eventoEmAndamento span {
@@ -446,7 +458,7 @@
 
 .eventoConcluido {
   border-left-color: #a1a1aa;
-  background: rgba(161, 161, 170, .13);
+  background: rgba(161, 161, 170, 0.13);
 }
 
 .eventoConcluido span {
@@ -455,8 +467,8 @@
 
 .eventoCancelado {
   border-left-color: #c51f26;
-  background: rgba(164, 22, 26, .18);
-  opacity: .68;
+  background: rgba(164, 22, 26, 0.18);
+  opacity: 0.68;
 }
 
 .eventoCancelado span {
@@ -471,8 +483,8 @@
 
 .tituloDiaMes {
   padding: 10px 8px;
-  border-right: 1px solid rgba(228, 228, 231, .06);
-  border-bottom: 1px solid rgba(228, 228, 231, .07);
+  border-right: 1px solid rgba(228, 228, 231, 0.06);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.07);
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
@@ -483,12 +495,12 @@
   min-width: 0;
   min-height: 92px;
   padding: 5px;
-  border-right: 1px solid rgba(228, 228, 231, .06);
-  border-bottom: 1px solid rgba(228, 228, 231, .06);
+  border-right: 1px solid rgba(228, 228, 231, 0.06);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.06);
 }
 
 .celulaForaMes {
-  background: rgba(0, 0, 0, .12);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .celulaHoje {
@@ -543,7 +555,7 @@
   text-align: center;
 }
 
-.estadoLista>span {
+.estadoLista > span {
   font-size: 24px;
 }
 
@@ -555,7 +567,7 @@
 
 .estadoLista button {
   padding: 8px 13px;
-  border: 1px solid rgba(228, 228, 231, .18);
+  border: 1px solid rgba(228, 228, 231, 0.18);
   background: transparent;
   color: #fff;
 }
@@ -563,7 +575,7 @@
 .notaDados {
   margin: 0;
   padding: 10px 16px;
-  border-top: 1px solid rgba(228, 228, 231, .06);
+  border-top: 1px solid rgba(228, 228, 231, 0.06);
   color: #71717a;
   font-size: 10px;
   line-height: 1.5;
@@ -576,8 +588,8 @@
   gap: 12px;
   margin: 0 0 14px;
   padding: 10px 13px;
-  border: 1px solid rgba(16, 185, 129, .25);
-  background: rgba(16, 185, 129, .07);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.07);
   color: #a7f3d0;
   font-size: 13px;
 }
@@ -600,8 +612,8 @@
   gap: 5px;
   margin: 0;
   padding: 11px;
-  border: 1px solid rgba(228, 228, 231, .08);
-  background: rgba(0, 0, 0, .12);
+  border: 1px solid rgba(228, 228, 231, 0.08);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .detalhesReserva p span {
@@ -625,7 +637,7 @@
 .acoesDetalhe button {
   min-height: 36px;
   padding: 0 12px;
-  border: 1px solid rgba(228, 228, 231, .16);
+  border: 1px solid rgba(228, 228, 231, 0.16);
   background: transparent;
   color: #e4e4e7;
   font: inherit;
@@ -634,7 +646,7 @@
 }
 
 .acoesDetalhe .botaoPerigo {
-  border-color: rgba(197, 31, 38, .4);
+  border-color: rgba(197, 31, 38, 0.4);
   color: #fca5a5;
 }
 
@@ -644,23 +656,23 @@
   gap: 10px 16px;
 }
 
-.confirmacaoReserva>p:not(.avisoToken):not(.erroToken) {
+.confirmacaoReserva > p:not(.avisoToken):not(.erroToken) {
   display: grid;
   gap: 5px;
   margin: 0;
   padding: 9px 0;
 }
 
-.confirmacaoReserva>p span,
-.tokenConfirmacao>span {
+.confirmacaoReserva > p span,
+.tokenConfirmacao > span {
   color: #a1a1aa;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.confirmacaoReserva>p strong {
+.confirmacaoReserva > p strong {
   color: #f4f4f5;
   font-size: 13px;
   font-weight: 500;
@@ -674,7 +686,7 @@
   align-items: center;
   justify-content: center;
   gap: 9px;
-  border-left: 1px solid rgba(228, 228, 231, .1);
+  border-left: 1px solid rgba(228, 228, 231, 0.1);
   padding: 12px;
   text-align: center;
 }
@@ -686,12 +698,12 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 19px;
   font-weight: 600;
-  letter-spacing: .05em;
+  letter-spacing: 0.05em;
 }
 
 .tokenConfirmacao small {
-  border: 1px solid rgba(56, 189, 248, .25);
-  background: rgba(14, 165, 233, .08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(14, 165, 233, 0.08);
   padding: 4px 6px;
   color: #bae6fd;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -703,7 +715,7 @@
   grid-column: 1 / -1;
   margin: 0;
   border-left: 2px solid #a4161a;
-  background: rgba(9, 9, 11, .65);
+  background: rgba(9, 9, 11, 0.65);
   padding: 10px 12px;
   color: #a1a1aa;
   font-size: 11px;
@@ -727,7 +739,7 @@
 .acoesConfirmacao button {
   min-height: 38px;
   padding: 0 14px;
-  border: 1px solid rgba(228, 228, 231, .16);
+  border: 1px solid rgba(228, 228, 231, 0.16);
   background: transparent;
   color: #d4d4d8;
   font: inherit;
@@ -800,7 +812,7 @@
   .tokenConfirmacao {
     grid-column: 1;
     grid-row: auto;
-    border-top: 1px solid rgba(228, 228, 231, .1);
+    border-top: 1px solid rgba(228, 228, 231, 0.1);
     border-left: 0;
     padding-top: 16px;
   }
@@ -816,7 +828,7 @@
   color: #f5f3f4;
   font-size: clamp(27px, 3vw, 36px);
   font-weight: 700;
-  letter-spacing: -.04em;
+  letter-spacing: -0.04em;
 }
 
 .contexto,
@@ -827,14 +839,17 @@
 
 .resumoPeriodo {
   border-radius: 999px;
-  background: rgba(245, 243, 244, .035);
+  background: rgba(245, 243, 244, 0.035);
 }
 
 .filtrosTopo {
-  border-color: rgba(245, 243, 244, .14);
+  border-color: rgba(245, 243, 244, 0.14);
   border-radius: 15px;
-  background: linear-gradient(135deg, rgba(164, 22, 26, .09), transparent 58%), #121318;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 10px 24px rgba(0, 0, 0, .13);
+  background:
+    linear-gradient(135deg, rgba(164, 22, 26, 0.09), transparent 58%), #121318;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 10px 24px rgba(0, 0, 0, 0.13);
 }
 
 .controleSelect {
@@ -844,21 +859,24 @@
 
 .controleSelect select,
 .busca {
-  border-color: rgba(245, 243, 244, .16);
+  border-color: rgba(245, 243, 244, 0.16);
   border-radius: 10px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .025), transparent), #09090b;
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.025), transparent), #09090b;
 }
 
 .controleSelect select:focus-visible,
 .busca:focus-within {
-  outline: 2px solid rgba(186, 24, 27, .35);
+  outline: 2px solid rgba(186, 24, 27, 0.35);
   outline-offset: 2px;
 }
 
 .botaoPrimario {
   border-radius: 11px;
   background: linear-gradient(115deg, #a4161a, #8f1318);
-  box-shadow: 0 7px 18px rgba(164, 22, 26, .2), inset 0 1px rgba(255, 255, 255, .12);
+  box-shadow:
+    0 7px 18px rgba(164, 22, 26, 0.2),
+    inset 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .botaoPrimario:hover {
@@ -866,14 +884,18 @@
 }
 
 .painelAgenda {
-  border: 2px solid rgba(245, 243, 244, .13);
+  border: 2px solid rgba(245, 243, 244, 0.13);
   border-radius: 17px;
-  background: linear-gradient(150deg, rgba(245, 243, 244, .025), transparent 42%), #121318;
-  box-shadow: inset 0 1px rgba(255, 255, 255, .035), 0 13px 30px rgba(0, 0, 0, .15);
+  background:
+    linear-gradient(150deg, rgba(245, 243, 244, 0.025), transparent 42%),
+    #121318;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.035),
+    0 13px 30px rgba(0, 0, 0, 0.15);
 }
 
 .cabecalhoPainel {
-  border-bottom-color: rgba(245, 243, 244, .1);
+  border-bottom-color: rgba(245, 243, 244, 0.1);
 }
 
 .navegacaoPeriodo button,
@@ -887,7 +909,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(245, 243, 244, .025);
+  background: rgba(245, 243, 244, 0.025);
 }
 
 .navegacaoPeriodo button:focus-visible,
@@ -911,11 +933,13 @@
 }
 
 .alternadorVisualizacao .visualizacaoAtiva {
-  box-shadow: 0 4px 12px rgba(164, 22, 26, .22), inset 0 1px rgba(255, 255, 255, .12);
+  box-shadow:
+    0 4px 12px rgba(164, 22, 26, 0.22),
+    inset 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .filtrosAgenda {
-  border-bottom-color: rgba(245, 243, 244, .1);
+  border-bottom-color: rgba(245, 243, 244, 0.1);
 }
 
 .busca {
@@ -940,12 +964,16 @@
 }
 
 .cabecalhoDia .diaHoje {
-  box-shadow: 0 0 0 4px rgba(164, 22, 26, .13), 0 0 14px rgba(164, 22, 26, .22);
+  box-shadow:
+    0 0 0 4px rgba(164, 22, 26, 0.13),
+    0 0 14px rgba(164, 22, 26, 0.22);
 }
 
 .evento {
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .15), inset 0 1px rgba(255, 255, 255, .08);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .eventoMes {
@@ -953,7 +981,7 @@
 }
 
 .celulaHoje {
-  background: linear-gradient(180deg, rgba(164, 22, 26, .08), transparent 45%);
+  background: linear-gradient(180deg, rgba(164, 22, 26, 0.08), transparent 45%);
 }
 
 .estadoLista {
@@ -961,23 +989,25 @@
 }
 
 .estadoLista button {
-  border-color: rgba(245, 243, 244, .2);
+  border-color: rgba(245, 243, 244, 0.2);
   color: #f5f3f4;
 }
 
 .notaDados {
-  border-top-color: rgba(245, 243, 244, .1);
+  border-top-color: rgba(245, 243, 244, 0.1);
   color: #aaa1a2;
 }
 
 .mensagemSucesso {
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .13);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
 }
 
 .detalhesReserva p {
   border-radius: 11px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .03), transparent), rgba(0, 0, 0, .12);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.03), transparent),
+    rgba(0, 0, 0, 0.12);
 }
 
 .detalhesReserva p span,
@@ -994,7 +1024,7 @@
 
 .tokenConfirmacao {
   border-radius: 13px;
-  background: rgba(245, 243, 244, .025);
+  background: rgba(245, 243, 244, 0.025);
 }
 
 .tokenConfirmacao small {

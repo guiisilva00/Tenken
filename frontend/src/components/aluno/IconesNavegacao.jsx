@@ -35,7 +35,10 @@ export function IconeEquipamento({ className }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M8.5 20.5v-4a2 2 0 0 1 2-2h0M9.1 13l-1.2-2.7M8.1 7.1l4.6-1.8M16.5 4.8h2.1m0 0 1.4-1.4m-1.4 1.4L20 6.2" fill="none" />
+      <path
+        d="M8.5 20.5v-4a2 2 0 0 1 2-2h0M9.1 13l-1.2-2.7M8.1 7.1l4.6-1.8M16.5 4.8h2.1m0 0 1.4-1.4m-1.4 1.4L20 6.2"
+        fill="none"
+      />
       <path d="M8.5 20.5v-1a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1Z" />
       <path d="M4 20.5h16" fill="none" />
       <circle cx="10.5" cy="14.5" r="2" />
@@ -59,7 +62,13 @@ export function IconeSeta({ className, direcao }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d={direcao === "cima" ? "m3.5 10 4.5-4.5 4.5 4.5" : "m3.5 6 4.5 4.5L12.5 6"} />
+      <path
+        d={
+          direcao === "cima"
+            ? "m3.5 10 4.5-4.5 4.5 4.5"
+            : "m3.5 6 4.5 4.5L12.5 6"
+        }
+      />
     </svg>
   );
 }

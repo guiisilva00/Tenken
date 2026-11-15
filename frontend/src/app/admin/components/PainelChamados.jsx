@@ -1,7 +1,16 @@
-import { formatarPercentual, nomeItem, valorItem, somarTotais } from "../lib/formatadores";
+import {
+  formatarPercentual,
+  nomeItem,
+  valorItem,
+  somarTotais,
+} from "../lib/formatadores";
 import styles from "./PainelChamados.module.css";
 
-export default function PainelChamados({ porStatus, porSeveridade, carregando }) {
+export default function PainelChamados({
+  porStatus,
+  porSeveridade,
+  carregando,
+}) {
   const status = Array.isArray(porStatus) ? porStatus : [];
   const severidade = Array.isArray(porSeveridade) ? porSeveridade : [];
   const totalStatus = somarTotais(status);
@@ -15,7 +24,11 @@ export default function PainelChamados({ porStatus, porSeveridade, carregando })
       </div>
 
       {status.length === 0 ? (
-        <p className={styles.vazio}>{carregando ? "Carregando chamados…" : "Não há chamados para mostrar."}</p>
+        <p className={styles.vazio}>
+          {carregando
+            ? "Carregando chamados…"
+            : "Não há chamados para mostrar."}
+        </p>
       ) : (
         <table className={styles.tabela}>
           <thead>
@@ -44,9 +57,16 @@ export default function PainelChamados({ porStatus, porSeveridade, carregando })
         ) : (
           severidade.map((item, index) => (
             <div className={styles.barraLinha} key={nomeItem(item, index)}>
-              <span className={styles.barraRotulo}>{nomeItem(item, index)}</span>
+              <span className={styles.barraRotulo}>
+                {nomeItem(item, index)}
+              </span>
               <div className={styles.barraFundo}>
-                <div className={styles.barraPreenchida} style={{ width: formatarPercentual(valorItem(item), totalSeveridade) }} />
+                <div
+                  className={styles.barraPreenchida}
+                  style={{
+                    width: formatarPercentual(valorItem(item), totalSeveridade),
+                  }}
+                />
               </div>
               <span className={styles.barraValor}>{valorItem(item)}</span>
             </div>

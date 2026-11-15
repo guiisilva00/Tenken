@@ -88,7 +88,11 @@
   background: var(--surface-highest, #313538);
 }
 
-
 /* Acabamento visual alinhado à visão geral do professor. */
-.avatar { border-radius: 11px; box-shadow: 0 6px 16px rgba(164,22,26,.2); }
-.sair { border-radius: 10px; }
+.avatar {
+  border-radius: 11px;
+  box-shadow: 0 6px 16px rgba(164, 22, 26, 0.2);
+}
+.sair {
+  border-radius: 10px;
+}

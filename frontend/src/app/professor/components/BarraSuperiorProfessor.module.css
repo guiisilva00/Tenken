@@ -10,7 +10,7 @@
   justify-content: space-between;
   padding: 0 32px;
   border-bottom: 1px solid var(--border-subtle, #22272b);
-  background: rgba(11, 15, 18, .96);
+  background: rgba(11, 15, 18, 0.96);
   font-family: "DM Sans", sans-serif;
 }
 
@@ -34,7 +34,7 @@
   color: var(--silver, #b1a7a6);
   font-size: var(--professor-font-caption);
   font-weight: 600;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
 }
 
 .trilha span:nth-child(2),
@@ -51,7 +51,7 @@
   color: #958c8d;
   font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
 }
 
 .conta {
@@ -88,7 +88,7 @@
   font: inherit;
   font-size: var(--professor-font-caption);
   font-weight: 600;
-  letter-spacing: .06em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -149,16 +149,20 @@
 }
 
 .barra {
-  border-bottom-color: rgba(245, 243, 244, .1);
-  background: linear-gradient(90deg, rgba(164, 22, 26, .035), transparent 40%), rgba(11, 15, 18, .97);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+  border-bottom-color: rgba(245, 243, 244, 0.1);
+  background:
+    linear-gradient(90deg, rgba(164, 22, 26, 0.035), transparent 40%),
+    rgba(11, 15, 18, 0.97);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(14px);
 }
 
 .menuButton {
   border-radius: 11px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .06), transparent), var(--surface-high, #262a2e);
-  box-shadow: inset 0 1px rgba(255, 255, 255, .06);
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.06), transparent),
+    var(--surface-high, #262a2e);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .trilha {
@@ -174,7 +178,9 @@
 }
 
 .avatar {
-  box-shadow: 0 0 0 3px rgba(164, 22, 26, .12), inset 0 1px rgba(255, 255, 255, .08);
+  box-shadow:
+    0 0 0 3px rgba(164, 22, 26, 0.12),
+    inset 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .nome {
@@ -184,13 +190,20 @@
 
 .sair {
   border-radius: 11px;
-  background: linear-gradient(145deg, rgba(245, 243, 244, .06), transparent), var(--surface-high, #262a2e);
-  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+  background:
+    linear-gradient(145deg, rgba(245, 243, 244, 0.06), transparent),
+    var(--surface-high, #262a2e);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
 .sair:hover {
-  border-color: rgba(164, 22, 26, .7);
-  background: linear-gradient(145deg, rgba(164, 22, 26, .14), transparent), var(--surface-high, #262a2e);
+  border-color: rgba(164, 22, 26, 0.7);
+  background:
+    linear-gradient(145deg, rgba(164, 22, 26, 0.14), transparent),
+    var(--surface-high, #262a2e);
 }
 
 .menuButton > :global(.material-symbols-outlined),

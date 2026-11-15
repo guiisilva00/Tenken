@@ -154,7 +154,16 @@
 }
 
 @media (max-width: 480px) {
-  .itemEquipamento { gap: 10px; padding-right: 4px; padding-left: 4px; }
-  .idEquipamento { flex-basis: 74px; font-size: 11px; }
-  .instrucaoLista { font-size: 11px; }
+  .itemEquipamento {
+    gap: 10px;
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+  .idEquipamento {
+    flex-basis: 74px;
+    font-size: 11px;
+  }
+  .instrucaoLista {
+    font-size: 11px;
+  }
 }

@@ -41,8 +41,16 @@ export default function FigureError({ onRetry }) {
           >
             Algo interrompeu esta página.
           </h1>
-          <p style={{ maxWidth: "34rem", margin: "1.25rem auto 0", color: "#b1a7a6", lineHeight: 1.7 }}>
-            Ocorreu um problema inesperado. Você pode tentar carregar esta área novamente.
+          <p
+            style={{
+              maxWidth: "34rem",
+              margin: "1.25rem auto 0",
+              color: "#b1a7a6",
+              lineHeight: 1.7,
+            }}
+          >
+            Ocorreu um problema inesperado. Você pode tentar carregar esta área
+            novamente.
           </p>
           <div
             style={{

@@ -7,7 +7,9 @@
   overflow: hidden;
   padding: clamp(28px, 5vw, 64px);
   border: 1px solid #262626;
-  background: radial-gradient(ellipse at 86% 18%, rgb(164 22 26 / 15%), transparent 38%), #0b090a;
+  background:
+    radial-gradient(ellipse at 86% 18%, rgb(164 22 26 / 15%), transparent 38%),
+    #0b090a;
 }
 
 .pagina::after {
@@ -18,7 +20,9 @@
   aspect-ratio: 1;
   border: 1px solid rgb(164 22 26 / 20%);
   border-radius: 50%;
-  box-shadow: 0 0 0 36px rgb(164 22 26 / 4%), 0 0 0 72px rgb(164 22 26 / 3%);
+  box-shadow:
+    0 0 0 36px rgb(164 22 26 / 4%),
+    0 0 0 72px rgb(164 22 26 / 3%);
   content: "";
   pointer-events: none;
 }
@@ -28,7 +32,7 @@
   color: #8b8585;
   font-family: var(--fonte-mono);
   font-size: 11px;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
 }
 
 .conteudo {
@@ -46,7 +50,7 @@
   color: #b1a7a6;
   font-family: var(--fonte-mono);
   font-size: 11px;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
 }
 
 .indicador span {
@@ -62,11 +66,13 @@
   color: #f5f3f4;
   font-size: clamp(40px, 7vw, 76px);
   font-weight: 500;
-  letter-spacing: -.055em;
+  letter-spacing: -0.055em;
   line-height: 1.05;
 }
 
-.titulo span { color: #d5cfd0; }
+.titulo span {
+  color: #d5cfd0;
+}
 
 .resumo {
   max-width: 550px;
@@ -89,16 +95,38 @@
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  transition: background 160ms ease, transform 160ms ease;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
 }
 
-.acao:hover { transform: translateY(-2px); background: #ba181b; }
-.acao:focus-visible { outline: 2px solid #f5f3f4; outline-offset: 4px; }
-.rodape { display: flex; flex-wrap: wrap; gap: 12px; }
-.rodape span { color: #a4161a; }
+.acao:hover {
+  transform: translateY(-2px);
+  background: #ba181b;
+}
+.acao:focus-visible {
+  outline: 2px solid #f5f3f4;
+  outline-offset: 4px;
+}
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.rodape span {
+  color: #a4161a;
+}
 
 @media (max-width: 600px) {
-  .pagina { min-height: calc(100svh - 180px); padding: 24px; }
-  .conteudo { padding: 64px 0; }
-  .rodape { max-width: 280px; font-size: 9px; }
+  .pagina {
+    min-height: calc(100svh - 180px);
+    padding: 24px;
+  }
+  .conteudo {
+    padding: 64px 0;
+  }
+  .rodape {
+    max-width: 280px;
+    font-size: 9px;
+  }
 }

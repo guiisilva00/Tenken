@@ -90,18 +90,18 @@ Abra `http://localhost:3000` no navegador.
 
 ### Comandos disponíveis (front-end)
 
-| Comando | Ação |
-| --- | --- |
-| `npm run dev` | Inicia o servidor de desenvolvimento. |
-| `npm run build` | Gera a versão de produção. |
+| Comando         | Ação                                      |
+| --------------- | ----------------------------------------- |
+| `npm run dev`   | Inicia o servidor de desenvolvimento.     |
+| `npm run build` | Gera a versão de produção.                |
 | `npm run start` | Inicia a versão de produção após o build. |
 
 ### Comandos disponíveis (back-end)
 
-| Comando | Ação |
-| --- | --- |
-| `npm run dev` | Inicia a API com recarregamento automático. |
-| `npm run start` | Inicia a API em modo produção. |
+| Comando         | Ação                                        |
+| --------------- | ------------------------------------------- |
+| `npm run dev`   | Inicia a API com recarregamento automático. |
+| `npm run start` | Inicia a API em modo produção.              |
 
 ## Estrutura do repositório
 
@@ -125,17 +125,17 @@ database/
 
 ## Identidade visual
 
-| Variável | Cor | Aplicação |
-| --- | --- | --- |
-| `--onyx` | `#0b090a` | Fundo principal |
-| `--carbon-black` | `#161a1d` | Painéis e superfícies escuras |
-| `--dark-garnet` | `#660708` | Ações secundárias e bordas |
-| `--mahogany-red` | `#a4161a` | Cor principal da marca |
+| Variável           | Cor       | Aplicação                        |
+| ------------------ | --------- | -------------------------------- |
+| `--onyx`           | `#0b090a` | Fundo principal                  |
+| `--carbon-black`   | `#161a1d` | Painéis e superfícies escuras    |
+| `--dark-garnet`    | `#660708` | Ações secundárias e bordas       |
+| `--mahogany-red`   | `#a4161a` | Cor principal da marca           |
 | `--mahogany-red-2` | `#ba181b` | Destaques e estados de interação |
-| `--silver` | `#b1a7a6` | Texto secundário |
-| `--dust-grey` | `#d3d3d3` | Divisores e linhas |
-| `--white-smoke` | `#f5f3f4` | Superfícies claras |
-| `--white` | `#ffffff` | Texto sobre fundos escuros |
+| `--silver`         | `#b1a7a6` | Texto secundário                 |
+| `--dust-grey`      | `#d3d3d3` | Divisores e linhas               |
+| `--white-smoke`    | `#f5f3f4` | Superfícies claras               |
+| `--white`          | `#ffffff` | Texto sobre fundos escuros       |
 
 ## Equipe
 

@@ -1,6 +1,10 @@
 import { Router } from "express";
 
-import { cadastrarAluno, gerarMatricula, solicitarAcesso } from "../controllers/AlunoController.js";
+import {
+  cadastrarAluno,
+  gerarMatricula,
+  solicitarAcesso,
+} from "../controllers/AlunoController.js";
 import { authMiddleware } from "../middlewares/AuthMiddleware.js";
 
 const router = Router();

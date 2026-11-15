@@ -33,7 +33,10 @@ export async function criar(req, res, next) {
 
 export async function atualizar(req, res, next) {
   try {
-    const equipamento = await EquipamentoService.atualizar(req.params.id, req.body);
+    const equipamento = await EquipamentoService.atualizar(
+      req.params.id,
+      req.body,
+    );
     return res.status(200).json({ sucesso: true, dados: equipamento });
   } catch (erro) {
     return next(erro);
@@ -42,7 +45,10 @@ export async function atualizar(req, res, next) {
 
 export async function atualizarStatus(req, res, next) {
   try {
-    const equipamento = await EquipamentoService.atualizarStatus(req.params.id, req.body.status);
+    const equipamento = await EquipamentoService.atualizarStatus(
+      req.params.id,
+      req.body.status,
+    );
     return res.status(200).json({ sucesso: true, dados: equipamento });
   } catch (erro) {
     return next(erro);

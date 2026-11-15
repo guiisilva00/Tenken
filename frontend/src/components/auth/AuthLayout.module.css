@@ -242,11 +242,7 @@
         rgba(11, 9, 10, 0.88) 0%,
         rgba(11, 9, 10, 0.12) 75%
       ),
-      linear-gradient(
-        90deg,
-        rgba(11, 9, 10, 0.2),
-        transparent 70%
-      );
+      linear-gradient(90deg, rgba(11, 9, 10, 0.2), transparent 70%);
   }
 
   .videoCaption {

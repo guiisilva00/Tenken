@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import FigureError from "@/components/figureError";
 

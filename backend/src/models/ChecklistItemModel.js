@@ -9,7 +9,10 @@ export async function listarPorModelo(modeloId) {
 }
 
 export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT * FROM checklist_itens WHERE id = ?", [id]);
+  const [linhas] = await pool.query(
+    "SELECT * FROM checklist_itens WHERE id = ?",
+    [id],
+  );
   return linhas[0] || null;
 }
 
@@ -30,6 +33,9 @@ export async function atualizar(id, { descricao, critico }) {
 }
 
 export async function excluir(id) {
-  const [resultado] = await pool.query("DELETE FROM checklist_itens WHERE id = ?", [id]);
+  const [resultado] = await pool.query(
+    "DELETE FROM checklist_itens WHERE id = ?",
+    [id],
+  );
   return resultado.affectedRows > 0;
 }

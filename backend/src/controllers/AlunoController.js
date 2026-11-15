@@ -2,7 +2,10 @@ import * as AlunoService from "../services/AlunoService.js";
 
 export async function solicitarAcesso(req, res, next) {
   try {
-    const resultado = await AlunoService.solicitarAcesso(req.body?.token, req.usuario.id);
+    const resultado = await AlunoService.solicitarAcesso(
+      req.body?.token,
+      req.usuario.id,
+    );
     return res.status(201).json(resultado);
   } catch (erro) {
     return next(erro);

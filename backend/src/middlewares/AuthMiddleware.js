@@ -2,12 +2,15 @@ import jwt from "jsonwebtoken";
 
 export function authMiddleware(request, response, next) {
   const authorization = request.get("authorization");
-  const match = typeof authorization === "string"
-    ? authorization.match(/^Bearer\s+(.+)$/i)
-    : null;
+  const match =
+    typeof authorization === "string"
+      ? authorization.match(/^Bearer\s+(.+)$/i)
+      : null;
 
   if (!match) {
-    return response.status(401).json({ message: "Token de autenticação inválido ou ausente" });
+    return response
+      .status(401)
+      .json({ message: "Token de autenticação inválido ou ausente" });
   }
 
   try {
@@ -19,7 +22,9 @@ export function authMiddleware(request, response, next) {
     };
     return next();
   } catch {
-    return response.status(401).json({ message: "Token de autenticação inválido ou ausente" });
+    return response
+      .status(401)
+      .json({ message: "Token de autenticação inválido ou ausente" });
   }
 }
 

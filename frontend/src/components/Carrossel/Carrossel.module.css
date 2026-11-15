@@ -7,8 +7,16 @@
   min-height: clamp(560px, 48vw, 720px);
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(ellipse at 20% 45%, rgba(164, 22, 26, .3), transparent 42%), linear-gradient(125deg, #242426, #0b090a 72%);
-  box-shadow: inset 0 0 90px rgba(11, 9, 10, .55), inset 0 0 220px rgba(11, 9, 10, .35);
+  background:
+    radial-gradient(
+      ellipse at 20% 45%,
+      rgba(164, 22, 26, 0.3),
+      transparent 42%
+    ),
+    linear-gradient(125deg, #242426, #0b090a 72%);
+  box-shadow:
+    inset 0 0 90px rgba(11, 9, 10, 0.55),
+    inset 0 0 220px rgba(11, 9, 10, 0.35);
 }
 
 .visual::after {
@@ -17,7 +25,14 @@
   z-index: 1;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, rgba(11, 9, 10, .08), rgba(11, 9, 10, .42) 42%, rgba(11, 9, 10, .94) 75%), linear-gradient(0deg, rgba(11, 9, 10, .58), transparent 38%);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(11, 9, 10, 0.08),
+      rgba(11, 9, 10, 0.42) 42%,
+      rgba(11, 9, 10, 0.94) 75%
+    ),
+    linear-gradient(0deg, rgba(11, 9, 10, 0.58), transparent 38%);
 }
 
 .imagem {
@@ -28,7 +43,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center 54%;
-  filter: saturate(.76);
+  filter: saturate(0.76);
   animation: imagem-entrada 650ms ease both;
 }
 
@@ -45,18 +60,18 @@
 }
 
 .marca {
-  color: rgba(164, 22, 26, .34);
+  color: rgba(164, 22, 26, 0.34);
   font-size: clamp(14rem, 35vw, 34rem);
   font-weight: 700;
-  letter-spacing: -.12em;
-  line-height: .8;
+  letter-spacing: -0.12em;
+  line-height: 0.8;
 }
 
 .aviso {
   max-width: 440px;
   color: var(--silver);
   font-size: 12px;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -74,8 +89,8 @@
   margin: 0 0 24px;
   color: var(--white);
   font-size: clamp(2.4rem, 5vw, 5rem);
-  letter-spacing: -.055em;
-  line-height: .99;
+  letter-spacing: -0.055em;
+  line-height: 0.99;
 }
 
 .texto {
@@ -94,7 +109,7 @@
   color: var(--white);
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
 }
 
 .contador span {
@@ -117,14 +132,16 @@
   width: 44px;
   height: 44px;
   place-items: center;
-  border: 1px solid rgba(245, 243, 244, .42);
+  border: 1px solid rgba(245, 243, 244, 0.42);
   border-radius: 50%;
-  background: rgba(11, 9, 10, .25);
+  background: rgba(11, 9, 10, 0.25);
   color: var(--white);
   font-size: 27px;
   line-height: 1;
   cursor: pointer;
-  transition: background 180ms, border-color 180ms;
+  transition:
+    background 180ms,
+    border-color 180ms;
 }
 
 .controles button:hover {
@@ -143,7 +160,7 @@
   height: 8px;
   padding: 0;
   border: 0;
-  background: rgba(245, 243, 244, .46);
+  background: rgba(245, 243, 244, 0.46);
 }
 
 .indicadores button[aria-current="true"] {
@@ -154,7 +171,7 @@
 
 @keyframes entrada {
   from {
-    opacity: .45;
+    opacity: 0.45;
     transform: translate(36px, -50%);
   }
 
@@ -166,7 +183,7 @@
 
 @keyframes imagem-entrada {
   from {
-    opacity: .7;
+    opacity: 0.7;
     transform: translateX(2.5%) scale(1.015);
   }
 
@@ -178,7 +195,7 @@
 
 @keyframes entrada-mobile {
   from {
-    opacity: .45;
+    opacity: 0.45;
     transform: translateX(24px);
   }
 
@@ -194,7 +211,12 @@
   }
 
   .visual::after {
-    background: linear-gradient(0deg, rgba(11, 9, 10, .97), rgba(11, 9, 10, .72) 55%, rgba(11, 9, 10, .08));
+    background: linear-gradient(
+      0deg,
+      rgba(11, 9, 10, 0.97),
+      rgba(11, 9, 10, 0.72) 55%,
+      rgba(11, 9, 10, 0.08)
+    );
   }
 
   .conteudo {
