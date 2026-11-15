@@ -53,6 +53,12 @@ export async function buscarSessao(idRecebido) {
   return usuario;
 }
 
+export async function verificarAtivo(idRecebido) {
+  const id = validarId(idRecebido);
+  const usuario = await UsuarioModel.buscarAtivoPorId(id);
+  return Boolean(usuario?.ativo);
+}
+
 export async function redefinirSenha({ email, senha, confirmarSenha } = {}) {
   const emailLimpo =
     typeof email === "string" ? email.trim().toLowerCase() : "";

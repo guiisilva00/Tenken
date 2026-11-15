@@ -50,6 +50,14 @@ export async function buscarPorId(id) {
   return linhas[0] || null;
 }
 
+export async function buscarAtivoPorId(id) {
+  const [linhas] = await pool.query(
+    "SELECT ativo FROM usuarios WHERE id = ?",
+    [id],
+  );
+  return linhas[0] || null;
+}
+
 export async function buscarPorMatricula(matricula) {
   const [linhas] = await pool.query(
     "SELECT id, nome, email, perfil, matricula, senha_hash, ativo FROM usuarios WHERE matricula = ?",

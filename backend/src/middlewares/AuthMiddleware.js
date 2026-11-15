@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import * as UsuarioService from "../services/UsuarioService.js";
 
-export function authMiddleware(request, response, next) {
+export async function authMiddleware(request, response, next) {
   const authorization = request.get("authorization");
   const match =
     typeof authorization === "string"
@@ -15,6 +16,9 @@ export function authMiddleware(request, response, next) {
 
   try {
     const payload = jwt.verify(match[1], process.env.JWT_SECRET);
+    if (!(await UsuarioService.verificarAtivo(payload.sub))) {
+      return response.status(401).json({ message: "Usuário desativado" });
+    }
     request.usuario = {
       id: payload.sub,
       perfil: payload.perfil,
