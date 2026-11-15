@@ -68,7 +68,7 @@ export async function buscarPorMatricula(matricula) {
 
 export async function buscarPorEmail(email) {
   const [linhas] = await pool.query(
-    "SELECT id FROM usuarios WHERE email = ? LIMIT 1",
+    "SELECT id, nome, email, ativo FROM usuarios WHERE email = ? LIMIT 1",
     [email],
   );
   return linhas[0] || null;

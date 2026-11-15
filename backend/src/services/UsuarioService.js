@@ -2,6 +2,13 @@ import { validarId } from "../utils/ValidarId.js";
 import * as UsuarioModel from "../models/UsuarioModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import * as TokenResetSenhaModel from "../models/TokenResetSenhaModel.js";
+import {
+  calcularExpiracaoResetSenha,
+  gerarTokenResetSenha,
+  hashTokenResetSenha,
+} from "../utils/Token.js";
+import * as EmailService from "./EmailService.js";
 
 const { PERFIS_VALIDOS } = UsuarioModel;
 
@@ -59,11 +66,33 @@ export async function verificarAtivo(idRecebido) {
   return Boolean(usuario?.ativo);
 }
 
-export async function redefinirSenha({ email, senha, confirmarSenha } = {}) {
-  const emailLimpo =
-    typeof email === "string" ? email.trim().toLowerCase() : "";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) {
+export async function solicitarRedefinicaoSenha(emailRecebido) {
+  const email = typeof emailRecebido === "string" ? emailRecebido.trim().toLowerCase() : "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new TypeError("Informe um e-mail válido.");
+  }
+
+  const usuario = await UsuarioModel.buscarPorEmail(email);
+  if (usuario?.ativo) {
+    const token = gerarTokenResetSenha();
+    await TokenResetSenhaModel.invalidarAnteriores(usuario.id);
+    await TokenResetSenhaModel.criar({
+      usuarioId: usuario.id,
+      tokenHash: hashTokenResetSenha(token),
+      expiraEm: calcularExpiracaoResetSenha(),
+    });
+    const link = `${process.env.FRONTEND_URL || "http://localhost:3000"}/redefinir-senha?token=${token}`;
+    try {
+      await EmailService.enviarEmailRedefinicaoSenha({ para: usuario.email, nome: usuario.nome, link });
+    } catch (erro) {
+      console.error("Falha ao enviar e-mail de redefinição de senha:", erro);
+    }
+  }
+}
+
+export async function redefinirSenha({ token, senha, confirmarSenha } = {}) {
+  if (typeof token !== "string" || !token.trim()) {
+    throw new TypeError("Token é obrigatório.");
   }
   if (typeof senha !== "string" || senha.length < 8) {
     throw new TypeError("A senha deve ter no mínimo 8 caracteres.");
@@ -72,15 +101,16 @@ export async function redefinirSenha({ email, senha, confirmarSenha } = {}) {
     throw new TypeError("A confirmação deve ser igual à senha.");
   }
 
-  const usuario = await UsuarioModel.buscarPorEmail(emailLimpo);
-  if (!usuario) {
-    const erro = new Error("E-mail não encontrado.");
-    erro.status = 404;
+  const senhaHash = await bcrypt.hash(senha, 12);
+  const resultado = await TokenResetSenhaModel.redefinirSenha(
+    hashTokenResetSenha(token.trim()),
+    senhaHash,
+  );
+  if (resultado.status === "token_invalido") {
+    const erro = new Error("Link inválido ou expirado.");
+    erro.status = 400;
     throw erro;
   }
-
-  const senhaHash = await bcrypt.hash(senha, 12);
-  await UsuarioModel.atualizarSenha(usuario.id, senhaHash);
 }
 
 export async function listar({ pagina = 1, limite = 10, perfil, ativo } = {}) {

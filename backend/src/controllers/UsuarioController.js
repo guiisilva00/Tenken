@@ -20,6 +20,18 @@ export async function redefinirSenha(req, res, next) {
   }
 }
 
+export async function solicitarRedefinicaoSenha(req, res, next) {
+  try {
+    await UsuarioService.solicitarRedefinicaoSenha(req.body?.email);
+    return res.status(200).json({
+      sucesso: true,
+      dados: { mensagem: "Se o e-mail estiver cadastrado, você receberá as instruções." },
+    });
+  } catch (erro) {
+    return next(erro);
+  }
+}
+
 export async function me(req, res, next) {
   try {
     const usuario = await UsuarioService.buscarSessao(req.usuario.id);

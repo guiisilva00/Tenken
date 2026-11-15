@@ -8,6 +8,7 @@ import {
   login,
   me,
   redefinirSenha,
+  solicitarRedefinicaoSenha,
 } from "../controllers/UsuarioController.js";
 import {
   authMiddleware,
@@ -17,6 +18,7 @@ import {
 const router = Router();
 
 router.post("/login", login);
+router.post("/esqueci-senha", solicitarRedefinicaoSenha);
 router.post("/redefinir-senha", redefinirSenha);
 router.get("/me", authMiddleware, me);
 router.get("/", authMiddleware, requirePerfil("ADMIN"), listar);
