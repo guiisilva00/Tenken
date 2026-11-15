@@ -26,9 +26,37 @@ export default function CadastroPage() {
   const [copiado, setCopiado] = useState(false);
   const [criandoConta, setCriandoConta] = useState(false);
 
+  function formatarCpf(valor) {
+    return valor
+      .replace(/\D/g, "")
+      .slice(0, 11)
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+
+  function formatarTelefone(valor) {
+    const digitos = valor.replace(/\D/g, "").slice(0, 11);
+    if (digitos.length <= 2) return digitos ? `(${digitos}` : "";
+
+    const ddd = digitos.slice(0, 2);
+    const numero = digitos.slice(2);
+    const tamanhoPrefixo = digitos.length > 10 ? 5 : 4;
+    if (numero.length <= tamanhoPrefixo) return `(${ddd}) ${numero}`;
+
+    const prefixo = numero.slice(0, tamanhoPrefixo);
+    return `(${ddd}) ${prefixo}-${numero.slice(tamanhoPrefixo)}`;
+  }
+
   function atualizarCampo(event) {
     const { name, value } = event.target;
-    setFormulario((atual) => ({ ...atual, [name]: value }));
+    const valor =
+      name === "cpf"
+        ? formatarCpf(value)
+        : name === "telefone"
+          ? formatarTelefone(value)
+          : value;
+    setFormulario((atual) => ({ ...atual, [name]: valor }));
     setErros((atuais) => ({ ...atuais, [name]: "", contato: "" }));
   }
 
@@ -147,6 +175,10 @@ export default function CadastroPage() {
           id={nome}
           name={nome}
           type={tipo}
+          inputMode={
+            nome === "cpf" || nome === "telefone" ? "numeric" : undefined
+          }
+          maxLength={nome === "cpf" ? 14 : nome === "telefone" ? 15 : undefined}
           placeholder={
             nome === "nome"
               ? "Seu nome completo"
