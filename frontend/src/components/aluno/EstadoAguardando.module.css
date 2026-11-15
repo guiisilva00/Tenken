@@ -45,6 +45,16 @@
   line-height: 1.7;
 }
 
+.aviso {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  color: #ffb703;
+  font-size: 13px;
+  background: rgba(255, 183, 3, 0.08);
+  border: 1px solid rgba(255, 183, 3, 0.25);
+  border-radius: 5px;
+}
+
 .dados {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -93,7 +103,7 @@
 }
 
 .cancelar,
-.simular {
+.verificar {
   min-height: 44px;
   padding: 10px 16px;
   border-radius: 5px;
@@ -109,7 +119,7 @@
   border: 1px solid #ba181b;
 }
 
-.simular {
+.verificar {
   color: var(--white-smoke);
   background: transparent;
   border: 1px solid rgba(177, 167, 166, 0.35);
@@ -118,13 +128,18 @@
 .cancelar:hover {
   background: #ba181b;
 }
-.simular:hover {
+.verificar:hover:not(:disabled) {
   border-color: #71717a;
   background: rgb(255 255 255 / 4%);
 }
 
+.verificar:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .cancelar:focus-visible,
-.simular:focus-visible {
+.verificar:focus-visible {
   outline: 2px solid var(--mahogany-red-2);
   outline-offset: 3px;
 }
@@ -165,7 +180,7 @@
   }
 
   .cancelar,
-  .simular {
+  .verificar {
     width: 100%;
   }
 }

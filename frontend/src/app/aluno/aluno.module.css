@@ -82,6 +82,17 @@
   text-align: left;
 }
 
+.erroFormulario {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  color: var(--white-smoke);
+  background: rgba(164, 22, 26, 0.1);
+  border: 1px solid rgba(186, 24, 27, 0.55);
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 .eyebrow {
   margin: 0 0 12px;
   color: #f87171;
