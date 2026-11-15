@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { aulaHoje, episObrigatorios, sessaoAluno } from "@/mocks/aluno";
-import FormularioVinculo from "@/components/aluno/FormularioVinculo";
-import EstadoAguardando from "@/components/aluno/EstadoAguardando";
 import styles from "./page.module.css";
 
 function formatarTempo(segundos) {
@@ -17,23 +15,8 @@ function formatarTempo(segundos) {
 }
 
 export default function DiagnosticoAluno() {
-  const [etapa, setEtapa] = useState("FORM");
-  const [solicitacao, setSolicitacao] = useState(null);
   const [segundosRestantes, setSegundosRestantes] = useState(0);
-  const bancadaLiberada = etapa === "APPROVED";
-
-  useEffect(() => {
-    if (
-      window.sessionStorage.getItem("tenken-aluno-bancada-liberada") === "true"
-    ) {
-      setEtapa("APPROVED");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!bancadaLiberada) return;
-    window.sessionStorage.setItem("tenken-aluno-bancada-liberada", "true");
-  }, [bancadaLiberada]);
+  const bancadaLiberada = true;
 
   useEffect(() => {
     function atualizarCronometro() {
@@ -48,11 +31,6 @@ export default function DiagnosticoAluno() {
     const intervalo = window.setInterval(atualizarCronometro, 1000);
     return () => window.clearInterval(intervalo);
   }, []);
-
-  function enviarSolicitacao(dados) {
-    setSolicitacao(dados);
-    setEtapa("WAITING");
-  }
 
   return (
     <section className={styles.pagina}>
@@ -70,11 +48,7 @@ export default function DiagnosticoAluno() {
             className={`${styles.led} ${bancadaLiberada ? styles.ledAtivo : ""}`}
             aria-hidden="true"
           />
-          {bancadaLiberada
-            ? "Bancada liberada"
-            : etapa === "WAITING"
-              ? "Aguardando aprovação"
-              : "Acesso não solicitado"}
+          Bancada liberada
         </div>
       </header>
 
@@ -126,34 +100,6 @@ export default function DiagnosticoAluno() {
         </div>
 
         <aside className={styles.colunaAcesso}>
-          {etapa === "FORM" && (
-            <section
-              className={styles.formulario}
-              aria-labelledby="titulo-acesso-bancada"
-            >
-              <div className={styles.cabecalhoFormulario}>
-                <span className={styles.numeroEtapa}>
-                  ACESSO AO LABORATÓRIO
-                </span>
-                <h2 id="titulo-acesso-bancada">Solicitar acesso à bancada</h2>
-                <p>
-                  Preencha seus dados e informe o token compartilhado pelo
-                  professor.
-                </p>
-              </div>
-              <FormularioVinculo onEnviar={enviarSolicitacao} />
-            </section>
-          )}
-
-          {etapa === "WAITING" && solicitacao && (
-            <EstadoAguardando
-              sessao={solicitacao}
-              token={solicitacao.token}
-              onCancelar={() => setEtapa("FORM")}
-              onSimularAprovacao={() => setEtapa("APPROVED")}
-            />
-          )}
-
           {bancadaLiberada && (
             <section className={styles.liberacao}>
               <span className={styles.numeroEtapa}>ACESSO CONFIRMADO</span>

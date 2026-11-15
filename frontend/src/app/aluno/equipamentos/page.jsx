@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { equipamentosSessao } from "@/mocks/aluno";
 import { IconeSeta } from "@/components/aluno/IconesNavegacao";
 import styles from "./page.module.css";
 
 export default function EquipamentosAluno() {
   const [itemAberto, setItemAberto] = useState(null);
+  const [equipamentos, setEquipamentos] = useState([]);
+
+  useEffect(() => {
+    try {
+      const dados = JSON.parse(window.sessionStorage.getItem("tenken-aluno-equipamentos") || "[]");
+      setEquipamentos(dados.map((item) => ({ ...item, id: item.codigo_patrimonio || String(item.id) })));
+    } catch {
+      setEquipamentos([]);
+    }
+  }, []);
 
   function alternarItem(id) {
     setItemAberto((atual) => (atual === id ? null : id));
@@ -30,7 +39,7 @@ export default function EquipamentosAluno() {
       </header>
 
       <ul className={styles.lista}>
-        {equipamentosSessao.map((equipamento) => {
+        {equipamentos.map((equipamento) => {
           const aberto = itemAberto === equipamento.id;
           const idPainel = `detalhes-${equipamento.id}`;
           const idLinha = `linha-${equipamento.id}`;
@@ -70,16 +79,16 @@ export default function EquipamentosAluno() {
               >
                 <div className={styles.detalhes}>
                   <p>
-                    <span>Alimentação / pressão nominal</span>
-                    <strong>{equipamento.detalhes.alimentacao}</strong>
+                    <span>Patrimônio</span>
+                    <strong>{equipamento.codigo_patrimonio || equipamento.id}</strong>
                   </p>
                   <p>
-                    <span>Última inspeção</span>
-                    <strong>{equipamento.detalhes.ultimaInspecao}</strong>
+                    <span>Localização</span>
+                    <strong>{equipamento.localizacao || "Localização não informada"}</strong>
                   </p>
                   <p>
-                    <span>Protocolo de segurança</span>
-                    <strong>{equipamento.detalhes.seguranca}</strong>
+                    <span>Equipamento</span>
+                    <strong>{equipamento.nome}</strong>
                   </p>
                 </div>
               </div>
@@ -87,6 +96,7 @@ export default function EquipamentosAluno() {
           );
         })}
       </ul>
+      {!equipamentos.length && <p>Nenhum equipamento foi liberado para esta aula.</p>}
     </section>
   );
 }
