@@ -69,8 +69,8 @@ export async function buscarPorId(id) {
   return linhas[0] || null;
 }
 
-export async function verificarConflito(equipamentoId, inicio, fim) {
-  const [linhas] = await pool.query(
+export async function verificarConflito(equipamentoId, inicio, fim, db = pool) {
+  const [linhas] = await db.query(
     "SELECT id FROM agendamentos WHERE equipamento_id=? AND status NOT IN ('CANCELADO','CONCLUIDO') AND inicio < ? AND fim > ? LIMIT 1",
     [equipamentoId, fim, inicio],
   );
@@ -85,8 +85,8 @@ export async function criar({
   inicio,
   fim,
   token_acesso,
-}) {
-  const [resultado] = await pool.query(
+}, db = pool) {
+  const [resultado] = await db.query(
     `INSERT INTO agendamentos (responsavel_id,equipamento_id,turma_id,atividade,inicio,fim,token_acesso,status) VALUES (?,?,?,?,?,?,?,'CONFIRMADO')`,
     [
       responsavel_id,

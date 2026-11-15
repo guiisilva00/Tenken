@@ -2,6 +2,7 @@ import * as AgendamentoModel from "../models/AgendamentoModel.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 import * as TurmaModel from "../models/TurmaModel.js";
 import { gerarTokenTurma } from "../utils/Token.js";
+import { pool } from "../config/Database.js";
 
 function idValido(v) {
   const n = Number(v);
@@ -62,22 +63,33 @@ export async function criar(dados, usuario) {
     if (!turma.token_acesso)
       throw new Error("Nao foi possivel definir token unico para turma.");
   }
-  const equipamento = await EquipamentoModel.buscarPorId(equipamentoId);
-  if (!equipamento || ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status))
-    throw new TypeError("Equipamento indisponível para reserva.");
   const ini = `${data} ${inicio}:00`,
     fimData = `${data} ${fim}:00`;
-  if (await AgendamentoModel.verificarConflito(equipamentoId, ini, fimData))
-    throw new TypeError("Equipamento já reservado nesse horário.");
-  const agendamentoId = await AgendamentoModel.criar({
-    responsavel_id: Number(usuario.id),
-    equipamento_id: equipamentoId,
-    turma_id: turmaId,
-    atividade,
-    inicio: ini,
-    fim: fimData,
-    token_acesso: null,
-  });
+  const conexao = await pool.getConnection();
+  let agendamentoId;
+  try {
+    await conexao.beginTransaction();
+    const equipamento = await EquipamentoModel.travarPorId(equipamentoId, conexao);
+    if (!equipamento || ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status))
+      throw new TypeError("Equipamento indisponível para reserva.");
+    if (await AgendamentoModel.verificarConflito(equipamentoId, ini, fimData, conexao))
+      throw new TypeError("Equipamento já reservado nesse horário.");
+    agendamentoId = await AgendamentoModel.criar({
+      responsavel_id: Number(usuario.id),
+      equipamento_id: equipamentoId,
+      turma_id: turmaId,
+      atividade,
+      inicio: ini,
+      fim: fimData,
+      token_acesso: null,
+    }, conexao);
+    await conexao.commit();
+  } catch (erro) {
+    await conexao.rollback();
+    throw erro;
+  } finally {
+    conexao.release();
+  }
   return AgendamentoModel.buscarDetalhado(agendamentoId);
 }
 export async function cancelar(idRecebido, professorId) {

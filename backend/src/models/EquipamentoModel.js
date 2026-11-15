@@ -33,6 +33,14 @@ export async function buscarPorId(id) {
   return linhas[0] || null;
 }
 
+export async function travarPorId(id, db) {
+  const [linhas] = await db.query(
+    "SELECT * FROM equipamentos WHERE id = ? FOR UPDATE",
+    [id],
+  );
+  return linhas[0] || null;
+}
+
 export async function criar(equipamento) {
   const sql = `
     INSERT INTO equipamentos (codigo_patrimonio, nome, tipo, localizacao, status)
