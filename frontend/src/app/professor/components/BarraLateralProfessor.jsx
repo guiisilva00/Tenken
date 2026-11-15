@@ -20,6 +20,12 @@ const itens = [
     pronto: true,
   },
   {
+    href: "/professor/aprovacoes",
+    label: "Aprovações",
+    icon: "how_to_reg",
+    pronto: true,
+  },
+  {
     href: "/professor/inspecoes",
     label: "Inspeções",
     icon: "fact_check",

@@ -1,4 +1,12 @@
 import { apiFetch } from "@/lib/api";
+
+export async function listarCheckinsPendentes() {
+  return (await apiFetch("/api/checkins/pendentes"))?.dados ?? [];
+}
+
+export async function aprovarCheckin(id) {
+  return (await apiFetch(`/api/checkins/${id}/aprovar`, { method: "PATCH" }))?.dados;
+}
 export async function listarTurmas() {
   return (await apiFetch("/api/turmas"))?.dados ?? [];
 }
