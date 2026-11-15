@@ -1,25 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import FormularioVinculo from "@/components/aluno/FormularioVinculo";
 import EstadoAguardando from "@/components/aluno/EstadoAguardando";
+import { apiFetch } from "@/lib/api";
+import { getUsuario } from "@/lib/session";
 import styles from "./aluno.module.css";
 
 export default function PaginaVinculacaoAluno() {
-  const router = useRouter();
   const [etapa, setEtapa] = useState("FORM");
   const [solicitacao, setSolicitacao] = useState(null);
 
-  useEffect(() => {
-    if (etapa !== "APPROVED") return;
-    window.sessionStorage.setItem("tenken-aluno-bancada-liberada", "true");
-    router.replace("/aluno/bem-vindo");
-  }, [etapa, router]);
-
-  function enviarSolicitacao(dados) {
-    setSolicitacao(dados);
+  async function enviarSolicitacao(token) {
+    const resposta = await apiFetch("/api/alunos/solicitar-acesso", {
+      method: "POST",
+      body: { token },
+    });
+    const usuario = getUsuario();
+    setSolicitacao({
+      nome: usuario?.nome || usuario?.matricula || "Aluno",
+      turma: resposta.turma.nome,
+      token,
+    });
     setEtapa("WAITING");
+  }
+
+  function cancelarSolicitacao() {
+    setSolicitacao(null);
+    setEtapa("FORM");
   }
 
   return (
@@ -27,11 +35,9 @@ export default function PaginaVinculacaoAluno() {
       <div className={`${styles.conteudo} ${styles.compacto}`}>
         {etapa === "FORM" && (
           <section className={styles.formulario}>
-            <p className={styles.eyebrow}>VINCULAÇÃO DE SESSÃO</p>
             <h1 className={styles.titulo}>Acesso à bancada do laboratório</h1>
             <p className={styles.descricao}>
-              Insira seu nome, turma e o token compartilhado pelo professor para
-              solicitar acesso aos equipamentos da aula.
+              Informe o token compartilhado pelo professor para solicitar acesso aos ativos da aula.
             </p>
             <FormularioVinculo onEnviar={enviarSolicitacao} />
           </section>
@@ -40,8 +46,7 @@ export default function PaginaVinculacaoAluno() {
           <EstadoAguardando
             sessao={solicitacao}
             token={solicitacao.token}
-            onCancelar={() => setEtapa("FORM")}
-            onSimularAprovacao={() => setEtapa("APPROVED")}
+            onCancelar={cancelarSolicitacao}
           />
         )}
       </div>

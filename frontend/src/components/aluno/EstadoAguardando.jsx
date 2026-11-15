@@ -4,7 +4,6 @@ export default function EstadoAguardando({
   sessao,
   token,
   onCancelar,
-  onSimularAprovacao,
 }) {
   return (
     <section className={styles.painel} aria-labelledby="titulo-aguardando">
@@ -40,15 +39,6 @@ export default function EstadoAguardando({
         <button className={styles.cancelar} type="button" onClick={onCancelar}>
           Cancelar solicitação
         </button>
-        {process.env.NODE_ENV === "development" && (
-          <button
-            className={styles.simular}
-            type="button"
-            onClick={onSimularAprovacao}
-          >
-            Simular aprovação
-          </button>
-        )}
       </div>
     </section>
   );
