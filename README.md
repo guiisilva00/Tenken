@@ -52,11 +52,13 @@ O front-end fica disponível em `http://localhost:3000` e a API em `http://local
 
 ### Banco de dados
 
-Crie o banco e aplique o esquema em `database/init/02-schema.sql`. Em seguida, execute o seed de usuários de teste:
+Crie o banco e aplique `database/init/02-schema.sql`. Esse arquivo contém o schema atual completo e os checklists iniciais; uma instalação nova não precisa executar migrations. Em seguida, execute o seed de usuários de teste:
 
 ```bash
 mysql tenken_db < database/seed/usuarios_teste.sql
 ```
+
+As migrations em `database/migrations/` servem apenas para atualizar bancos existentes. A migration `20261113_remove_unused_tables.sql` remove tabelas legadas e pode apagar dados; revise-as antes de executá-la.
 
 Isso cria três contas de teste (uso restrito a ambiente local):
 
@@ -119,7 +121,8 @@ frontend/src/
 └── lib/           # Cliente de API e sessão do usuário
 
 database/
-├── init/          # Esquema do banco (MySQL)
+├── init/          # Schema completo para bancos novos (MySQL)
+├── migrations/    # Atualizações para bancos existentes
 └── seed/          # Dados de exemplo e contas de teste
 ```
 
