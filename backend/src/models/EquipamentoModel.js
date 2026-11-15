@@ -26,8 +26,8 @@ export async function listar({ limite, offset, tipo, localizacao, status }) {
   return { equipamentos: linhas, total: Number(total) };
 }
 
-export async function buscarPorId(id) {
-  const [linhas] = await pool.query("SELECT * FROM equipamentos WHERE id = ?", [
+export async function buscarPorId(id, db = pool) {
+  const [linhas] = await db.query("SELECT * FROM equipamentos WHERE id = ?", [
     id,
   ]);
   return linhas[0] || null;

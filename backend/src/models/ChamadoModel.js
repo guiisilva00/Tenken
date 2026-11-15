@@ -49,8 +49,8 @@ export async function listar({
   return { chamados: linhas, total: Number(total) };
 }
 
-export async function buscarPorId(id) {
-  const [linhas] = await pool.query(
+export async function buscarPorId(id, db = pool) {
+  const [linhas] = await db.query(
     "SELECT * FROM chamados_manutencao WHERE id = ?",
     [id],
   );
@@ -115,17 +115,17 @@ export async function criar(chamado, db = pool) {
   return { ...chamado, id: resultado.insertId };
 }
 
-export async function atualizarStatus(id, status) {
+export async function atualizarStatus(id, status, db = pool) {
   const concluidoEm = status === "CONCLUIDO" ? "NOW()" : "NULL";
-  const [resultado] = await pool.query(
+  const [resultado] = await db.query(
     `UPDATE chamados_manutencao SET status = ?, concluido_em = ${concluidoEm} WHERE id = ?`,
     [status, id],
   );
   return resultado.affectedRows > 0;
 }
 
-export async function contarAtivosPorEquipamento(equipamentoId) {
-  const [[{ total }]] = await pool.query(
+export async function contarAtivosPorEquipamento(equipamentoId, db = pool) {
+  const [[{ total }]] = await db.query(
     "SELECT COUNT(*) AS total FROM chamados_manutencao WHERE equipamento_id = ? AND status NOT IN ('CONCLUIDO', 'CANCELADO')",
     [equipamentoId],
   );

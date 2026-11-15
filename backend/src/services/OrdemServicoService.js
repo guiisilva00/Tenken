@@ -3,6 +3,7 @@ import * as ChamadoModel from "../models/ChamadoModel.js";
 import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
 import * as HistoricoManutencaoService from "./HistoricoManutencaoService.js";
 import * as ChamadoService from "./ChamadoService.js";
+import { pool } from "../config/Database.js";
 
 const STATUS_VALIDOS = ["EMITIDA", "EM_EXECUCAO", "FINALIZADA", "CANCELADA"];
 const STATUS_CHAMADO_VALIDOS = [
@@ -13,6 +14,12 @@ const STATUS_CHAMADO_VALIDOS = [
   "CANCELADO",
 ];
 const SEVERIDADES_VALIDAS = ["BAIXA", "MEDIA", "ALTA", "CRITICA"];
+const STATUS_CHAMADO_POR_ORDEM = {
+  EMITIDA: "ABERTO",
+  EM_EXECUCAO: "EM_ATENDIMENTO",
+  FINALIZADA: "CONCLUIDO",
+  CANCELADA: "CANCELADO",
+};
 
 async function gerarNumero() {
   const ano = new Date().getFullYear();
@@ -81,9 +88,26 @@ export async function atualizarStatus(idRecebido, status) {
   if (!STATUS_VALIDOS.includes(status)) {
     throw new TypeError(`Status deve ser um de: ${STATUS_VALIDOS.join(", ")}.`);
   }
-  const atualizou = await OrdemServicoModel.atualizarStatus(id, status);
-  if (!atualizou) {
+  const ordemServico = await OrdemServicoModel.buscarPorId(id);
+  if (!ordemServico) {
     throw new Error(`Ordem de serviço ${id} não encontrada.`);
+  }
+  const conexao = await pool.getConnection();
+  try {
+    await conexao.beginTransaction();
+    const atualizou = await OrdemServicoModel.atualizarStatus(id, status, conexao);
+    if (!atualizou) throw new Error(`Ordem de serviço ${id} não encontrada.`);
+    await ChamadoModel.atualizarStatus(
+      ordemServico.chamado_id,
+      STATUS_CHAMADO_POR_ORDEM[status],
+      conexao,
+    );
+    await conexao.commit();
+  } catch (erro) {
+    await conexao.rollback();
+    throw erro;
+  } finally {
+    conexao.release();
   }
   return await OrdemServicoModel.buscarPorId(id);
 }
@@ -108,15 +132,27 @@ export async function concluir(idRecebido, descricao, usuarioLogado) {
     throw erro;
   }
 
-  await HistoricoManutencaoService.criar(
-    ordemServico.chamado_id,
-    { descricao },
-    usuarioLogado,
-  );
-  await ChamadoService.atualizarStatus(
-    ordemServico.chamado_id,
-    "CONCLUIDO",
-    usuarioLogado,
-  );
+  const conexao = await pool.getConnection();
+  try {
+    await conexao.beginTransaction();
+    await HistoricoManutencaoService.criar(
+      ordemServico.chamado_id,
+      { descricao },
+      usuarioLogado,
+      conexao,
+    );
+    await ChamadoService.atualizarStatus(
+      ordemServico.chamado_id,
+      "CONCLUIDO",
+      usuarioLogado,
+      conexao,
+    );
+    await conexao.commit();
+  } catch (erro) {
+    await conexao.rollback();
+    throw erro;
+  } finally {
+    conexao.release();
+  }
   return await OrdemServicoModel.buscarPorId(id);
 }

@@ -65,18 +65,18 @@ export async function criar({ chamado_id, numero, emitida_por }) {
   };
 }
 
-export async function atualizarStatus(id, status) {
+export async function atualizarStatus(id, status, db = pool) {
   const finalizadaEm = status === "FINALIZADA" ? "NOW()" : "NULL";
-  const [resultado] = await pool.query(
+  const [resultado] = await db.query(
     `UPDATE ordens_servico SET status = ?, finalizada_em = ${finalizadaEm} WHERE id = ?`,
     [status, id],
   );
   return resultado.affectedRows > 0;
 }
 
-export async function atualizarStatusPorChamado(chamadoId, status) {
+export async function atualizarStatusPorChamado(chamadoId, status, db = pool) {
   const finalizadaEm = status === "FINALIZADA" ? "NOW()" : "NULL";
-  await pool.query(
+  await db.query(
     `UPDATE ordens_servico SET status = ?, finalizada_em = ${finalizadaEm} WHERE chamado_id = ?`,
     [status, chamadoId],
   );

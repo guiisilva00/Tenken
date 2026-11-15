@@ -7,6 +7,7 @@ import * as ChamadoModel from "../models/ChamadoModel.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 import * as UsuarioModel from "../models/UsuarioModel.js";
 import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
+import { pool } from "../config/Database.js";
 
 const PERFIS_PODEM_ABRIR_CHAMADO = ["ADMIN", "PROFESSOR", "TECNICO"];
 
@@ -115,12 +116,12 @@ export async function criar(dados, usuarioLogado) {
   return await ChamadoModel.criar(chamadoDominio);
 }
 
-export async function atualizarStatus(idRecebido, status, usuarioLogado) {
+export async function atualizarStatus(idRecebido, status, usuarioLogado, db = pool) {
   const id = validarId(idRecebido);
   if (!STATUS_VALIDOS.includes(status)) {
     throw new TypeError(`Status deve ser um de: ${STATUS_VALIDOS.join(", ")}.`);
   }
-  const chamado = await ChamadoModel.buscarPorId(id);
+  const chamado = await ChamadoModel.buscarPorId(id, db);
   if (!chamado) {
     throw new Error(`Chamado ${id} não encontrado.`);
   }
@@ -137,7 +138,7 @@ export async function atualizarStatus(idRecebido, status, usuarioLogado) {
       throw erro;
     }
   }
-  const atualizou = await ChamadoModel.atualizarStatus(id, status);
+  const atualizou = await ChamadoModel.atualizarStatus(id, status, db);
   if (!atualizou) {
     throw new Error(`Chamado ${id} não encontrado.`);
   }
@@ -151,26 +152,30 @@ export async function atualizarStatus(idRecebido, status, usuarioLogado) {
     await OrdemServicoModel.atualizarStatusPorChamado(
       id,
       statusOrdemPorChamado[status],
+      db,
     );
   }
   if (status === "CONCLUIDO") {
     const chamadosAtivos = await ChamadoModel.contarAtivosPorEquipamento(
       chamado.equipamento_id,
+      db,
     );
     if (chamadosAtivos === 0) {
       const equipamento = await EquipamentoModel.buscarPorId(
         chamado.equipamento_id,
+        db,
       );
       if (equipamento?.status === "EM_MANUTENCAO") {
         await EquipamentoModel.atualizarStatus(
           chamado.equipamento_id,
           "DISPONIVEL",
+          db,
         );
       }
     }
   }
 
-  return await ChamadoModel.buscarPorId(id);
+  return await ChamadoModel.buscarPorId(id, db);
 }
 
 export async function atualizarTecnico(idRecebido, tecnicoIdRecebido) {

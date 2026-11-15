@@ -8,7 +8,7 @@ export async function listarPorChamado(chamadoId) {
   return linhas;
 }
 
-export async function criar(historico) {
+export async function criar(historico, db = pool) {
   const sql = `
     INSERT INTO historico_manutencao (chamado_id, tecnico_id, descricao, pecas_trocadas, custo)
     VALUES (?, ?, ?, ?, ?)
@@ -20,7 +20,7 @@ export async function criar(historico) {
     historico.pecas_trocadas,
     historico.custo,
   ];
-  const [resultado] = await pool.query(sql, valores);
+  const [resultado] = await db.query(sql, valores);
 
   return { id: resultado.insertId, ...historico };
 }

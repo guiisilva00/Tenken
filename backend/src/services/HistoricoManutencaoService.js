@@ -2,6 +2,7 @@ import { validarId } from "../utils/ValidarId.js";
 import * as ChamadoModel from "../models/ChamadoModel.js";
 import * as HistoricoManutencaoModel from "../models/HistoricoManutencaoModel.js";
 import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
+import { pool } from "../config/Database.js";
 
 async function validarAtribuicaoTecnico(chamado, usuarioLogado) {
   if (
@@ -29,7 +30,7 @@ export async function listar(chamadoIdRecebido, usuarioLogado) {
   return await HistoricoManutencaoModel.listarPorChamado(chamadoId);
 }
 
-export async function criar(chamadoIdRecebido, dados, usuarioLogado) {
+export async function criar(chamadoIdRecebido, dados, usuarioLogado, db = pool) {
   const chamadoId = validarId(chamadoIdRecebido, "ID do chamado");
   const chamado = await ChamadoModel.buscarPorId(chamadoId);
   if (!chamado) {
@@ -55,5 +56,5 @@ export async function criar(chamadoIdRecebido, dados, usuarioLogado) {
         ? dados.pecas_trocadas.trim()
         : null,
     custo,
-  });
+  }, db);
 }
