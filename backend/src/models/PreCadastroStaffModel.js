@@ -1,15 +1,17 @@
 import { pool } from "../config/Database.js";
 
+const MAX_TENTATIVAS = 5;
+
 export async function listar() {
   const [linhas] = await pool.query(
-    "SELECT id, nome, email, perfil, codigo, utilizada, criado_em FROM pre_cadastros_staff ORDER BY id DESC",
+    "SELECT id, nome, email, perfil, codigo, utilizada, tentativas, expira_em, criado_em FROM pre_cadastros_staff ORDER BY id DESC",
   );
   return linhas;
 }
 
 export async function buscarPorId(id) {
   const [linhas] = await pool.query(
-    "SELECT id, nome, email, perfil, codigo, utilizada, criado_em FROM pre_cadastros_staff WHERE id = ?",
+    "SELECT id, nome, email, perfil, codigo, utilizada, tentativas, expira_em, criado_em FROM pre_cadastros_staff WHERE id = ?",
     [id],
   );
   return linhas[0] || null;
@@ -23,10 +25,10 @@ export async function buscarPorCodigo(codigo) {
   return linhas[0] || null;
 }
 
-export async function criar({ nome, email, perfil, codigo }) {
+export async function criar({ nome, email, perfil, codigo, expiraEm }) {
   const [resultado] = await pool.query(
-    "INSERT INTO pre_cadastros_staff (nome, email, perfil, codigo) VALUES (?, ?, ?, ?)",
-    [nome, email, perfil, codigo],
+    "INSERT INTO pre_cadastros_staff (nome, email, perfil, codigo, expira_em) VALUES (?, ?, ?, ?, ?)",
+    [nome, email, perfil, codigo, expiraEm],
   );
   return {
     id: resultado.insertId,
@@ -35,6 +37,8 @@ export async function criar({ nome, email, perfil, codigo }) {
     perfil,
     codigo,
     utilizada: false,
+    tentativas: 0,
+    expira_em: expiraEm,
   };
 }
 
@@ -46,15 +50,15 @@ export async function revogar(id) {
   return resultado.affectedRows > 0;
 }
 
-export async function ativar(codigo, senhaHash) {
+export async function ativar(email, codigo, senhaHash) {
   const connection = await pool.getConnection();
 
   try {
     await connection.beginTransaction();
 
     const [linhas] = await connection.query(
-      "SELECT id, nome, email, perfil, utilizada FROM pre_cadastros_staff WHERE codigo = ? FOR UPDATE",
-      [codigo],
+      "SELECT id, nome, email, perfil, codigo, utilizada, tentativas, expira_em FROM pre_cadastros_staff WHERE email = ? FOR UPDATE",
+      [email],
     );
     const preCadastro = linhas[0];
 
@@ -65,6 +69,22 @@ export async function ativar(codigo, senhaHash) {
     if (preCadastro.utilizada) {
       await connection.rollback();
       return { status: "ja_utilizado" };
+    }
+    if (preCadastro.tentativas >= MAX_TENTATIVAS) {
+      await connection.rollback();
+      return { status: "bloqueado" };
+    }
+    if (new Date(preCadastro.expira_em).getTime() < Date.now()) {
+      await connection.rollback();
+      return { status: "expirado" };
+    }
+    if (preCadastro.codigo !== codigo) {
+      await connection.query(
+        "UPDATE pre_cadastros_staff SET tentativas = tentativas + 1 WHERE id = ?",
+        [preCadastro.id],
+      );
+      await connection.commit();
+      return { status: "codigo_invalido" };
     }
 
     const [resultadoInsert] = await connection.query(
