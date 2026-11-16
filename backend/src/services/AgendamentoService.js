@@ -53,6 +53,8 @@ export async function criar(dados, usuario) {
   let agendamentoId;
   try {
     await conexao.beginTransaction();
+    if (await AgendamentoModel.inicioJaPassou(ini, conexao))
+      throw new TypeError("Não é possível agendar em um horário que já passou.");
     const equipamento = await EquipamentoModel.travarPorId(equipamentoId, conexao);
     if (!equipamento || ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status))
       throw new TypeError("Equipamento indisponível para reserva.");
