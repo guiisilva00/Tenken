@@ -1,26 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import FormularioVinculo from "@/components/aluno/FormularioVinculo";
 import EstadoAguardando from "@/components/aluno/EstadoAguardando";
 import EstadoLiberado from "@/components/aluno/EstadoLiberado";
+import { ResumoAula } from "@/components/aluno/AulaContexto";
 import { apiFetch } from "@/lib/api";
 import { getUsuario } from "@/lib/session";
 import styles from "./aluno.module.css";
 
 export default function PaginaVinculacaoAluno() {
-  const [etapa, setEtapa] = useState("FORM");
+  const [etapa, setEtapa] = useState("LOADING");
+  const consultando = useRef(false);
+  const montado = useRef(false);
   const [solicitacao, setSolicitacao] = useState(null);
   const [equipamentos, setEquipamentos] = useState([]);
   const [mensagemAguardando, setMensagemAguardando] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
+  const [validade, setValidade] = useState(null);
 
   async function enviarSolicitacao(token) {
-    const resposta = await apiFetch("/api/alunos/solicitar-acesso", {
+    let resposta;
+    try {
+      resposta = await apiFetch("/api/alunos/solicitar-acesso", {
       method: "POST",
       body: { token },
-    });
+      });
+    } catch (erro) {
+      if (erro.status !== 409) throw erro;
+      await verificarCheckinAtual();
+      return;
+    }
     const usuario = getUsuario();
     setSolicitacao({
       nome: usuario?.nome || usuario?.matricula || "Aluno",
@@ -29,6 +40,7 @@ export default function PaginaVinculacaoAluno() {
     });
     setMensagemAguardando("");
     setEtapa("WAITING");
+    await verificarCheckinAtual();
   }
 
   function cancelarSolicitacao() {
@@ -38,16 +50,22 @@ export default function PaginaVinculacaoAluno() {
   }
 
   const verificarCheckinAtual = useCallback(async () => {
+    if (consultando.current) return;
+    consultando.current = true;
     try {
-      const resposta = await apiFetch("/api/checkins/atual");
+      const resposta = await apiFetch("/api/checkins/atual", { cache: "no-store" });
+      if (!montado.current) return;
       const dados = resposta?.dados;
       const usuario = getUsuario();
       setSolicitacao((atual) => ({
         ...atual,
         nome: atual?.nome || usuario?.nome || usuario?.matricula || "Aluno",
         turma: dados?.turma?.nome || atual?.turma || "Turma",
-        token: atual?.token || "",
+        token: dados?.agendamento?.token || "",
+        agendamento: dados?.agendamento,
+        equipamentos: dados?.equipamentos,
       }));
+      setValidade(Date.now() + dados.segundos_restantes * 1000);
 
       if (!dados?.aprovado) {
         setMensagemAguardando("");
@@ -63,29 +81,47 @@ export default function PaginaVinculacaoAluno() {
       }));
       setEquipamentos(equipamentosLiberados);
       setSolicitacao((atual) => ({ ...atual, turma: dados.turma?.nome || atual?.turma }));
-      window.sessionStorage.setItem("tenken-aluno-bancada-liberada", "true");
-      window.sessionStorage.setItem("tenken-aluno-equipamentos", JSON.stringify(dados.equipamentos || []));
       setMensagemAguardando("");
       setEtapa("APPROVED");
     } catch (erro) {
+      if (!montado.current) return;
       if (erro.status === 404) {
         setErroFormulario("N\u00e3o encontramos sua solicita\u00e7\u00e3o de acesso. Envie uma nova solicita\u00e7\u00e3o.");
         setSolicitacao(null);
         setMensagemAguardando("");
         setEtapa("FORM");
+        setValidade(null);
         return;
       }
       setMensagemAguardando(erro.message || "N\u00e3o foi poss\u00edvel verificar sua solicita\u00e7\u00e3o agora.");
+      setEtapa((atual) => atual === "LOADING" ? "ERROR" : atual);
+    } finally {
+      consultando.current = false;
     }
   }, []);
 
   useEffect(() => {
+    montado.current = true;
+    const motivo = new URLSearchParams(window.location.search).get("motivo");
+    if (motivo) setErroFormulario(motivo === "pendente"
+      ? "Seu acesso ainda aguarda aprovação do professor."
+      : "Você precisa de uma aprovação válida para uma reserva ativa. Solicite o token ao professor.");
     verificarCheckinAtual();
+    return () => { montado.current = false; };
   }, [verificarCheckinAtual]);
+
+  useEffect(() => {
+    if (validade === null) return;
+    const timer = window.setTimeout(verificarCheckinAtual, Math.max(0, validade - Date.now()) + 1000);
+    return () => window.clearTimeout(timer);
+  }, [validade, verificarCheckinAtual]);
 
   return (
     <main className={styles.pagina}>
       <div className={`${styles.conteudo} ${styles.compacto}`}>
+        {etapa === "LOADING" && <p role="status">Consultando sua solicitação de acesso…</p>}
+        {etapa === "ERROR" && <section><p role="alert">{mensagemAguardando}</p><button type="button" onClick={verificarCheckinAtual}>Tentar novamente</button></section>}
+        {solicitacao?.agendamento && etapa !== "FORM" && <ResumoAula agendamento={solicitacao.agendamento} />}
         {etapa === "FORM" && (
           <section className={styles.formulario}>
             <Link className={styles.voltarLogin} href="/login">
@@ -93,7 +129,9 @@ export default function PaginaVinculacaoAluno() {
             </Link>
             <h1 className={styles.titulo}>Acesso à bancada do laboratório</h1>
             <p className={styles.descricao}>
-              Informe o token compartilhado pelo professor para solicitar acesso aos ativos da aula.
+              O token é fornecido pelo professor responsável. Peça a ele o token da sua reserva.
+              Cada token corresponde a uma reserva específica de turma, equipamento e horário
+              e só é válido durante o período ativo do agendamento.
             </p>
             {erroFormulario && <p className={styles.erroFormulario} role="alert">{erroFormulario}</p>}
             <FormularioVinculo onEnviar={enviarSolicitacao} />
@@ -109,7 +147,9 @@ export default function PaginaVinculacaoAluno() {
           />
         )}
         {etapa === "APPROVED" && solicitacao && (
-          <EstadoLiberado sessao={solicitacao} equipamentos={equipamentos} />
+          <><EstadoLiberado sessao={solicitacao} equipamentos={equipamentos} />
+            {mensagemAguardando && <p role="alert">{mensagemAguardando}</p>}
+          </>
         )}
       </div>
     </main>
