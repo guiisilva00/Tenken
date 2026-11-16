@@ -164,10 +164,20 @@
     font-size: var(--professor-font-caption);
   }
 
-  .status {
-    max-width: 80px;
-    font-size: 7px;
-    text-align: right;
+  .identificacao {
+    padding-right: 6px;
+  }
+
+  .dadosUsuario,
+  .sairTexto {
+    display: none;
+  }
+
+  .sair {
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    padding: 0;
   }
 }
 

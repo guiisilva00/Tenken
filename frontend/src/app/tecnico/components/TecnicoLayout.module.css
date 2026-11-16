@@ -272,6 +272,13 @@
     min-width: 0;
     max-width: 120px;
   }
+  .accountBadge {
+    padding-right: 6px;
+  }
+  .accountInfo,
+  .logoutButton > span:last-child {
+    display: none;
+  }
   .logoutButton {
     width: 36px;
     padding: 0;

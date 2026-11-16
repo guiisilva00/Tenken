@@ -55,7 +55,7 @@ export default function BarraSuperiorProfessor({
           <span className="material-symbols-outlined" aria-hidden="true">
             power_settings_new
           </span>
-          Sair
+          <span className={styles.sairTexto}>Sair</span>
         </button>
       </div>
     </header>
