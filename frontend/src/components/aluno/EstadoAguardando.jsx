@@ -25,7 +25,7 @@ export default function EstadoAguardando({ sessao, token, mensagem, onCancelar, 
       <dl className={styles.dados}>
         <div className={styles.item}><dt>Aluno</dt><dd>{sessao.nome}</dd></div>
         <div className={styles.item}><dt>Turma</dt><dd>{sessao.turma}</dd></div>
-        <div className={`${styles.item} ${styles.token}`}><dt>Token enviado</dt><dd>{token}</dd></div>
+      {token && <div className={`${styles.item} ${styles.token}`}><dt>Token enviado</dt><dd>{token}</dd></div>}
       </dl>
       <div className={styles.acoes}>
         <button className={styles.verificar} type="button" onClick={verificarNovamente} disabled={verificando}>

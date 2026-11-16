@@ -63,6 +63,30 @@
     inset 0 1px rgb(255 255 255 / 3%);
 }
 
+.voltarLogin {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin: 0 0 22px;
+  color: #f0c7c8;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color 160ms ease;
+}
+
+.voltarLogin:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.voltarLogin:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #ffb703;
+  outline-offset: 4px;
+}
+
 .titulo {
   margin: 0;
   color: var(--white);
