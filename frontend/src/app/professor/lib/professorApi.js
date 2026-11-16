@@ -1,7 +1,7 @@
 import { apiFetch } from "@/lib/api";
 
-export async function listarCheckinsPendentes() {
-  return (await apiFetch("/api/checkins/pendentes"))?.dados ?? [];
+export async function listarCheckinsPendentes(options = {}) {
+  return (await apiFetch("/api/checkins/pendentes", { ...options, cache: "no-store" }))?.dados ?? [];
 }
 
 export async function aprovarCheckin(id) {

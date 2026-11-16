@@ -30,12 +30,20 @@ export async function buscarAtualDoAluno(alunoId) {
   }
   return {
     aprovado: checkin.aprovado_em !== null,
+    agendamento: {
+      id: checkin.agendamento_id, atividade: checkin.atividade,
+      inicio: checkin.inicio, fim: checkin.fim, token: checkin.token_acesso,
+      professor: checkin.professor_nome,
+    },
+    segundos_restantes: Math.max(0, Math.floor((new Date(checkin.fim) - new Date(checkin.agora)) / 1000)),
     turma: { id: checkin.turma_id, nome: checkin.turma_nome },
     equipamentos: [{
       id: checkin.equipamento_id,
       nome: checkin.equipamento_nome,
       codigo_patrimonio: checkin.codigo_patrimonio,
       localizacao: checkin.localizacao,
+      tipo: checkin.tipo,
+      status: checkin.equipamento_status,
     }],
   };
 }
@@ -47,6 +55,10 @@ export async function listarPendentes(professorId) {
     aluno: { id: linha.aluno_id, nome: linha.aluno_nome, matricula: linha.aluno_matricula },
     turma: { id: linha.turma_id, nome: linha.turma_nome },
     equipamento: { id: linha.equipamento_id, nome: linha.equipamento_nome },
+    agendamento: {
+      id: linha.agendamento_id, atividade: linha.atividade,
+      inicio: linha.inicio, fim: linha.fim, token: linha.token_acesso,
+    },
     criado_em: linha.criado_em,
   }));
 }
@@ -64,8 +76,8 @@ export async function aprovar(idRecebido, professorId) {
     erro.status = 403;
     throw erro;
   }
-  if (checkin.aprovado_em !== null || !(await CheckinModel.aprovar(agendamentoId, alunoId))) {
-    const erro = new Error("Check-in já aprovado.");
+  if (checkin.aprovado_em !== null || !(await CheckinModel.aprovar(agendamentoId, alunoId, professorId))) {
+    const erro = new Error("Check-in já aprovado ou sem vínculo e agendamento ativos.");
     erro.status = 409;
     throw erro;
   }

@@ -383,6 +383,10 @@
 .slotVazio:disabled {
   cursor: not-allowed;
 }
+.slotPassado {
+  background: rgba(245, 243, 244, 0.035);
+  opacity: 0.38;
+}
 .slotVazio:disabled span {
   display: none;
 }
