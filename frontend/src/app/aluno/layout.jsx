@@ -5,7 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import AuthGuard from "@/components/auth/AuthGuard";
 import BarraLateral from "@/components/aluno/BarraLateral";
 import { clearSession, getUsuario } from "@/lib/session";
-import { sessaoAluno } from "@/mocks/aluno";
+import { apiFetch } from "@/lib/api";
+import { AulaContexto } from "@/components/aluno/AulaContexto";
 import styles from "./AlunoLayout.module.css";
 
 const titulosPagina = {
@@ -21,9 +22,12 @@ export default function LayoutAluno({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [menuAberto, setMenuAberto] = useState(false);
   const [rotaLiberada, setRotaLiberada] = useState(false);
+  const [aula, setAula] = useState(null);
+  const [erro, setErro] = useState("");
+  const [tentativa, setTentativa] = useState(0);
 
   useEffect(() => {
-    setUsuario(getUsuario() || { nome: sessaoAluno.nome, perfil: "ALUNO" });
+    setUsuario(getUsuario());
   }, []);
 
   useEffect(() => {
@@ -34,15 +38,38 @@ export default function LayoutAluno({ children }) {
     }
 
     setRotaLiberada(false);
-    if (
-      window.sessionStorage.getItem("tenken-aluno-bancada-liberada") === "true"
-    ) {
-      setRotaLiberada(true);
-      return;
-    }
+    setErro("");
+    let ativo = true;
+    const controle = new AbortController();
+    apiFetch("/api/checkins/atual", { signal: controle.signal, cache: "no-store" })
+      .then(({ dados }) => {
+        if (!ativo) return;
+        if (!dados?.aprovado) {
+          router.replace("/aluno?motivo=pendente");
+          return;
+        }
+        setAula(dados);
+        setRotaLiberada(pathname);
+      })
+      .catch((falha) => {
+        if (!ativo) return;
+        if (falha.status === 404 || falha.status === 403) {
+          router.replace("/aluno?motivo=sem-acesso");
+        } else {
+          setErro("Não foi possível confirmar seu acesso agora. Tente novamente.");
+        }
+      });
+    return () => { ativo = false; controle.abort(); };
+  }, [pathname, router, tentativa]);
 
-    router.replace("/aluno");
-  }, [pathname, router]);
+  useEffect(() => {
+    if (!aula || rotaLiberada !== pathname) return;
+    const timer = window.setTimeout(() => {
+      setRotaLiberada(false);
+      router.replace("/aluno?motivo=sem-acesso");
+    }, Math.max(0, aula.segundos_restantes * 1000));
+    return () => window.clearTimeout(timer);
+  }, [aula, pathname, rotaLiberada, router]);
 
   function sair() {
     window.sessionStorage.removeItem("tenken-aluno-bancada-liberada");
@@ -54,7 +81,7 @@ export default function LayoutAluno({ children }) {
     <AuthGuard>
       {pathname === "/aluno" ? (
         children
-      ) : rotaLiberada ? (
+      ) : rotaLiberada === pathname ? (
         <div className={styles.wrapper}>
           <BarraLateral
             aberta={menuAberto}
@@ -117,7 +144,7 @@ export default function LayoutAluno({ children }) {
                   </div>
                   <div className={styles.userInfo}>
                     <span className={styles.userName}>
-                      {usuario?.nome || usuario?.matricula || sessaoAluno.nome}
+                      {usuario?.nome || usuario?.matricula || "Aluno"}
                     </span>
                     <span className={styles.userRole}>ALUNO</span>
                   </div>
@@ -139,10 +166,10 @@ export default function LayoutAluno({ children }) {
               </div>
             </header>
 
-            <main className={styles.mainView}>{children}</main>
+            <main className={styles.mainView}><AulaContexto.Provider value={aula}>{children}</AulaContexto.Provider></main>
           </div>
         </div>
-      ) : null}
+      ) : <div role="status">{erro || "Confirmando autorização de acesso…"}{erro && <button type="button" onClick={() => setTentativa((n) => n + 1)}>Tentar novamente</button>}</div>}
     </AuthGuard>
   );
 }
