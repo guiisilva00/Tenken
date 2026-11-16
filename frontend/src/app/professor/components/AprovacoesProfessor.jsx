@@ -30,12 +30,12 @@ export default function AprovacoesProfessor() {
     setErro("");
     try {
       const dados = await listarCheckinsPendentes({ signal: controle.signal });
-      if (ativo.current && versao.current === versaoInicial) setPendentes(dados);
+      if (ativo.current && !controle.signal.aborted && versao.current === versaoInicial) setPendentes(dados);
     } catch (falha) {
       if (ativo.current && !controle.signal.aborted) setErro(falha.message || "Não foi possível carregar as aprovações pendentes.");
     } finally {
       if (requisicao.current === controle) requisicao.current = null;
-      if (ativo.current) setCarregando(false);
+      if (ativo.current && !controle.signal.aborted) setCarregando(false);
     }
   }, []);
 
@@ -114,7 +114,7 @@ export default function AprovacoesProfessor() {
               </li>
             ))}
           </ul>
-        ) : (
+        ) : !erro && (
           <div className={styles.vazio}><h3>Nenhuma aprovação pendente</h3><p>Novas solicitações de acesso aparecerão aqui.</p></div>
         )}
       </section>
