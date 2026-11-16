@@ -57,7 +57,17 @@
 .conta {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 16px;
+}
+
+.identificacao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 4px 6px;
+  border: 1px solid var(--border-subtle, #22272b);
+  border-radius: 12px;
+  background: var(--surface-low, #181c1f);
 }
 
 .avatar {
@@ -65,36 +75,49 @@
   width: 32px;
   height: 32px;
   place-items: center;
-  border-radius: 50%;
-  background: #442326;
-  color: #f5dfe0;
+  border-radius: 11px;
+  background: var(--mahogany-red, #a4161a);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 700;
 }
 
+.dadosUsuario {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
 .nome {
-  color: #ded8d8;
+  color: var(--white-smoke, #f5f3f4);
   font-size: 13px;
   font-weight: 600;
 }
 
 .sair {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 14px;
   border: 1px solid var(--border-subtle, #22272b);
   border-radius: 4px;
   background: var(--surface-high, #262a2e);
-  color: #ded8d8;
+  color: var(--white-smoke, #f5f3f4);
   cursor: pointer;
-  font: inherit;
-  font-size: var(--professor-font-caption);
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  transition: background 0.15s;
 }
 
 .sair:hover {
-  border-color: #a4161a;
-  color: #fff;
+  background: var(--surface-highest, #313538);
+}
+
+.sair :global(.material-symbols-outlined) {
+  color: var(--status-critical, #ef4444);
+  font-size: 18px;
 }
 
 @media (max-width: 1024px) {
