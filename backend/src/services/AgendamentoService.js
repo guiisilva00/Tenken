@@ -47,22 +47,6 @@ export async function criar(dados, usuario) {
   const turma = await TurmaModel.buscarPorId(turmaId);
   if (!turma || Number(turma.professor_id) !== Number(usuario.id))
     throw new TypeError("A turma não está vinculada a este professor.");
-  if (!turma.token_acesso) {
-    for (let tentativa = 0; tentativa < 5; tentativa += 1) {
-      try {
-        await TurmaModel.definirTokenTurma(turmaId, gerarTokenTurma());
-        const turmaAtualizada = await TurmaModel.buscarPorId(turmaId);
-        if (turmaAtualizada?.token_acesso) {
-          turma.token_acesso = turmaAtualizada.token_acesso;
-          break;
-        }
-      } catch (error) {
-        if (error.code !== "ER_DUP_ENTRY" || tentativa === 4) throw error;
-      }
-    }
-    if (!turma.token_acesso)
-      throw new Error("Nao foi possivel definir token unico para turma.");
-  }
   const ini = `${data} ${inicio}:00`,
     fimData = `${data} ${fim}:00`;
   const conexao = await pool.getConnection();
@@ -74,15 +58,25 @@ export async function criar(dados, usuario) {
       throw new TypeError("Equipamento indisponível para reserva.");
     if (await AgendamentoModel.verificarConflito(equipamentoId, ini, fimData, conexao))
       throw new TypeError("Equipamento já reservado nesse horário.");
-    agendamentoId = await AgendamentoModel.criar({
-      responsavel_id: Number(usuario.id),
-      equipamento_id: equipamentoId,
-      turma_id: turmaId,
-      atividade,
-      inicio: ini,
-      fim: fimData,
-      token_acesso: null,
-    }, conexao);
+    for (let tentativa = 0; tentativa < 5; tentativa += 1) {
+      const token = gerarTokenTurma();
+      if (await AgendamentoModel.tokenExiste(token, conexao)) continue;
+      try {
+        agendamentoId = await AgendamentoModel.criar({
+          responsavel_id: Number(usuario.id),
+          equipamento_id: equipamentoId,
+          turma_id: turmaId,
+          atividade,
+          inicio: ini,
+          fim: fimData,
+          token_acesso: token,
+        }, conexao);
+        break;
+      } catch (erro) {
+        if (erro.code !== "ER_DUP_ENTRY" || tentativa === 4) throw erro;
+      }
+    }
+    if (!agendamentoId) throw new Error("Nao foi possivel gerar token unico para o agendamento.");
     await conexao.commit();
   } catch (erro) {
     await conexao.rollback();

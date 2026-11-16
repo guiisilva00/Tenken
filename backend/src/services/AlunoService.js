@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import * as AlunoModel from "../models/AlunoModel.js";
 import * as TurmaModel from "../models/TurmaModel.js";
+import * as AgendamentoModel from "../models/AgendamentoModel.js";
 import { validarTokenTurma } from "../utils/Token.js";
 
 const MAX_TENTATIVAS_MATRICULA = 5;
@@ -24,28 +25,23 @@ function gerarCodigoMatricula() {
 }
 
 export async function solicitarAcesso(token, alunoId) {
-  if (!validarTokenTurma(token)) throw erroComStatus("Token inválido.", 400);
-  const turma = await TurmaModel.buscarTurmaPorToken(token);
-  if (!turma) throw erroComStatus("Token não encontrado.", 404);
-
-  const agendamento = await AlunoModel.buscarAgendamentoAtivo(turma.id);
-  if (!agendamento)
-    throw erroComStatus("Não há aula ativa para esta turma agora.", 422);
-  if (!(await AlunoModel.pertenceATurma(turma.id, alunoId))) {
-    throw erroComStatus("Aluno não pertence a esta turma.", 403);
+  if (!validarTokenTurma(token)) throw erroComStatus("Token invalido.", 400);
+  const agendamento = await AgendamentoModel.buscarPorTokenAtivo(token);
+  if (!agendamento) throw erroComStatus("Token nao encontrado ou agendamento inativo.", 404);
+  if (!(await AlunoModel.pertenceATurma(agendamento.turma_id, alunoId))) {
+    throw erroComStatus("Aluno nao pertence a esta turma.", 403);
   }
 
   try {
     await AlunoModel.criarCheckin(agendamento.id, alunoId);
   } catch (erro) {
-    if (erro.code === "ER_DUP_ENTRY")
-      throw erroComStatus("Solicitação já registrada.", 409);
+    if (erro.code === "ER_DUP_ENTRY") throw erroComStatus("Solicitacao ja registrada.", 409);
     throw erro;
   }
 
   return {
     status: "AGUARDANDO_APROVACAO",
-    turma: { id: turma.id, nome: turma.nome },
+    turma: { id: agendamento.turma_id, nome: agendamento.turma },
   };
 }
 
