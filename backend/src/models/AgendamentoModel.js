@@ -77,6 +77,27 @@ export async function verificarConflito(equipamentoId, inicio, fim, db = pool) {
   return linhas.length > 0;
 }
 
+export async function buscarPorTokenAtivo(token) {
+  const [linhas] = await pool.query(
+    `SELECT a.id, a.turma_id, t.nome AS turma
+     FROM agendamentos a
+     JOIN turmas_projetos t ON t.id = a.turma_id
+     WHERE a.token_acesso = ? AND a.inicio <= NOW() AND a.fim >= NOW()
+       AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
+     LIMIT 1`,
+    [token],
+  );
+  return linhas[0] || null;
+}
+
+export async function tokenExiste(token, db = pool) {
+  const [linhas] = await db.query(
+    "SELECT id FROM agendamentos WHERE token_acesso = ? LIMIT 1",
+    [token],
+  );
+  return linhas.length > 0;
+}
+
 export async function criar({
   responsavel_id,
   equipamento_id,

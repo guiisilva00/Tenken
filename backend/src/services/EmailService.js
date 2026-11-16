@@ -31,6 +31,10 @@ function obterTransportador() {
 }
 
 export async function enviarEmailRedefinicaoSenha({ para, nome, link }) {
+  if (!process.env.SMTP_HOST) {
+    throw new Error("SMTP_HOST não configurado para envio de e-mail.");
+  }
+
   const nomeHtml = escaparHtml(nome);
   const linkHtml = escaparHtml(link);
   const logo = await readFile(

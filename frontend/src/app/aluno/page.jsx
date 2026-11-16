@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import FormularioVinculo from "@/components/aluno/FormularioVinculo";
 import EstadoAguardando from "@/components/aluno/EstadoAguardando";
 import EstadoLiberado from "@/components/aluno/EstadoLiberado";
@@ -36,19 +37,29 @@ export default function PaginaVinculacaoAluno() {
     setEtapa("FORM");
   }
 
-  async function verificarCheckinAtual() {
+  const verificarCheckinAtual = useCallback(async () => {
     try {
       const resposta = await apiFetch("/api/checkins/atual");
       const dados = resposta?.dados;
+      const usuario = getUsuario();
+      setSolicitacao((atual) => ({
+        ...atual,
+        nome: atual?.nome || usuario?.nome || usuario?.matricula || "Aluno",
+        turma: dados?.turma?.nome || atual?.turma || "Turma",
+        token: atual?.token || "",
+      }));
+
       if (!dados?.aprovado) {
-        setMensagemAguardando("Ainda aguardando aprovação do professor.");
+        setMensagemAguardando("");
+        setEtapa("WAITING");
         return;
       }
+
       const equipamentosLiberados = (dados.equipamentos || []).map((equipamento) => ({
         id: equipamento.codigo_patrimonio || String(equipamento.id),
-        tipo: "Equipamento do laboratório",
+        tipo: "Equipamento do laborat\u00f3rio",
         nome: equipamento.nome,
-        detalhe: equipamento.localizacao ? `Localização: ${equipamento.localizacao}` : "Localização não informada",
+        detalhe: equipamento.localizacao ? "Localiza\u00e7\u00e3o: " + equipamento.localizacao : "Localiza\u00e7\u00e3o n\u00e3o informada",
       }));
       setEquipamentos(equipamentosLiberados);
       setSolicitacao((atual) => ({ ...atual, turma: dados.turma?.nome || atual?.turma }));
@@ -58,19 +69,28 @@ export default function PaginaVinculacaoAluno() {
       setEtapa("APPROVED");
     } catch (erro) {
       if (erro.status === 404) {
-        setErroFormulario("Não encontramos sua solicitação de acesso. Envie uma nova solicitação.");
-        cancelarSolicitacao();
+        setErroFormulario("N\u00e3o encontramos sua solicita\u00e7\u00e3o de acesso. Envie uma nova solicita\u00e7\u00e3o.");
+        setSolicitacao(null);
+        setMensagemAguardando("");
+        setEtapa("FORM");
         return;
       }
-      setMensagemAguardando(erro.message || "Não foi possível verificar sua solicitação agora.");
+      setMensagemAguardando(erro.message || "N\u00e3o foi poss\u00edvel verificar sua solicita\u00e7\u00e3o agora.");
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    verificarCheckinAtual();
+  }, [verificarCheckinAtual]);
 
   return (
     <main className={styles.pagina}>
       <div className={`${styles.conteudo} ${styles.compacto}`}>
         {etapa === "FORM" && (
           <section className={styles.formulario}>
+            <Link className={styles.voltarLogin} href="/login">
+              Voltar para login
+            </Link>
             <h1 className={styles.titulo}>Acesso à bancada do laboratório</h1>
             <p className={styles.descricao}>
               Informe o token compartilhado pelo professor para solicitar acesso aos ativos da aula.

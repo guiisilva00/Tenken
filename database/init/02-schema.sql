@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS tenken_db
+﻿CREATE DATABASE IF NOT EXISTS tenken_db
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
@@ -50,7 +50,7 @@ CREATE TABLE agendamentos (
   atividade VARCHAR(120) NULL,
   inicio DATETIME NOT NULL,
   fim DATETIME NOT NULL,
-  token_acesso VARCHAR(20) NULL,
+  token_acesso VARCHAR(20) NULL UNIQUE,  
   status ENUM('CONFIRMADO', 'EM_ANDAMENTO', 'CONCLUIDO', 'CANCELADO') NOT NULL DEFAULT 'CONFIRMADO',
   criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CHECK (fim > inicio),
@@ -59,6 +59,7 @@ CREATE TABLE agendamentos (
   FOREIGN KEY (turma_id) REFERENCES turmas_projetos(id),
   INDEX idx_agendamento_equipamento_horario (equipamento_id, inicio, fim)
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE checkins (
   agendamento_id BIGINT UNSIGNED NOT NULL,

@@ -12,7 +12,7 @@ export default function BemVindoAluno() {
           <span /> AMBIENTE DE APRENDIZAGEM
         </span>
         <h1 className={styles.titulo}>
-          Bem-vindo ao <span>TENKEN</span>
+          Bem-vindo ao <span>TENKEN !</span>
         </h1>
         <p className={styles.resumo}>
           Sua sessão está liberada. Consulte as informações da aula e os
