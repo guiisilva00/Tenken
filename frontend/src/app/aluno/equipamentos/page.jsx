@@ -1,22 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useAulaAtual, ResumoAula } from "@/components/aluno/AulaContexto";
 import Link from "next/link";
 import { IconeSeta } from "@/components/aluno/IconesNavegacao";
 import styles from "./page.module.css";
 
 export default function EquipamentosAluno() {
   const [itemAberto, setItemAberto] = useState(null);
-  const [equipamentos, setEquipamentos] = useState([]);
-
-  useEffect(() => {
-    try {
-      const dados = JSON.parse(window.sessionStorage.getItem("tenken-aluno-equipamentos") || "[]");
-      setEquipamentos(dados.map((item) => ({ ...item, id: item.codigo_patrimonio || String(item.id) })));
-    } catch {
-      setEquipamentos([]);
-    }
-  }, []);
+  const aula = useAulaAtual();
+  const equipamentos = aula?.equipamentos || [];
 
   function alternarItem(id) {
     setItemAberto((atual) => (atual === id ? null : id));
@@ -38,6 +31,8 @@ export default function EquipamentosAluno() {
         </Link>
       </header>
 
+      <p>{aula?.turma?.nome}</p>
+      <ResumoAula agendamento={aula?.agendamento} />
       <ul className={styles.lista}>
         {equipamentos.map((equipamento) => {
           const aberto = itemAberto === equipamento.id;
@@ -59,11 +54,11 @@ export default function EquipamentosAluno() {
                     {equipamento.nome}
                   </strong>
                   <small className={styles.descricaoEquipamento}>
-                    {equipamento.tipo} · {equipamento.detalhe}
+                    {equipamento.tipo} · {equipamento.localizacao || "Localização não informada"}
                   </small>
                 </span>
                 <span className={styles.acoesLinha}>
-                  <span className={styles.badge}>OPERACIONAL</span>
+                  <span className={styles.badge}>{equipamento.status?.replaceAll("_", " ") || "Status não informado"}</span>
                   <IconeSeta
                     className={`${styles.seta} ${aberto ? styles.setaAberta : ""}`}
                     direcao="baixo"
