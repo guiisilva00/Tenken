@@ -126,6 +126,7 @@ export default function TecnicoLayout({ children }) {
             <strong>{tituloPagina}</strong>
           </nav>
           <div className={styles.account}>
+            <div className={styles.accountBadge}>
             <span className={styles.avatar}>
               <span className="material-symbols-outlined">engineering</span>
             </span>
@@ -133,12 +134,16 @@ export default function TecnicoLayout({ children }) {
               <strong>{usuario.nome || usuario.matricula || "Técnico"}</strong>
               <small>TÉCNICO</small>
             </span>
+            </div>
             <button
               type="button"
               className={styles.logoutButton}
               onClick={sair}
+              aria-label="Sair da sessão"
             >
-              <span className="material-symbols-outlined">logout</span>
+              <span className="material-symbols-outlined">
+                power_settings_new
+              </span>
               <span>Sair</span>
             </button>
           </div>

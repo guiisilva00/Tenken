@@ -37,13 +37,25 @@ export default function BarraSuperiorProfessor({
         <strong>{titulo}</strong>
       </nav>
       <div className={styles.conta}>
-        <span className={styles.avatar} aria-hidden="true">
-          {iniciais}
-        </span>
-        <span className={styles.nome}>{usuario?.nome || "Professor"}</span>
-        <span className={styles.status}>PROFESSOR</span>
-        <button type="button" className={styles.sair} onClick={onSair}>
-          Sair
+        <div className={styles.identificacao}>
+          <span className={styles.avatar} aria-hidden="true">
+            {iniciais}
+          </span>
+          <span className={styles.dadosUsuario}>
+            <span className={styles.nome}>{usuario?.nome || "Professor"}</span>
+            <span className={styles.status}>PROFESSOR</span>
+          </span>
+        </div>
+        <button
+          type="button"
+          className={styles.sair}
+          onClick={onSair}
+          aria-label="Sair da sessão"
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">
+            power_settings_new
+          </span>
+          <span className={styles.sairTexto}>Sair</span>
         </button>
       </div>
     </header>
