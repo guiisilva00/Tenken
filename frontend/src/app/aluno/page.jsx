@@ -86,7 +86,7 @@ export default function PaginaVinculacaoAluno() {
     } catch (erro) {
       if (!montado.current) return;
       if (erro.status === 404) {
-        setErroFormulario("N\u00e3o encontramos sua solicita\u00e7\u00e3o de acesso. Envie uma nova solicita\u00e7\u00e3o.");
+        setErroFormulario("Não há solicitação válida para uma reserva ativa. Peça ao professor o token da reserva atual para solicitar acesso.");
         setSolicitacao(null);
         setMensagemAguardando("");
         setEtapa("FORM");
@@ -112,7 +112,10 @@ export default function PaginaVinculacaoAluno() {
 
   useEffect(() => {
     if (validade === null) return;
-    const timer = window.setTimeout(verificarCheckinAtual, Math.max(0, validade - Date.now()) + 1000);
+    const timer = window.setTimeout(() => {
+      setEtapa("LOADING");
+      verificarCheckinAtual();
+    }, Math.max(0, validade - Date.now()) + 1000);
     return () => window.clearTimeout(timer);
   }, [validade, verificarCheckinAtual]);
 
@@ -148,7 +151,7 @@ export default function PaginaVinculacaoAluno() {
         )}
         {etapa === "APPROVED" && solicitacao && (
           <><EstadoLiberado sessao={solicitacao} equipamentos={equipamentos} />
-            {mensagemAguardando && <p role="alert">{mensagemAguardando}</p>}
+            {mensagemAguardando && <div><p role="alert">{mensagemAguardando}</p><button type="button" onClick={verificarCheckinAtual}>Tentar novamente</button></div>}
           </>
         )}
       </div>
