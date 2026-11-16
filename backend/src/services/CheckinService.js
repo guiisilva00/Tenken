@@ -76,7 +76,7 @@ export async function aprovar(idRecebido, professorId) {
     erro.status = 403;
     throw erro;
   }
-  if (checkin.aprovado_em !== null || !(await CheckinModel.aprovar(agendamentoId, alunoId))) {
+  if (checkin.aprovado_em !== null || !(await CheckinModel.aprovar(agendamentoId, alunoId, professorId))) {
     const erro = new Error("Check-in já aprovado ou sem vínculo e agendamento ativos.");
     erro.status = 409;
     throw erro;

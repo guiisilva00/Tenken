@@ -13,8 +13,8 @@ export async function buscarMaisRecentePorAluno(alunoId) {
      JOIN turmas_projetos t ON t.id = a.turma_id
      JOIN equipamentos e ON e.id = a.equipamento_id
      JOIN usuarios p ON p.id = t.professor_id
-     JOIN turma_alunos ta ON ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id
      WHERE c.aluno_id = ?
+       AND EXISTS (SELECT 1 FROM turma_alunos ta WHERE ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id)
        AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      ORDER BY c.realizado_em DESC, c.agendamento_id DESC
@@ -36,8 +36,8 @@ export async function listarPendentesPorProfessor(professorId) {
      JOIN turmas_projetos t ON t.id = a.turma_id
      JOIN equipamentos e ON e.id = a.equipamento_id
      JOIN usuarios u ON u.id = c.aluno_id
-     JOIN turma_alunos ta ON ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id
      WHERE c.aprovado_em IS NULL AND t.professor_id = ?
+       AND EXISTS (SELECT 1 FROM turma_alunos ta WHERE ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id)
        AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      ORDER BY c.realizado_em DESC`,
@@ -59,16 +59,18 @@ export async function buscarPorIds(agendamentoId, alunoId) {
   return linhas[0] || null;
 }
 
-export async function aprovar(agendamentoId, alunoId) {
+export async function aprovar(agendamentoId, alunoId, professorId) {
   const [resultado] = await pool.query(
     `UPDATE checkins c
      JOIN agendamentos a ON a.id = c.agendamento_id
+     JOIN turmas_projetos t ON t.id = a.turma_id
      JOIN turma_alunos ta ON ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id
      SET c.aprovado_em = NOW()
      WHERE c.agendamento_id = ? AND c.aluno_id = ? AND c.aprovado_em IS NULL
+       AND t.professor_id = ?
        AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')`,
-    [agendamentoId, alunoId],
+    [agendamentoId, alunoId, professorId],
   );
   return resultado.affectedRows > 0;
 }
