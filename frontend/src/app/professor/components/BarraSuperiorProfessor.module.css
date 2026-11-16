@@ -75,7 +75,7 @@
   width: 32px;
   height: 32px;
   place-items: center;
-  border-radius: 11px;
+  border-radius: 50%;
   background: var(--mahogany-red, #a4161a);
   color: #ffffff;
   font-size: 11px;
