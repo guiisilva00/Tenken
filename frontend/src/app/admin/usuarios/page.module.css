@@ -193,6 +193,12 @@
 .roleDot {
   border-radius: 0;
 }
+.roleDot.roleAdmin {
+  background: var(--primary, #ffb4ac);
+}
+.roleDot.roleProfessor {
+  background: var(--tertiary, #9ecaff);
+}
 .roleDot.roleTecnico {
   background: var(--status-warning, #f59e0b);
 }
