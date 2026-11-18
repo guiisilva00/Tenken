@@ -21,6 +21,25 @@ export async function pertenceATurma(turmaId, alunoId) {
   return linhas.length > 0;
 }
 
+export async function buscarArea(alunoId) {
+  const [turmas] = await pool.query(
+    `SELECT t.id, t.nome FROM turma_alunos ta JOIN turmas_projetos t ON t.id = ta.turma_id
+     WHERE ta.aluno_id = ? ORDER BY t.nome`, [alunoId]);
+  const [agendamentos] = await pool.query(
+    `SELECT a.id, a.turma_id, t.nome AS turma, a.equipamento_id, e.nome AS equipamento,
+      e.codigo_patrimonio AS patrimonio, e.tipo, e.localizacao, e.status AS equipamento_status,
+      a.atividade, DATE_FORMAT(a.inicio, '%Y-%m-%d') AS data,
+      DATE_FORMAT(a.inicio, '%H:%i') AS inicio, DATE_FORMAT(a.fim, '%H:%i') AS fim, a.status
+     FROM agendamentos a JOIN turma_alunos ta ON ta.turma_id = a.turma_id
+     JOIN turmas_projetos t ON t.id = a.turma_id JOIN equipamentos e ON e.id = a.equipamento_id
+     WHERE ta.aluno_id = ? AND a.status NOT IN ('CANCELADO') ORDER BY a.inicio DESC`, [alunoId]);
+  const equipamentos = [...new Map(agendamentos.map((a) => [a.equipamento_id, {
+    id: a.equipamento_id, nome: a.equipamento, codigo_patrimonio: a.patrimonio,
+    tipo: a.tipo, localizacao: a.localizacao, status: a.equipamento_status,
+  }])).values()];
+  return { turmas, agendamentos, equipamentos };
+}
+
 export async function criarCheckin(agendamentoId, alunoId) {
   await pool.execute(
     "INSERT INTO checkins (agendamento_id, aluno_id, aprovado_em) VALUES (?, ?, NULL)",

@@ -63,8 +63,6 @@ export default function PaginaVinculacaoAluno() {
       }));
       setEquipamentos(equipamentosLiberados);
       setSolicitacao((atual) => ({ ...atual, turma: dados.turma?.nome || atual?.turma }));
-      window.sessionStorage.setItem("tenken-aluno-bancada-liberada", "true");
-      window.sessionStorage.setItem("tenken-aluno-equipamentos", JSON.stringify(dados.equipamentos || []));
       setMensagemAguardando("");
       setEtapa("APPROVED");
     } catch (erro) {

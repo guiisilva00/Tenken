@@ -6,6 +6,10 @@ import { validarTokenTurma } from "../utils/Token.js";
 
 const MAX_TENTATIVAS_MATRICULA = 5;
 
+export async function buscarArea(alunoId) {
+  return AlunoModel.buscarArea(Number(alunoId));
+}
+
 function erroComStatus(mensagem, status) {
   const erro = new Error(mensagem);
   erro.status = status;

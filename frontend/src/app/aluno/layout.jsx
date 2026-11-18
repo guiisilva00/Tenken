@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import AuthGuard from "@/components/auth/AuthGuard";
 import BarraLateral from "@/components/aluno/BarraLateral";
 import { clearSession, getUsuario } from "@/lib/session";
-import { sessaoAluno } from "@/mocks/aluno";
 import styles from "./AlunoLayout.module.css";
 
 const titulosPagina = {
@@ -20,10 +19,10 @@ export default function LayoutAluno({ children }) {
   const router = useRouter();
   const [usuario, setUsuario] = useState(null);
   const [menuAberto, setMenuAberto] = useState(false);
-  const [rotaLiberada, setRotaLiberada] = useState(false);
+  const [rotaLiberada, setRotaLiberada] = useState(true);
 
   useEffect(() => {
-    setUsuario(getUsuario() || { nome: sessaoAluno.nome, perfil: "ALUNO" });
+    setUsuario(getUsuario());
   }, []);
 
   useEffect(() => {
@@ -34,18 +33,10 @@ export default function LayoutAluno({ children }) {
     }
 
     setRotaLiberada(false);
-    if (
-      window.sessionStorage.getItem("tenken-aluno-bancada-liberada") === "true"
-    ) {
-      setRotaLiberada(true);
-      return;
-    }
-
-    router.replace("/aluno");
+    setRotaLiberada(true);
   }, [pathname, router]);
 
   function sair() {
-    window.sessionStorage.removeItem("tenken-aluno-bancada-liberada");
     clearSession();
     router.replace("/login");
   }
@@ -117,7 +108,7 @@ export default function LayoutAluno({ children }) {
                   </div>
                   <div className={styles.userInfo}>
                     <span className={styles.userName}>
-                      {usuario?.nome || usuario?.matricula || sessaoAluno.nome}
+                    {usuario?.nome || usuario?.matricula || "Aluno"}
                     </span>
                     <span className={styles.userRole}>ALUNO</span>
                   </div>

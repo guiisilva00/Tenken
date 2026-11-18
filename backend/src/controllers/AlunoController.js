@@ -1,5 +1,14 @@
 import * as AlunoService from "../services/AlunoService.js";
 
+export async function buscarArea(req, res, next) {
+  try {
+    const dados = await AlunoService.buscarArea(req.usuario.id);
+    return res.status(200).json({ sucesso: true, dados });
+  } catch (erro) {
+    return next(erro);
+  }
+}
+
 export async function solicitarAcesso(req, res, next) {
   try {
     const resultado = await AlunoService.solicitarAcesso(
