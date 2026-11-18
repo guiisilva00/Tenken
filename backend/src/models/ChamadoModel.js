@@ -65,6 +65,14 @@ export async function buscarPorInspecao(inspecaoId, db = pool) {
   return linhas[0] || null;
 }
 
+export async function existeCorretivoAtivo(equipamentoId, db = pool) {
+  const [linhas] = await db.query(
+    "SELECT id FROM chamados_manutencao WHERE equipamento_id = ? AND tipo = 'CORRETIVO' AND status NOT IN ('CONCLUIDO', 'CANCELADO') LIMIT 1",
+    [equipamentoId],
+  );
+  return linhas.length > 0;
+}
+
 export async function listarDoProfessor(professorId, situacao) {
   const filtros = {
     EM_ANDAMENTO:

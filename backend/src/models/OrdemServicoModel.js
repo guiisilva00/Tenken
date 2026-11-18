@@ -43,16 +43,16 @@ export async function listarTodas({ status, severidade } = {}) {
   return linhas;
 }
 
-export async function contarNoAno(ano) {
-  const [[{ total }]] = await pool.query(
+export async function contarNoAno(ano, db = pool) {
+  const [[{ total }]] = await db.query(
     "SELECT COUNT(*) AS total FROM ordens_servico WHERE YEAR(emitida_em) = ?",
     [ano],
   );
   return Number(total);
 }
 
-export async function criar({ chamado_id, numero, emitida_por }) {
-  const [resultado] = await pool.query(
+export async function criar({ chamado_id, numero, emitida_por }, db = pool) {
+  const [resultado] = await db.query(
     "INSERT INTO ordens_servico (chamado_id, numero, emitida_por) VALUES (?, ?, ?)",
     [chamado_id, numero, emitida_por],
   );
