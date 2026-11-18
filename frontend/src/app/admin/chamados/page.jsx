@@ -26,6 +26,19 @@ const ROTULO_STATUS = {
   CANCELADO: "Cancelado",
 };
 
+function normalizarStatus(status) {
+  return String(status ?? "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+}
+
+function podeEmitirOS(status) {
+  return !["EM_ATENDIMENTO", "AGUARDANDO_PECAS", "CONCLUIDO", "CANCELADO"].includes(
+    normalizarStatus(status),
+  );
+}
+
 export default function PaginaChamados() {
   return <AdminLayout>{({ token }) => <Conteudo token={token} />}</AdminLayout>;
 }
@@ -100,6 +113,7 @@ function Conteudo({ token }) {
   }
 
   async function emitirOS(item) {
+    if (!podeEmitirOS(item.status)) return;
     try {
       const os = await chamarApi(`/chamados/${item.id}/ordem-servico`, token, {
         method: "POST",
@@ -491,19 +505,21 @@ function Conteudo({ token }) {
                   </label>
                 </div>
                 <div className={styles.modalActions}>
-                  <button
-                    type="button"
-                    className={`${styles.actionBtn} ${styles.actionBtnPrimary}`}
-                    onClick={() => emitirOS(selecionado)}
-                  >
-                    <span
-                      className="material-symbols-outlined"
-                      aria-hidden="true"
+                  {podeEmitirOS(selecionado.status) && (
+                    <button
+                      type="button"
+                      className={`${styles.actionBtn} ${styles.actionBtnPrimary}`}
+                      onClick={() => emitirOS(selecionado)}
                     >
-                      build_circle
-                    </span>
-                    Emitir ordem de serviço (OS)
-                  </button>
+                      <span
+                        className="material-symbols-outlined"
+                        aria-hidden="true"
+                      >
+                        build_circle
+                      </span>
+                      Emitir ordem de serviço (OS)
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
