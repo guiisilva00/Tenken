@@ -112,8 +112,9 @@ export async function atualizarStatus(idRecebido, status) {
   return await OrdemServicoModel.buscarPorId(id);
 }
 
-export async function concluir(idRecebido, descricao, usuarioLogado) {
+export async function concluir(idRecebido, dados, usuarioLogado) {
   const id = validarId(idRecebido);
+  const descricao = typeof dados === "string" ? dados : dados?.descricao;
   if (typeof descricao !== "string" || descricao.trim() === "") {
     throw new TypeError("Descreva o serviço realizado para concluir a ordem.");
   }
@@ -137,7 +138,7 @@ export async function concluir(idRecebido, descricao, usuarioLogado) {
     await conexao.beginTransaction();
     await HistoricoManutencaoService.criar(
       ordemServico.chamado_id,
-      { descricao },
+      typeof dados === "string" ? { descricao } : dados,
       usuarioLogado,
       conexao,
     );
