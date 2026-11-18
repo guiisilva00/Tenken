@@ -37,7 +37,7 @@ export async function concluir(req, res, next) {
   try {
     const ordemServico = await OrdemServicoService.concluir(
       req.params.id,
-      req.body.descricao,
+      req.body,
       req.usuario,
     );
     return res.status(200).json({ sucesso: true, dados: ordemServico });

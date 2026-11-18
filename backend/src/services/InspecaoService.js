@@ -5,6 +5,7 @@ import * as ChecklistItemModel from "../models/ChecklistItemModel.js";
 import * as ChecklistModeloModel from "../models/ChecklistModeloModel.js";
 import * as EquipamentoModel from "../models/EquipamentoModel.js";
 import * as InspecaoModel from "../models/InspecaoModel.js";
+import * as OrdemServicoModel from "../models/OrdemServicoModel.js";
 import { pool } from "../config/Database.js";
 import { basename } from "node:path";
 
@@ -208,7 +209,10 @@ export async function registrar(dados, usuario, arquivos = []) {
     typeof dados.chamadoDescricao === "string"
       ? dados.chamadoDescricao.trim()
       : "";
-  const severidade = dados.chamadoSeveridade || "ALTA";
+  const severidadeSolicitada = dados.chamadoSeveridade || "ALTA";
+  const severidade = reprovada && itens.some((item) => item.critico && !respostas.get(item.id).conforme)
+    ? "CRITICA"
+    : severidadeSolicitada;
 
   if (reprovada && !descricaoChamado) {
     throw new TypeError("Descreva o problema para abrir o chamado.");
@@ -285,6 +289,13 @@ export async function registrar(dados, usuario, arquivos = []) {
         }),
         conexao,
       );
+      const ano = new Date().getFullYear();
+      const quantidade = await OrdemServicoModel.contarNoAno(ano, conexao);
+      await OrdemServicoModel.criar({
+        chamado_id: chamado.id,
+        numero: `OS-${ano}-${String(quantidade + 1).padStart(4, "0")}`,
+        emitida_por: Number(usuario.id),
+      }, conexao);
     } else if (possuiFalha) {
       chamado = await ChamadoModel.criar(
         new Chamado({

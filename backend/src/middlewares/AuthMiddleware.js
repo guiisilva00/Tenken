@@ -16,13 +16,14 @@ export async function authMiddleware(request, response, next) {
 
   try {
     const payload = jwt.verify(match[1], process.env.JWT_SECRET);
-    if (!(await UsuarioService.verificarAtivo(payload.sub))) {
+    const usuario = await UsuarioService.buscarSessao(payload.sub);
+    if (!usuario) {
       return response.status(401).json({ message: "Usuário desativado" });
     }
     request.usuario = {
-      id: payload.sub,
-      perfil: payload.perfil,
-      matricula: payload.matricula,
+      id: usuario.id,
+      perfil: usuario.perfil,
+      matricula: usuario.matricula,
     };
     return next();
   } catch {

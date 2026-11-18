@@ -16,6 +16,7 @@ function Conteudo({ token }) {
   const [professores, setProfessores] = useState([]);
   const [nome, setNome] = useState("");
   const [professorId, setProfessorId] = useState("");
+  const [turmaEditando, setTurmaEditando] = useState(null);
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState("todas");
   const [modalAberto, setModalAberto, fechandoModal, finalizarFechamentoModal] =
@@ -73,22 +74,34 @@ function Conteudo({ token }) {
     setErro("");
     setSalvando(true);
     try {
-      await chamarApi("/turmas", token, {
-        method: "POST",
+      await chamarApi(turmaEditando ? `/turmas/${turmaEditando.id}` : "/turmas", token, {
+        method: turmaEditando ? "PUT" : "POST",
         body: { nome, professor_id: Number(professorId) },
       });
       setFeedback({
         type: "success",
-        message: `Turma ${nome.trim()} criada com sucesso.`,
+        message: `Turma ${nome.trim()} ${turmaEditando ? "atualizada" : "criada"} com sucesso.`,
       });
       setNome("");
       setProfessorId("");
+      setTurmaEditando(null);
       setModalAberto(false);
       await carregar();
     } catch (e) {
       setFeedback({ type: "error", message: e.message });
     } finally {
       setSalvando(false);
+    }
+  }
+
+  async function excluirTurma(turma) {
+    if (!window.confirm(`Excluir a turma ${turma.nome}?`)) return;
+    try {
+      await chamarApi(`/turmas/${turma.id}`, token, { method: "DELETE" });
+      setFeedback({ type: "success", message: `Turma ${turma.nome} excluída.` });
+      await carregar();
+    } catch (e) {
+      setFeedback({ type: "error", message: e.message });
     }
   }
 
@@ -116,6 +129,9 @@ function Conteudo({ token }) {
           className={styles.primaryButton}
           onClick={() => {
             setErro("");
+            setTurmaEditando(null);
+            setNome("");
+            setProfessorId("");
             setModalAberto(true);
           }}
         >
@@ -250,6 +266,9 @@ function Conteudo({ token }) {
                 className={styles.primaryButton}
                 onClick={() => {
                   setErro("");
+                  setTurmaEditando(null);
+                  setNome("");
+                  setProfessorId("");
                   setModalAberto(true);
                 }}
               >
@@ -299,6 +318,7 @@ function Conteudo({ token }) {
                   <th scope="col">Turma</th>
                   <th scope="col">Professor responsável</th>
                   <th scope="col">Alunos</th>
+                  <th scope="col">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -342,6 +362,12 @@ function Conteudo({ token }) {
                         {Number(turma.alunos ?? 0) === 1 ? "aluno" : "alunos"}
                       </span>
                     </td>
+                    <td>
+                      <button type="button" className={styles.textButton} onClick={() => {
+                        setTurmaEditando(turma); setNome(turma.nome); setProfessorId(String(turma.professor_id)); setModalAberto(true);
+                      }}>Editar</button>
+                      <button type="button" className={styles.textButton} onClick={() => excluirTurma(turma)}>Excluir</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -372,7 +398,7 @@ function Conteudo({ token }) {
                 </span>
                 <div>
                   <h2 id="titulo-criar-turma" className={styles.modalTitle}>
-                    Criar turma
+                    {turmaEditando ? "Editar turma" : "Criar turma"}
                   </h2>
                   <p className={styles.modalDescription}>
                     Informe o nome da turma e o professor responsável.
@@ -442,7 +468,7 @@ function Conteudo({ token }) {
                   className={styles.primaryButton}
                   disabled={salvando || professores.length === 0}
                 >
-                  {salvando ? "Salvando..." : "Criar turma"}
+                  {salvando ? "Salvando..." : turmaEditando ? "Salvar alterações" : "Criar turma"}
                 </button>
               </div>
             </form>
