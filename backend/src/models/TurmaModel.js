@@ -31,6 +31,30 @@ export async function criar({ nome, professor_id }) {
   return resultado.insertId;
 }
 
+export async function atualizar(id, { nome, professor_id }) {
+  const [resultado] = await pool.query(
+    "UPDATE turmas_projetos SET nome = ?, professor_id = ? WHERE id = ?",
+    [nome, professor_id, id],
+  );
+  return resultado.affectedRows > 0;
+}
+
+export async function excluir(id) {
+  const [[refs]] = await pool.query(
+    `SELECT
+       (SELECT COUNT(*) FROM turma_alunos WHERE turma_id = ?) +
+       (SELECT COUNT(*) FROM agendamentos WHERE turma_id = ?) AS total`,
+    [id, id],
+  );
+  if (Number(refs.total) > 0) {
+    const erro = new Error("A turma possui alunos ou agendamentos vinculados e não pode ser excluída.");
+    erro.status = 409;
+    throw erro;
+  }
+  const [resultado] = await pool.query("DELETE FROM turmas_projetos WHERE id = ?", [id]);
+  return resultado.affectedRows > 0;
+}
+
 export async function buscarPorId(id) {
   const [linhas] = await pool.query(
     "SELECT id, nome, professor_id, token_acesso FROM turmas_projetos WHERE id = ?",
