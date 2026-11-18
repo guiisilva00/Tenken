@@ -68,6 +68,10 @@ function minutosDoHorario(horario) {
   return horas * 60 + minutos;
 }
 
+function horarioJaPassou(data, horario, agora) {
+  return new Date(`${data}T${horario}:00`) <= agora;
+}
+
 function rotuloInspecao(registro) {
   if (!registro) return "A iniciar";
   if (!registro.resultado)
@@ -113,6 +117,7 @@ export default function AgendamentosProfessor() {
   const [detalheId, setDetalheId, fechandoDetalhe, finalizarFechamentoDetalhe] =
     useModalExit(null);
   const [mensagem, setMensagem] = useState("");
+  const [agora, setAgora] = useState(() => new Date());
 
   const carregar = useCallback(async (mostrarCarregando = false) => {
     if (mostrarCarregando) setCarregando(true);
@@ -137,6 +142,11 @@ export default function AgendamentosProfessor() {
   useEffect(() => {
     carregar(true);
   }, [carregar]);
+
+  useEffect(() => {
+    const intervalo = window.setInterval(() => setAgora(new Date()), 30_000);
+    return () => window.clearInterval(intervalo);
+  }, []);
 
   const localizacoes = [
     ...new Set(
@@ -287,6 +297,10 @@ export default function AgendamentosProfessor() {
       );
       return;
     }
+    if (horarioJaPassou(data, inicio, new Date())) {
+      setMensagem("Não é possível agendar em um horário que já passou.");
+      return;
+    }
     const [hora] = inicio.split(":").map(Number);
     const fim = `${String(Math.min(hora + (inicio === "09:00" ? 1 : 2), 23)).padStart(2, "0")}:00`;
     setFormularioInicial({ data, inicio, fim, equipamentoId });
@@ -344,19 +358,24 @@ export default function AgendamentosProfessor() {
     const diaPassado = paraISO(data) < hoje;
     return (
       <div className={styles.agendaDia}>
-        {HORAS.map((hora, indice) => (
-          <button
-            type="button"
-            key={hora}
-            className={styles.slotVazio}
-            style={{ top: `${indice * ALTURA_INTERVALO}px` }}
-            disabled={diaPassado}
-            onClick={() => abrirFormulario(paraISO(data), hora)}
-            aria-label={`Criar agendamento em ${formatarData(paraISO(data))}, às ${hora}`}
-          >
-            <span>+ Reservar</span>
-          </button>
-        ))}
+        {HORAS.map((hora, indice) => {
+          const horarioIndisponivel =
+            diaPassado || horarioJaPassou(paraISO(data), hora, agora);
+          return (
+            <button
+              type="button"
+              key={hora}
+              className={`${styles.slotVazio} ${horarioIndisponivel ? styles.slotPassado : ""}`}
+              style={{ top: `${indice * ALTURA_INTERVALO}px` }}
+              disabled={horarioIndisponivel}
+              onClick={() => abrirFormulario(paraISO(data), hora)}
+              aria-label={`Criar agendamento em ${formatarData(paraISO(data))}, às ${hora}`}
+              aria-disabled={horarioIndisponivel}
+            >
+              <span>+ Reservar</span>
+            </button>
+          );
+        })}
         {eventos.map((item) => {
           const inicio = minutosDoHorario(item.inicio);
           const fim = minutosDoHorario(item.fim);

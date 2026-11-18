@@ -25,6 +25,7 @@ export default function EstadoAguardando({ sessao, token, mensagem, onCancelar, 
       <dl className={styles.dados}>
         <div className={styles.item}><dt>Aluno</dt><dd>{sessao.nome}</dd></div>
         <div className={styles.item}><dt>Turma</dt><dd>{sessao.turma}</dd></div>
+        {sessao.equipamentos?.map((item) => <div className={styles.item} key={item.id}><dt>Equipamento</dt><dd>{item.nome}</dd></div>)}
       {token && <div className={`${styles.item} ${styles.token}`}><dt>Token enviado</dt><dd>{token}</dd></div>}
       </dl>
       <div className={styles.acoes}>

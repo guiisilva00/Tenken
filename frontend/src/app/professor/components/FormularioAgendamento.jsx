@@ -8,6 +8,11 @@ function dataLocalISO() {
   return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 }
 
+function horarioLocal() {
+  const agora = new Date();
+  return `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
+}
+
 export default function FormularioAgendamento({
   dataInicial,
   horarioInicial = "09:00",
@@ -49,6 +54,10 @@ export default function FormularioAgendamento({
     }
     if (form.data < dataLocalISO()) {
       setErro("A data do agendamento deve ser hoje ou uma data futura.");
+      return;
+    }
+    if (new Date(`${form.data}T${form.inicio}:00`) <= new Date()) {
+      setErro("Não é possível agendar em um horário que já passou.");
       return;
     }
     if (form.fim <= form.inicio) {
@@ -148,6 +157,7 @@ export default function FormularioAgendamento({
           <input
             id="inicio-reserva"
             type="time"
+            min={form.data === dataLocalISO() ? horarioLocal() : undefined}
             value={form.inicio}
             onChange={(evento) => alterar("inicio", evento.target.value)}
           />

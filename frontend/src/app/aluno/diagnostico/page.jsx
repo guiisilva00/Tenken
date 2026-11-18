@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -33,6 +33,7 @@ export default function DiagnosticoAluno() {
           <span className={`${styles.led} ${aprovado ? styles.ledAtivo : ""}`} aria-hidden="true" />
           {aprovado ? "Acesso aprovado" : "Aguardando aprovação"}
         </div>
+        <span className={`${styles.status} ${styles.statusAtivo}`} role="status">Acesso aprovado pelo professor</span>
       </header>
       <div className={styles.grade}>
         <div className={styles.colunaAula}>
