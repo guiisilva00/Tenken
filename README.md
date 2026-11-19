@@ -9,140 +9,164 @@
     <img src="https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs" alt="Next.js 16" />
     <img src="https://img.shields.io/badge/Express-API-000000?logo=express&logoColor=white" alt="Express" />
     <img src="https://img.shields.io/badge/MySQL-banco%20de%20dados-4479a1?logo=mysql&logoColor=white" alt="MySQL" />
-    <img src="https://img.shields.io/badge/CSS3-estilos-1572b6?logo=css3&logoColor=white" alt="CSS3" />
   </p>
 </div>
 
-## Sobre o projeto
+## Sobre o Tenken
 
-Tenken (点検) é uma plataforma web para apoiar a organização de bancadas didáticas, robôs, componentes e ferramentas em laboratórios educacionais de robótica e automação. O nome significa inspeção, checagem ou verificação.
+Tenken (点検) é uma aplicação web para organizar o uso, a inspeção e a manutenção de equipamentos de laboratórios educacionais de robótica e automação. O sistema reúne inventário, turmas, agendamentos, check-ins, inspeções, chamados de manutenção, ordens de serviço e relatórios.
 
-O projeto substitui controles dispersos por um fluxo rastreável que ajuda a prevenir falhas, preservar equipamentos e registrar seu histórico de uso. Tem front-end em Next.js, back-end em Express e banco de dados MySQL, com autenticação por matrícula/senha e tokens JWT.
+O fluxo operacional conecta **agendamento → inspeção pré-uso → utilização → inspeção pós-uso → manutenção, quando necessária**. As operações persistem em MySQL e são atendidas por uma API REST autenticada. A interface web é feita com Next.js e React.
 
-## O que já está disponível
+## Funcionalidades disponíveis
 
-- Página institucional pública, login e cadastro de alunos.
-- Painel do administrador: gestão de equipamentos, usuários, turmas e chamados, além de relatórios.
-- Painel do professor: turmas, agendamentos de equipamentos, inspeções (checklist pré e pós-uso) e chamados de manutenção.
-- Painel do técnico: acompanhamento e atendimento de chamados de manutenção.
-- Área do aluno: solicitação de acesso à bancada por token de turma (a tela atual ainda usa dados de exemplo enquanto a integração completa com o back-end está em andamento).
-- API REST em Express, com autenticação JWT e senhas protegidas com bcrypt.
+### Acesso público e contas
 
-## Ciclo de uso
+- Página institucional, login por matrícula e senha e redirecionamento conforme o perfil da conta.
+- Cadastro de alunos com geração de matrícula a partir de pré-matrícula.
+- Fluxo de solicitação e redefinição de senha por e-mail, configurado via SMTP.
+- Sessão autenticada com JWT; as senhas são armazenadas com bcrypt.
+- Pré-cadastro e ativação de contas de professores e técnicos pela administração.
 
-**Agendamento → inspeção prévia → utilização → inspeção posterior → manutenção, quando necessária.**
+### Administrador
 
-### Regras principais
+- Painel com totais e estados de equipamentos e chamados.
+- Cadastro, edição, consulta e inativação de equipamentos; alteração de estado também pode ser feita por técnico.
+- Gestão de usuários, perfis, ativação de contas e turmas.
+- Consulta e gestão de chamados, atribuição de técnico e emissão/atualização de ordens de serviço.
+- Relatórios por período e tipo de equipamento, incluindo ranking de uso, taxa de ocupação, ranking de falhas e tempo médio de reparo (MTTR).
 
-- Inspeções pré e pós-uso são obrigatórias.
-- Reservas, inspeções e chamados ficam vinculados ao usuário responsável.
-- Falhas críticas bloqueiam o equipamento e abrem chamado corretivo com prioridade alta.
-- Permissões e disponibilidade são validadas no back-end, além da interface.
+### Professor
 
-## Executar localmente com Docker
+- Consulta de turmas e equipamentos disponíveis.
+- Criação de agendamentos vinculados a turma e equipamento, com token de acesso, validação de conflito/estado do ativo e cancelamento de reservas confirmadas.
+- Aprovação de check-ins solicitados pelos alunos.
+- Inspeções pré e pós-uso com checklist correspondente ao tipo de equipamento, respostas por item e envio opcional de fotos de evidência.
+- Consulta de inspeções realizadas e respostas, além de abertura e acompanhamento de chamados relacionados às turmas do professor.
+
+### Aluno
+
+- Solicitação de acesso à aula usando o token compartilhado pelo professor.
+- Acompanhamento do check-in e dos agendamentos do dia na página Diagnóstico; o estado do check-in é consultado novamente a cada 15 segundos enquanto a página está aberta.
+- Consulta dos equipamentos associados à turma após aprovação do check-in.
+- A interface diferencia espera, aprovação, aula futura, aula encerrada, erro de carregamento e dia sem agendamento. A API atual não oferece um estado específico de acesso negado nem uma operação de revogação do check-in.
+
+### Técnico
+
+- Painel com chamados por estado e severidade, evolução diária e equipamentos em manutenção.
+- Consulta e atendimento de chamados atribuídos, registro de histórico de manutenção, peças trocadas e custos.
+- Consulta e conclusão de ordens de serviço.
+
+### Regras operacionais implementadas
+
+- O backend impede conflito de horário no mesmo equipamento e impede novos agendamentos de equipamentos inativos ou em manutenção.
+- O checklist pré-uso só pode ser registrado em agendamento confirmado; o pós-uso, em agendamento em andamento. A conclusão de cada etapa atualiza o estado do agendamento e do equipamento.
+- Uma falha crítica reprova a inspeção, bloqueia o equipamento para manutenção e cria chamado corretivo e ordem de serviço na mesma transação. Falhas não críticas permitem aprovação com ressalvas e geram chamado preventivo.
+- As rotas da API verificam autenticação e perfil autorizado para cada operação.
+
+## Perfis e páginas
+
+| Perfil | Rotas principais |
+| --- | --- |
+| Público | `/`, `/login`, `/cadastro`, `/esqueci-senha`, `/redefinir-senha` |
+| Administrador | `/admin`, `/admin/equipamentos`, `/admin/usuarios`, `/admin/turmas`, `/admin/relatorios` |
+| Professor | `/professor`, `/professor/agendamentos`, `/professor/turmas`, `/professor/equipamentos`, `/professor/inspecoes`, `/professor/aprovacoes`, `/professor/chamados` |
+| Aluno | `/aluno`, `/aluno/diagnostico`, `/aluno/equipamentos` |
+| Técnico | `/tecnico`, `/tecnico/chamados` |
+
+## Tecnologias e estrutura
+
+- **Frontend:** Next.js App Router, React e CSS Modules.
+- **API:** Node.js 24 e Express 5, com controllers, services, models, rotas e middlewares.
+- **Banco de dados:** MySQL 8.4, com chaves estrangeiras, restrições e transações para operações do fluxo de inspeção.
+- **Arquivos:** evidências de inspeção são recebidas por Multer e servidas pelo caminho `/uploads`.
+- **Infraestrutura local:** Docker Compose com serviços de frontend, backend e banco. O schema inicial é executado pelo container MySQL quando o volume de dados é criado pela primeira vez.
+
+```text
+backend/src/                 API, regras de negócio e acesso ao banco
+frontend/src/app/            Rotas e páginas da aplicação
+frontend/src/components/     Componentes compartilhados
+frontend/src/lib/            Cliente da API e sessão
+database/init/               Schema inicial e checklists
+database/seed/               Contas e dados de desenvolvimento
+docs/                        Documentação funcional e técnica
+```
+
+O modelo de dados inclui usuários, turmas e vínculos com alunos, equipamentos, agendamentos, check-ins, modelos/itens de checklist, inspeções e respostas, chamados, ordens de serviço, histórico de manutenção, pré-matrículas e tokens de redefinição de senha.
+
+## Executar com Docker
+
+Na raiz do repositório, crie o arquivo `.env` a partir do exemplo e ajuste os valores conforme seu ambiente.
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
+```
+
+Linux/macOS:
 
 ```bash
 cp .env.example .env
 docker compose up --build
 ```
 
-O front-end fica disponível em `http://localhost:3000` e a API em `http://localhost:8080/api`.
+Com as portas padrão, a aplicação fica em `http://localhost:3000`, a API em `http://localhost:8080` e o endpoint de saúde em `http://localhost:8080/api/health`. O `docker-compose.override.yml` publica as portas para desenvolvimento local. Para ambientes com proxy, as portas também podem ser configuradas pelas variáveis descritas em `.env.example`.
 
-## Executar localmente sem Docker
+Os valores de `.env.example` são somente conveniências de desenvolvimento. Defina senhas fortes, um `JWT_SECRET` próprio e os dados SMTP do ambiente antes de qualquer implantação. Mantenha o `.env` fora do controle de versão.
 
-### Banco de dados
+## Executar sem Docker
 
-Crie o banco e aplique `database/init/02-schema.sql`. Esse arquivo contém o schema atual completo e os checklists iniciais; uma instalação nova não precisa executar migrations. Em seguida, execute o seed de usuários de teste:
+Use Node.js 24 e uma instância MySQL 8.4 acessível. Crie o banco com o schema inicial:
 
 ```bash
-mysql tenken_db < database/seed/usuarios_teste.sql
+mysql -u root -p < database/init/02-schema.sql
 ```
 
-As migrations em `database/migrations/` servem apenas para atualizar bancos existentes. A migration `20261113_remove_unused_tables.sql` remove tabelas legadas e pode apagar dados; revise-as antes de executá-la.
+Opcionalmente, carregue dados de desenvolvimento na ordem indicada nos comentários dos arquivos de seed. `usuarios_teste.sql` cria contas de teste; `20261108_1020_seed_completa_laboratorio.sql` fornece dados relacionais de laboratório; `equipamentos_patrocinadores.sql` acrescenta equipamentos de exemplo; `tenken_seed.sql` depende do schema e do seed completo de laboratório. Use esses dados apenas em ambientes locais.
 
-Isso cria três contas de teste (uso restrito a ambiente local):
+Configure `backend/.env` com `PORT`, `FRONTEND_URL`, `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `JWT_SECRET` e `JWT_EXPIRES_IN`. Para redefinição de senha por e-mail, configure também `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` e, se necessário, `SMTP_FROM`.
 
-```text
-Administrador — Matrícula: ADMIN001 — Senha: TenkenAdmin123!
-Professor     — Matrícula: PROF001  — Senha: TenkenProf123!
-Técnico       — Matrícula: TEC001   — Senha: TenkenTec123!
-```
-
-Para um ambiente de desenvolvimento com mais dados (turmas, equipamentos, agendamentos), use também `database/seed/20261108_1020_seed_completa_laboratorio.sql`.
-
-### Back-end
+Inicie a API:
 
 ```bash
 cd backend
-cp .env.example .env   # defina DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET
 npm install
 npm run dev
 ```
 
-### Front-end
+Configure `frontend/.env` com `NEXT_PUBLIC_API_URL` apontando para a API (por exemplo, `http://localhost:8080/api`) e inicie a interface:
 
 ```bash
 cd frontend
-cp .env.example .env   # defina NEXT_PUBLIC_API_URL
 npm install
 npm run dev
 ```
 
-Abra `http://localhost:3000` no navegador.
+Abra `http://localhost:3000`.
 
-### Comandos disponíveis (front-end)
+## Comandos
 
-| Comando         | Ação                                      |
-| --------------- | ----------------------------------------- |
-| `npm run dev`   | Inicia o servidor de desenvolvimento.     |
-| `npm run build` | Gera a versão de produção.                |
-| `npm run start` | Inicia a versão de produção após o build. |
+| Diretório | Comando | Ação |
+| --- | --- | --- |
+| `frontend/` | `npm run dev` | Servidor de desenvolvimento Next.js. |
+| `frontend/` | `npm run build` | Build de produção. |
+| `frontend/` | `npm run start` | Servidor de produção após o build. |
+| `backend/` | `npm run dev` | API com reinício automático via Node watch. |
+| `backend/` | `npm start` | API em modo de produção. |
+| raiz | `docker compose up --build` | Inicializa e constrói banco, API e frontend. |
 
-### Comandos disponíveis (back-end)
+O repositório não configura um script de testes automatizados. Valide fluxos funcionais em ambiente local e execute `npm run build` no frontend após mudanças de interface.
 
-| Comando         | Ação                                        |
-| --------------- | ------------------------------------------- |
-| `npm run dev`   | Inicia a API com recarregamento automático. |
-| `npm run start` | Inicia a API em modo produção.              |
+## Documentação
 
-## Estrutura do repositório
-
-```text
-backend/src/
-├── controllers/   # Recebe a requisição e devolve a resposta
-├── services/      # Regras de negócio
-├── models/        # Acesso ao banco de dados (mysql2)
-├── routes/        # Definição das rotas por recurso
-└── middlewares/   # Autenticação e tratamento de erros
-
-frontend/src/
-├── app/           # Rotas do Next.js (App Router), uma pasta por perfil
-├── components/    # Componentes compartilhados entre os perfis
-└── lib/           # Cliente de API e sessão do usuário
-
-database/
-├── init/          # Schema completo para bancos novos (MySQL)
-├── migrations/    # Atualizações para bancos existentes
-└── seed/          # Dados de exemplo e contas de teste
-```
-
-## Identidade visual
-
-| Variável           | Cor       | Aplicação                        |
-| ------------------ | --------- | -------------------------------- |
-| `--onyx`           | `#0b090a` | Fundo principal                  |
-| `--carbon-black`   | `#161a1d` | Painéis e superfícies escuras    |
-| `--dark-garnet`    | `#660708` | Ações secundárias e bordas       |
-| `--mahogany-red`   | `#a4161a` | Cor principal da marca           |
-| `--mahogany-red-2` | `#ba181b` | Destaques e estados de interação |
-| `--silver`         | `#b1a7a6` | Texto secundário                 |
-| `--dust-grey`      | `#d3d3d3` | Divisores e linhas               |
-| `--white-smoke`    | `#f5f3f4` | Superfícies claras               |
-| `--white`          | `#ffffff` | Texto sobre fundos escuros       |
+- [Documentação do Projeto Integrador](docs/tenken_documentacao_projeto_integrador%20%281%29.md): visão do projeto, regras e requisitos, funcionalidades implementadas, endpoints e pendências conhecidas.
+- [Fluxo de chamados do professor](docs/chamados-professor.md): relação entre inspeções reprovadas e chamados corretivos/preventivos.
 
 ## Equipe
 
 - **Felipe Stevanato:** banco de dados, modelagem e suporte.
 - **Guilherme Silva:** interface, arquitetura visual e integração.
-- **Samuel Sousa:** documentação, requisitos e apoio ao front-end.
-- **Miguel Cantarino:** back-end, API e validação dos fluxos.
+- **Samuel Sousa:** documentação, requisitos e apoio ao frontend.
+- **Miguel Cantarino:** backend, API e validação dos fluxos.
