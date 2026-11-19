@@ -19,7 +19,6 @@ export default function LayoutAluno({ children }) {
   const router = useRouter();
   const [usuario, setUsuario] = useState(null);
   const [menuAberto, setMenuAberto] = useState(false);
-  const [rotaLiberada, setRotaLiberada] = useState(true);
 
   useEffect(() => {
     setUsuario(getUsuario());
@@ -27,14 +26,7 @@ export default function LayoutAluno({ children }) {
 
   useEffect(() => {
     setMenuAberto(false);
-    if (pathname === "/aluno") {
-      setRotaLiberada(true);
-      return;
-    }
-
-    setRotaLiberada(false);
-    setRotaLiberada(true);
-  }, [pathname, router]);
+  }, [pathname]);
 
   function sair() {
     clearSession();
@@ -45,13 +37,14 @@ export default function LayoutAluno({ children }) {
     <AuthGuard>
       {pathname === "/aluno" ? (
         children
-      ) : rotaLiberada ? (
+      ) : (
         <div className={styles.wrapper}>
           <BarraLateral
             aberta={menuAberto}
             onNavegar={() => setMenuAberto(false)}
             onFechar={() => setMenuAberto(false)}
           />
+
           {menuAberto && (
             <button
               type="button"
@@ -108,11 +101,12 @@ export default function LayoutAluno({ children }) {
                   </div>
                   <div className={styles.userInfo}>
                     <span className={styles.userName}>
-                    {usuario?.nome || usuario?.matricula || "Aluno"}
+                      {usuario?.nome || usuario?.matricula || "Aluno"}
                     </span>
                     <span className={styles.userRole}>ALUNO</span>
                   </div>
                 </div>
+
                 <button
                   type="button"
                   className={styles.logoutBtn}
@@ -133,7 +127,7 @@ export default function LayoutAluno({ children }) {
             <main className={styles.mainView}>{children}</main>
           </div>
         </div>
-      ) : null}
+      )}
     </AuthGuard>
   );
 }

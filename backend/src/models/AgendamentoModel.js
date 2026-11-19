@@ -77,6 +77,11 @@ export async function verificarConflito(equipamentoId, inicio, fim, db = pool) {
   return linhas.length > 0;
 }
 
+export async function inicioJaPassou(inicio, db = pool) {
+  const [[linha]] = await db.query("SELECT ? <= NOW() AS ja_passou", [inicio]);
+  return Boolean(linha?.ja_passou);
+}
+
 export async function buscarPorTokenAtivo(token) {
   // Os campos DATETIME são gravados como horário local do laboratório.
   // Converta o instante atual para esse mesmo fuso antes da comparação;

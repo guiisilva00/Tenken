@@ -8,6 +8,11 @@ function dataLocalISO() {
   return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 }
 
+function horarioLocal() {
+  const agora = new Date();
+  return `${String(agora.getHours()).padStart(2, "0")}:${String(agora.getMinutes()).padStart(2, "0")}`;
+}
+
 function instanteLocal(data, horario) {
   const [ano, mes, dia] = data.split("-").map(Number);
   const [hora, minuto] = horario.split(":").map(Number);
@@ -42,6 +47,7 @@ export default function FormularioAgendamento({
 
   async function enviar(evento) {
     evento.preventDefault();
+
     if (
       !form.atividade.trim() ||
       !form.data ||
@@ -53,20 +59,24 @@ export default function FormularioAgendamento({
       setErro("Preencha todos os campos para continuar.");
       return;
     }
+
     if (form.data < dataLocalISO()) {
       setErro("A data do agendamento deve ser hoje ou uma data futura.");
       return;
     }
+
     if (instanteLocal(form.data, form.inicio) <= new Date()) {
       setErro("O início do agendamento precisa ser um horário futuro.");
       return;
     }
+
     if (form.fim <= form.inicio) {
       setErro("O horário de término precisa ser depois do início.");
       return;
     }
 
     setEnviando(true);
+
     try {
       const resultado = await onCreate({
         ...form,
@@ -74,10 +84,12 @@ export default function FormularioAgendamento({
         equipamentoId: Number(form.equipamentoId),
         atividade: form.atividade.trim(),
       });
+
       if (!resultado.ok) {
         setErro(resultado.message);
         return;
       }
+
       onCancel();
     } catch (falha) {
       setErro(falha.message || "Não foi possível criar o agendamento.");
@@ -158,10 +170,12 @@ export default function FormularioAgendamento({
           <input
             id="inicio-reserva"
             type="time"
+            min={form.data === dataLocalISO() ? horarioLocal() : undefined}
             value={form.inicio}
             onChange={(evento) => alterar("inicio", evento.target.value)}
           />
         </label>
+
         <label className={styles.campo} htmlFor="fim-reserva">
           <span>Término</span>
           <input
@@ -178,6 +192,7 @@ export default function FormularioAgendamento({
           {erro}
         </p>
       )}
+
       <div className={styles.acoes}>
         <button
           className={styles.secundario}
@@ -187,6 +202,7 @@ export default function FormularioAgendamento({
         >
           Voltar
         </button>
+
         <button className={styles.primario} type="submit" disabled={enviando}>
           {enviando ? "Salvando…" : "Criar agendamento"}
         </button>
