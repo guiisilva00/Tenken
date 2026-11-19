@@ -456,12 +456,12 @@ export default function PaginaChamadosTecnico() {
                 <dd>{formatarData(chamadoSelecionado.aberto_em)}</dd>
               </div>
             </dl>
-            <div className={styles.modalDescricao}>
-              <h3>Descrição</h3>
+            <details className={styles.modalDescricao}>
+              <summary>Descrição original do chamado</summary>
               <p>
                 {chamadoSelecionado.descricao || "Sem descrição informada."}
               </p>
-            </div>
+            </details>
             {chamadoSelecionado.status === "ABERTO" && (
               <div className={styles.modalAcoes}>
                 <button
@@ -478,24 +478,28 @@ export default function PaginaChamadosTecnico() {
               chamadoSelecionado.status,
             ) && (
               <div className={styles.modalAcoes}>
-                <label className={styles.campoDescricaoServico}>
+                <label
+                  className={`${styles.campoDescricaoServico} ${styles.campoTextoServico}`}
+                >
                   <span>Descrição do serviço realizado</span>
                   <textarea
                     value={descricaoServico}
                     onChange={(evento) =>
                       setDescricaoServico(evento.target.value)
                     }
-                    rows={5}
+                    rows={3}
                     placeholder="Descreva o serviço realizado"
                     required
                   />
                 </label>
-                <label className={styles.campoDescricaoServico}>
+                <label
+                  className={`${styles.campoDescricaoServico} ${styles.campoPecasServico}`}
+                >
                   <span>Peças trocadas (opcional)</span>
                   <textarea
                     value={pecasTrocadas}
                     onChange={(evento) => setPecasTrocadas(evento.target.value)}
-                    rows={3}
+                    rows={2}
                     placeholder="Informe as peças substituídas, se houver"
                   />
                 </label>

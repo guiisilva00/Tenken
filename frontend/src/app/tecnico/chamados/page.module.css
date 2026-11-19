@@ -263,7 +263,7 @@
   -webkit-overflow-scrolling: touch;
   flex: 0 0 auto;
   margin: auto;
-  padding: 22px;
+  padding: 18px;
   color: var(--white-smoke);
   background: var(--surface-low, #181c1f);
   border: 1px solid var(--border-subtle);
@@ -282,7 +282,7 @@
 .modalTitulo {
   margin: 0;
   color: var(--white-smoke);
-  font-size: 23px;
+  font-size: 21px;
   line-height: 1.35;
 }
 .fecharModal {
@@ -301,17 +301,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 .modalDados {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 20px 0;
+  gap: 8px;
+  margin: 12px 0;
 }
 .modalDados div {
   min-width: 0;
-  padding: 12px;
+  padding: 9px 10px;
   background: var(--surface-lowest);
   border: 1px solid var(--border-subtle);
   border-radius: 4px;
@@ -330,16 +330,18 @@
   overflow-wrap: anywhere;
 }
 .modalDescricao {
-  padding-top: 16px;
+  padding-top: 11px;
   border-top: 1px solid var(--border-subtle);
 }
-.modalDescricao h3 {
-  margin: 0 0 8px;
+.modalDescricao summary {
+  width: fit-content;
   color: var(--dust-grey);
-  font-size: 15px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
 }
 .modalDescricao p {
-  margin: 0;
+  margin: 8px 0 0;
   color: var(--silver);
   font-size: 15px;
   line-height: 1.6;
@@ -367,9 +369,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
-  padding-top: 16px;
+  gap: 9px;
+  margin-top: 13px;
+  padding-top: 12px;
   border-top: 1px solid var(--border-subtle);
 }
 .campoDescricaoServico {
@@ -382,9 +384,9 @@
 }
 .campoDescricaoServico textarea {
   width: 100%;
-  min-height: 140px;
-  padding: 12px;
-  resize: none;
+  min-height: 0;
+  padding: 9px 11px;
+  resize: vertical;
   color: var(--white-smoke);
   background: var(--surface-lowest);
   border: 1px solid var(--border-subtle);
@@ -394,13 +396,19 @@
   font-size: 15px;
   line-height: 1.5;
 }
+.campoTextoServico textarea {
+  height: 82px;
+}
+.campoPecasServico textarea {
+  height: 58px;
+}
 .campoDescricaoServico textarea:focus {
   outline: 1px solid var(--mahogany-red-2);
 }
 .campoDescricaoServico input {
   width: 100%;
-  min-height: 48px;
-  padding: 10px 12px;
+  min-height: 42px;
+  padding: 8px 12px;
   color: var(--white-smoke);
   background: var(--surface-lowest);
   border: 1px solid var(--border-subtle);
