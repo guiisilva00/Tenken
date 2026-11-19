@@ -81,12 +81,6 @@ export default function BarraLateral({ aberta = false, onNavegar, onFechar }) {
         </nav>
       </div>
 
-      <footer className={styles.footer}>
-        <div className={styles.telemetryCard} role="status">
-          <span className={styles.pulseDot} aria-hidden="true" />
-          <span className={styles.telemetryText}>Bancada liberada</span>
-        </div>
-      </footer>
     </aside>
   );
 }

@@ -185,6 +185,16 @@
     padding-right: 6px;
   }
   .userInfo {
+    display: flex;
+    max-width: 108px;
+  }
+  .userName {
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .userRole {
     display: none;
   }
   .logoutBtn {
@@ -193,6 +203,15 @@
   }
   .mainView {
     padding: 18px 14px 28px;
+  }
+}
+
+@media (max-width: 380px) {
+  .userInfo {
+    max-width: 68px;
+  }
+  .breadcrumbCurrent {
+    max-width: 72px;
   }
 }
 

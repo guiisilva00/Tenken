@@ -96,49 +96,6 @@
   color: #fff;
   font-weight: 700;
 }
-.footer {
-  padding: 16px;
-  border-top: 1px solid rgb(255 255 255 / 4%);
-  background: var(--surface-lowest, #0b0f12);
-}
-.telemetryCard {
-  display: flex;
-  min-height: 40px;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid var(--border-subtle, #22272b);
-  border-radius: 4px;
-  background: var(--surface-low, #181c1f);
-}
-.pulseDot {
-  width: 8px;
-  height: 8px;
-  flex: 0 0 8px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
-  animation: pulseAnim 2s infinite ease-in-out;
-}
-.telemetryText {
-  color: var(--silver, #b1a7a6);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-@keyframes pulseAnim {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.85);
-  }
-}
-
 @media (max-width: 1024px) {
   .barra {
     z-index: 60;
@@ -167,7 +124,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pulseDot,
   .barra {
     animation: none;
     transition: none;
