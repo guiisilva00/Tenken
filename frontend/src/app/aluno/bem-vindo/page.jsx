@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styles from "../page.module.css";
 
 export default function BemVindoAluno() {
@@ -18,9 +17,6 @@ export default function BemVindoAluno() {
           Sua sessão está liberada. Consulte as informações da aula e os
           equipamentos que serão utilizados no laboratório.
         </p>
-        <Link className={styles.acao} href="/aluno/diagnostico">
-          Ver diagnóstico da aula <span aria-hidden="true">↗</span>
-        </Link>
       </div>
       <div className={styles.rodape}>
         TECNOLOGIA INDUSTRIAL <span>•</span> SEGURANÇA <span>•</span> PRECISÃO

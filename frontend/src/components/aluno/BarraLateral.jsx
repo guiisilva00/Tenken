@@ -3,11 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { IconeCasa, IconeEquipamento } from "./IconesNavegacao";
+import {
+  IconeCasa,
+  IconeDiagnostico,
+  IconeEquipamento,
+} from "./IconesNavegacao";
 import styles from "./BarraLateral.module.css";
 
 const itens = [
   { href: "/aluno/bem-vindo", label: "Bem-vindo", Icone: IconeCasa },
+  {
+    href: "/aluno/diagnostico",
+    label: "Diagnóstico",
+    Icone: IconeDiagnostico,
+  },
   {
     href: "/aluno/equipamentos",
     label: "Equipamentos",
