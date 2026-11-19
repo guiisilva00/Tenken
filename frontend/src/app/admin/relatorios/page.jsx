@@ -57,7 +57,7 @@ function Conteudo({ token }) {
       });
       if (tipoFiltro !== "all") q.set("tipo", tipoFiltro);
       const data = await chamarApi(`/admin/relatorios?${q}`, token);
-      setRelatorio(data);
+      setRelatorio(data?.dados ?? data);
     } catch (e) {
       setErro(e.message);
     } finally {
@@ -75,6 +75,26 @@ function Conteudo({ token }) {
   )
     ? relatorio.equipamentos_por_status
     : [];
+  const coresStatus = {
+    DISPONIVEL: "#2ec4b6",
+    RESERVADO: "#f4b740",
+    EM_USO: "#61a9ff",
+    EM_MANUTENCAO: "#f07878",
+    INATIVO: "#827b83",
+  };
+  const circunferenciaRosca = 2 * Math.PI * 42;
+  const fatiasStatus = equipamentosPorStatus.reduce((fatias, item) => {
+    const total = Number(item.total ?? 0);
+    const anterior = fatias.at(-1)?.acumulado ?? 0;
+    fatias.push({
+      ...item,
+      total,
+      acumulado: anterior + total,
+      inicio: anterior,
+      cor: coresStatus[String(item.status).toUpperCase()] || "#b1a7a6",
+    });
+    return fatias;
+  }, []);
   const totalAtivosMonitorados = equipamentosPorStatus.reduce(
     (soma, item) => soma + Number(item.total ?? 0),
     0,
@@ -85,7 +105,7 @@ function Conteudo({ token }) {
   const eficienciaGeral =
     totalAtivosMonitorados && equipamentosOperacionais
       ? (Number(equipamentosOperacionais.total ?? 0) / totalAtivosMonitorados) *
-        100
+      100
       : null;
 
   const mttrValor = relatorio?.mttr_horas ?? null;
@@ -451,10 +471,23 @@ function Conteudo({ token }) {
           </div>
 
           <div className={styles.donutBody}>
-            <p className={styles.chartSubtitle}>
-              A situação dos equipamentos aparecerá aqui quando houver dados
-              disponíveis.
-            </p>
+            {fatiasStatus.length > 0 ? (
+              <>
+                <div className={styles.donutWrapper}>
+                  <svg className={styles.donutSvg} viewBox="0 0 120 120" role="img" aria-label="Distribuição dos equipamentos por status">
+                    <circle className={styles.donutTrack} cx="60" cy="60" r="42" />
+                    {fatiasStatus.map((fatia, indice) => {
+                      const tamanho = totalAtivosMonitorados ? (fatia.total / totalAtivosMonitorados) * circunferenciaRosca : 0;
+                      return <circle key={fatia.status || indice} className={styles.donutSegment} cx="60" cy="60" r="42" stroke={fatia.cor} strokeDasharray={`${tamanho} ${circunferenciaRosca - tamanho}`} strokeDashoffset={-((fatia.inicio / (totalAtivosMonitorados || 1)) * circunferenciaRosca)} style={{ animationDelay: `${indice * 90}ms` }} />;
+                    })}
+                  </svg>
+                  <div className={styles.donutCenter}><strong className={styles.donutCenterNumber}>{totalAtivosMonitorados}</strong><span className={styles.donutCenterLabel}>ATIVOS</span></div>
+                </div>
+                <ul className={styles.legendList}>
+                  {fatiasStatus.map((fatia, indice) => <li className={styles.legendRow} key={fatia.status || indice}><span className={styles.legendItemLeft}><span className={styles.legendDot} style={{ backgroundColor: fatia.cor }} /><span className={styles.legendText}>{String(fatia.status).replaceAll("_", " ")}</span></span><span className={styles.legendItemRight}><span className={styles.legendUnits}>{fatia.total}</span><strong className={styles.legendPct}>{totalAtivosMonitorados ? `${((fatia.total / totalAtivosMonitorados) * 100).toFixed(0)}%` : "0%"}</strong></span></li>)}
+                </ul>
+              </>
+            ) : <p className={styles.chartSubtitle}>{loading ? "Carregando situação dos equipamentos…" : "Nenhum equipamento encontrado para os filtros selecionados."}</p>}
           </div>
         </div>
 
