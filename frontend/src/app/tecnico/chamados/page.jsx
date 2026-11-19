@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import styles from "./page.module.css";
 import EmptyState from "@/components/EmptyState";
+import FeedbackModal from "@/app/admin/components/FeedbackModal";
 
 const STATUS = [
   ["ABERTO", "Aberto"],
@@ -60,6 +61,7 @@ export default function PaginaChamadosTecnico() {
   const [pecasTrocadas, setPecasTrocadas] = useState("");
   const [custoServico, setCustoServico] = useState("");
   const [aviso, setAviso] = useState("");
+  const [feedback, setFeedback] = useState(null);
 
   const carregar = useCallback(async () => {
     setCarregando(true);
@@ -188,7 +190,11 @@ export default function PaginaChamadosTecnico() {
       setDescricaoServico("");
       setPecasTrocadas("");
       setCustoServico("");
-      setAviso("Ordem de serviço concluída com sucesso.");
+      setFeedback({
+        type: "success",
+        title: "Ordem de serviço concluída",
+        message: "A OS foi resolvida e registrada com sucesso.",
+      });
     } catch (error) {
       setErro(error.message || "Não foi possível concluir a ordem de serviço.");
     } finally {
@@ -525,6 +531,7 @@ export default function PaginaChamadosTecnico() {
           </section>
         </div>
       )}
+      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </div>
   );
 }
