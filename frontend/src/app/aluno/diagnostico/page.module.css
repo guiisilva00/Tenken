@@ -6,15 +6,18 @@
   --aluno-wait: #ffb703;
   --aluno-active: #2ec4b6;
   width: 100%;
-  min-height: calc(100vh - 44px);
+  min-height: 0;
   margin: 0 auto;
   color: #f5f3f4;
 }
 .grade {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 0.62fr);
   align-items: start;
-  gap: 24px;
+  gap: 20px;
+}
+.grade:has(.colunaAcesso:empty) {
+  grid-template-columns: minmax(0, 1fr);
 }
 .colunaAula,
 .colunaAcesso {
@@ -24,18 +27,26 @@
 .secaoEpis,
 .formulario,
 .liberacao {
-  padding: clamp(20px, 3vw, 30px);
-  border: 1px solid var(--aluno-border);
-  border-radius: 6px;
-  background: var(--aluno-carbon);
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #1b1a1c, #131315 78%);
+  box-shadow: 0 16px 36px rgb(0 0 0 / 18%);
+}
+.cartaoAula {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(164 22 26 / 18%), transparent 48%),
+    linear-gradient(145deg, #21191b, #151416 74%);
 }
 .cartaoAula h2,
 .secaoEpis h2,
 .liberacao h2 {
-  margin: 12px 0;
+  margin: 0;
   font-size: clamp(20px, 2.5vw, 27px);
-  font-weight: 500;
-  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  text-wrap: balance;
 }
 .cartaoAula > p,
 .secaoEpis > p,
@@ -48,32 +59,70 @@
 .dadosAula {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
   margin: 26px 0 0;
   padding-top: 20px;
   border-top: 1px solid var(--aluno-border);
 }
 .dadosAula div {
   display: flex;
+  min-height: 74px;
   flex-direction: column;
-  gap: 7px;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 15px;
+  border: 1px solid rgb(255 255 255 / 6%);
+  border-radius: 9px;
+  background: rgb(255 255 255 / 3%);
 }
 .dadosAula dt {
-  color: #9c9292;
+  color: #c28f90;
   font-family: var(--fonte-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
 }
 .dadosAula dd {
   margin: 0;
+  color: #f4eeee;
   font-size: 14px;
+  font-weight: 550;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 .secaoEpis {
-  margin-top: 16px;
+  margin-top: 18px;
+  border-color: rgb(255 183 3 / 24%);
+  background: linear-gradient(125deg, rgb(255 183 3 / 8%), #171517 62%);
 }
 .secaoEpis h2 {
-  margin-top: 0;
+  margin: 0 0 10px;
   font-size: 18px;
+  color: #ffe2a0;
+}
+.secaoEpis a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 0 15px;
+  border-radius: 7px;
+  background: #a4161a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+.secaoEpis a:hover {
+  transform: translateY(-1px);
+  background: #bd2025;
+}
+.secaoEpis a:focus-visible,
+.linkEquipamentos:focus-visible,
+.botaoEquipamentos:focus-visible {
+  outline: 2px solid #ffb4ac;
+  outline-offset: 3px;
 }
 .secaoEpis ul {
   display: flex;
@@ -94,7 +143,9 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 18px;
+  min-height: 42px;
+  margin-top: 12px;
+  padding: 0 4px;
   color: #f2a0a2;
   font-size: 13px;
   text-decoration: none;
@@ -121,14 +172,20 @@
 }
 .liberacao {
   border-color: rgb(46 196 182 / 30%);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(46 196 182 / 13%), transparent 52%),
+    linear-gradient(145deg, #17201f, #131516 78%);
 }
 .liberacao h2 {
   color: var(--aluno-active);
 }
 .botaoEquipamentos {
   display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   margin-top: 20px;
   padding: 12px 15px;
+  border-radius: 7px;
   background: var(--aluno-crimson);
   color: #fff;
   font-size: 13px;
@@ -164,10 +221,10 @@
   flex: 0 0 auto;
   align-items: center;
   gap: 10px;
-  padding: 10px 13px;
-  border: 1px solid var(--aluno-border);
-  border-radius: 4px;
-  background: var(--aluno-carbon);
+  padding: 10px 14px;
+  border: 1px solid rgb(255 183 3 / 28%);
+  border-radius: 999px;
+  background: rgb(255 183 3 / 7%);
   color: #d9d5d5;
   font-size: 12px;
 }
@@ -181,6 +238,8 @@
 }
 .statusAtivo {
   border-color: rgb(46 196 182 / 28%);
+  background: rgb(46 196 182 / 8%);
+  color: #8de4da;
 }
 .statusAtivo .led {
   background: var(--aluno-active);
@@ -196,7 +255,7 @@
   width: min(100%, 600px);
   padding: clamp(22px, 4vw, 34px);
   border: 1px solid var(--aluno-border);
-  border-radius: 6px;
+  border-radius: 12px;
   background: linear-gradient(145deg, #161a1d, #101214);
 }
 .cabecalhoFormulario {
@@ -486,6 +545,15 @@
   }
 }
 @media (max-width: 560px) {
+  .grade {
+    gap: 14px;
+  }
+  .cartaoAula,
+  .secaoEpis,
+  .liberacao {
+    padding: 20px;
+    border-radius: 11px;
+  }
   .cabecalho {
     align-items: flex-start;
     flex-direction: column;
