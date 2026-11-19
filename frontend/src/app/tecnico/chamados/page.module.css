@@ -247,15 +247,22 @@
   position: fixed;
   z-index: 1000;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 20px;
   background: rgba(0, 0, 0, 0.72);
 }
 .modal {
   width: min(100%, 620px);
   max-height: min(85vh, 720px);
+  max-height: min(85dvh, 720px);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  flex: 0 0 auto;
+  margin: auto 0;
   padding: 22px;
   color: var(--white-smoke);
   background: var(--surface-low, #181c1f);
