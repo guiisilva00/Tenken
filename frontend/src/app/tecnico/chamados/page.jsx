@@ -32,6 +32,21 @@ function formatarData(valor) {
     : data.toLocaleDateString("pt-BR");
 }
 
+function formatarCusto(valor) {
+  const digitos = String(valor).replace(/\D/g, "");
+  if (!digitos) return "";
+  return (Number(digitos) / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function converterCusto(valor) {
+  if (!valor.trim()) return 0;
+  const digitos = valor.replace(/\D/g, "");
+  return Number(digitos) / 100;
+}
+
 export default function PaginaChamadosTecnico() {
   const [chamados, setChamados] = useState([]);
   const [status, setStatus] = useState("");
@@ -146,7 +161,7 @@ export default function PaginaChamadosTecnico() {
 
   async function concluirOrdem() {
     if (!chamadoSelecionado || atualizandoStatus) return;
-    const custo = custoServico.trim() === "" ? 0 : Number(custoServico);
+    const custo = converterCusto(custoServico);
     if (!Number.isFinite(custo) || custo < 0) {
       setErro("Informe um custo vÃ¡lido, igual ou maior que zero.");
       return;
@@ -481,12 +496,13 @@ export default function PaginaChamadosTecnico() {
                 <label className={styles.campoDescricaoServico}>
                   <span>Custo do reparo (opcional)</span>
                   <input
-                    type="number"
-                    min="0"
-                    step="0.01"
+                    type="text"
+                    inputMode="decimal"
                     value={custoServico}
-                    onChange={(evento) => setCustoServico(evento.target.value)}
-                    placeholder="0.00"
+                    onChange={(evento) =>
+                      setCustoServico(formatarCusto(evento.target.value))
+                    }
+                    placeholder="0,00"
                   />
                 </label>
                 <button
@@ -497,8 +513,7 @@ export default function PaginaChamadosTecnico() {
                     atualizandoStatus ||
                     !descricaoServico.trim() ||
                     (custoServico !== "" &&
-                      (!Number.isFinite(Number(custoServico)) ||
-                        Number(custoServico) < 0))
+                      !Number.isFinite(converterCusto(custoServico)))
                   }
                 >
                   {atualizandoStatus
