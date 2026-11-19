@@ -36,6 +36,19 @@ export async function emitir(chamadoIdRecebido, usuarioLogado) {
     throw new Error(`Chamado ${chamadoId} não encontrado.`);
   }
 
+  if (
+    String(chamado.status ?? "")
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "_") === "EM_ATENDIMENTO"
+  ) {
+    const erro = new Error(
+      "Não é possível emitir uma ordem de serviço para um chamado em atendimento.",
+    );
+    erro.status = 409;
+    throw erro;
+  }
+
   const existente = await OrdemServicoModel.buscarPorChamado(chamadoId);
   if (existente) {
     const erroConflito = new Error(
