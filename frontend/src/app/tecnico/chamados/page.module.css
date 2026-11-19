@@ -250,14 +250,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   padding: 20px;
   background: rgba(0, 0, 0, 0.72);
 }
 .modal {
   width: min(100%, 620px);
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   flex: 0 0 auto;
   margin: auto;
   padding: 22px;
