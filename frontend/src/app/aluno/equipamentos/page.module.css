@@ -169,6 +169,161 @@
   font-weight: 500;
   text-align: right;
 }
+
+/* Leitura e profundidade da lista de equipamentos do aluno. */
+.pagina {
+  color: #f7f3f3;
+}
+
+.titulo {
+  color: #fff8f6;
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.subtitulo {
+  color: #c9bfc0;
+}
+
+.voltar {
+  min-height: 42px;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid rgb(255 180 172 / 26%);
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgb(164 22 26 / 22%), rgb(164 22 26 / 9%));
+  color: #ffd0cb;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.voltar:hover {
+  transform: translateY(-1px);
+  border-color: rgb(255 180 172 / 48%);
+  background: rgb(164 22 26 / 28%);
+  color: #fff;
+}
+
+.lista {
+  display: grid;
+  gap: 12px;
+  border: 0;
+}
+
+.item {
+  border: 0;
+}
+
+.linha {
+  min-height: 96px;
+  padding: 18px 20px;
+  border: 1px solid rgb(245 243 244 / 13%);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(46 196 182 / 8%), transparent 48%),
+    linear-gradient(145deg, #202124, #151719 76%);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 5%),
+    0 12px 26px rgb(0 0 0 / 24%);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.linha:hover {
+  transform: translateY(-2px);
+  border-color: rgb(255 180 172 / 30%);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(46 196 182 / 12%), transparent 48%),
+    linear-gradient(145deg, #272326, #191a1c 76%);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 7%),
+    0 17px 32px rgb(0 0 0 / 34%);
+}
+
+.linha:focus-visible {
+  border-radius: 14px;
+  outline-color: #ffb4ac;
+  outline-offset: 3px;
+}
+
+.idEquipamento {
+  padding: 8px 9px;
+  border: 1px solid rgb(255 180 172 / 25%);
+  border-radius: 7px;
+  background: rgb(164 22 26 / 14%);
+  color: #ffc0ba;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nomeEquipamento {
+  color: #fff8f6;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.descricaoEquipamento {
+  color: #c9c1c2;
+}
+
+.badge {
+  padding: 6px 10px;
+  border: 1px solid rgb(46 196 182 / 38%);
+  border-radius: 999px;
+  background: rgb(46 196 182 / 10%);
+  color: #8de4da;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.seta {
+  color: #d4cbcc;
+}
+
+.painelAberto .detalhes {
+  margin-right: 12px;
+  margin-left: 12px;
+  border-color: rgb(255 255 255 / 12%);
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(145deg, #1b1d20, #111416);
+  box-shadow: 0 12px 22px rgb(0 0 0 / 22%);
+}
+
+.detalhes p span {
+  color: #c3b8b9;
+}
+
+.detalhes p strong {
+  color: #fff8f6;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .linha {
+    min-height: 88px;
+    padding: 14px 10px;
+  }
+
+  .nomeEquipamento {
+    font-size: 14px;
+  }
+
+  .idEquipamento {
+    padding: 6px;
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voltar,
+  .linha {
+    transition: none;
+  }
+
+  .voltar:hover,
+  .linha:hover {
+    transform: none;
+  }
+}
 @media (max-width: 700px) {
   .cabecalho {
     align-items: flex-start;
