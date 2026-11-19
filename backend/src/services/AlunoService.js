@@ -28,9 +28,28 @@ function gerarCodigoMatricula() {
   return `MAT-${String(Math.floor(Math.random() * 100000)).padStart(5, "0")}`;
 }
 
+function dataHoraLocalLaboratorio() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valores.year}-${valores.month}-${valores.day} ${valores.hour}:${valores.minute}:${valores.second}`;
+}
+
 export async function solicitarAcesso(token, alunoId) {
-  if (!validarTokenTurma(token)) throw erroComStatus("Token invalido.", 400);
-  const agendamento = await AgendamentoModel.buscarPorTokenAtivo(token);
+  const tokenNormalizado = typeof token === "string" ? token.trim().toUpperCase() : "";
+  if (!validarTokenTurma(tokenNormalizado)) throw erroComStatus("Token inválido. Confira o código informado pelo professor.", 400);
+  const agendamento = await AgendamentoModel.buscarPorTokenAtivo(
+    tokenNormalizado,
+    dataHoraLocalLaboratorio(),
+  );
   if (!agendamento) throw erroComStatus("Token nao encontrado ou agendamento inativo.", 404);
   if (!(await AlunoModel.pertenceATurma(agendamento.turma_id, alunoId))) {
     throw erroComStatus("Aluno nao pertence a esta turma.", 403);

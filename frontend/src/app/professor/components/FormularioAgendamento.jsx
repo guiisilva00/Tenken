@@ -4,14 +4,32 @@ import { useState } from "react";
 import styles from "./FormularioAgendamento.module.css";
 
 function dataLocalISO() {
-  const hoje = new Date();
-  return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valores.year}-${valores.month}-${valores.day}`;
 }
 
-function instanteLocal(data, horario) {
-  const [ano, mes, dia] = data.split("-").map(Number);
-  const [hora, minuto] = horario.split(":").map(Number);
-  return new Date(ano, mes - 1, dia, hora, minuto, 0, 0);
+function agoraLocal() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valores.year}-${valores.month}-${valores.day} ${valores.hour}:${valores.minute}`;
+}
+
+function horarioLocal() {
+  return agoraLocal().slice(11);
 }
 
 export default function FormularioAgendamento({
@@ -57,7 +75,7 @@ export default function FormularioAgendamento({
       setErro("A data do agendamento deve ser hoje ou uma data futura.");
       return;
     }
-    if (instanteLocal(form.data, form.inicio) <= new Date()) {
+    if (`${form.data} ${form.inicio}` <= agoraLocal()) {
       setErro("O início do agendamento precisa ser um horário futuro.");
       return;
     }
@@ -158,6 +176,7 @@ export default function FormularioAgendamento({
           <input
             id="inicio-reserva"
             type="time"
+            min={form.data === dataLocalISO() ? horarioLocal() : undefined}
             value={form.inicio}
             onChange={(evento) => alterar("inicio", evento.target.value)}
           />

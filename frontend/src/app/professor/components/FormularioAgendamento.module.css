@@ -129,7 +129,6 @@
 
 .erro {
   border: 1px solid rgba(194, 103, 105, 0.32);
-  border-left-width: 3px;
   border-radius: 10px;
   background: linear-gradient(
     100deg,

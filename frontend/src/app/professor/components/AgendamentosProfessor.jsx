@@ -37,6 +37,17 @@ function paraISO(data) {
   return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
 }
 
+function dataAtualLaboratorio() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return new Date(Number(valores.year), Number(valores.month) - 1, Number(valores.day), 12);
+}
+
 function inicioDaSemana(data) {
   const inicio = new Date(data);
   inicio.setDate(inicio.getDate() - ((inicio.getDay() + 6) % 7));
@@ -66,6 +77,20 @@ function formatarDiaSemana(data) {
 function minutosDoHorario(horario) {
   const [horas, minutos] = horario.split(":").map(Number);
   return horas * 60 + minutos;
+}
+
+function proximoHorarioDisponivel() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  const minutosAgora = Number(valores.hour) * 60 + Number(valores.minute);
+  const proximoIntervalo = Math.ceil((minutosAgora + 1) / 10) * 10;
+  const minutos = Math.min(proximoIntervalo, 23 * 60 + 50);
+  return `${String(Math.floor(minutos / 60)).padStart(2, "0")}:${String(minutos % 60).padStart(2, "0")}`;
 }
 
 function rotuloInspecao(registro) {
@@ -98,7 +123,7 @@ export default function AgendamentosProfessor() {
   const [localizacaoFiltro, setLocalizacaoFiltro] = useState("TODAS");
   const [equipamentoFiltro, setEquipamentoFiltro] = useState("TODOS");
   const [visualizacao, setVisualizacao] = useState("SEMANA");
-  const [dataFoco, setDataFoco] = useState(() => new Date());
+  const [dataFoco, setDataFoco] = useState(() => dataAtualLaboratorio());
   const [criando, setCriando, fechandoCriacao, finalizarFechamentoCriacao] =
     useModalExit(false);
   const [formularioInicial, setFormularioInicial] = useState(null);
@@ -149,7 +174,7 @@ export default function AgendamentosProfessor() {
   );
 
   const dataReferencia = paraISO(dataFoco);
-  const hoje = paraISO(new Date());
+  const hoje = paraISO(dataAtualLaboratorio());
   const primeiroDiaMes = new Date(
     dataFoco.getFullYear(),
     dataFoco.getMonth(),
@@ -278,18 +303,20 @@ export default function AgendamentosProfessor() {
 
   function abrirFormulario(
     data = dataReferencia,
-    inicio = "09:00",
+    inicio,
     equipamentoId = equipamentoFiltro === "TODOS" ? "" : equipamentoFiltro,
   ) {
-    if (data < paraISO(new Date())) {
+    if (data < hoje) {
       setMensagem(
         "Não é possível criar agendamentos em dias anteriores a hoje.",
       );
       return;
     }
-    const [hora] = inicio.split(":").map(Number);
-    const fim = `${String(Math.min(hora + (inicio === "09:00" ? 1 : 2), 23)).padStart(2, "0")}:00`;
-    setFormularioInicial({ data, inicio, fim, equipamentoId });
+    const horarioInicial = inicio || (data === hoje ? proximoHorarioDisponivel() : "09:00");
+    const [hora, minuto] = horarioInicial.split(":").map(Number);
+    const totalFim = Math.min(hora * 60 + minuto + 60, 23 * 60 + 59);
+    const fim = `${String(Math.floor(totalFim / 60)).padStart(2, "0")}:${String(totalFim % 60).padStart(2, "0")}`;
+    setFormularioInicial({ data, inicio: horarioInicial, fim, equipamentoId });
     setMensagem("");
     setCriando(true);
   }
