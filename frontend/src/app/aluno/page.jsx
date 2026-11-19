@@ -2,17 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import FormularioVinculo from "@/components/aluno/FormularioVinculo";
 import EstadoAguardando from "@/components/aluno/EstadoAguardando";
-import EstadoLiberado from "@/components/aluno/EstadoLiberado";
 import { apiFetch } from "@/lib/api";
 import { getUsuario } from "@/lib/session";
 import styles from "./aluno.module.css";
 
 export default function PaginaVinculacaoAluno() {
-  const [etapa, setEtapa] = useState("FORM");
+  const router = useRouter();
+  const [etapa, setEtapa] = useState("CHECKING");
   const [solicitacao, setSolicitacao] = useState(null);
-  const [equipamentos, setEquipamentos] = useState([]);
   const [mensagemAguardando, setMensagemAguardando] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
 
@@ -55,27 +55,22 @@ export default function PaginaVinculacaoAluno() {
         return;
       }
 
-      const equipamentosLiberados = (dados.equipamentos || []).map((equipamento) => ({
-        id: equipamento.codigo_patrimonio || String(equipamento.id),
-        tipo: "Equipamento do laborat\u00f3rio",
-        nome: equipamento.nome,
-        detalhe: equipamento.localizacao ? "Localiza\u00e7\u00e3o: " + equipamento.localizacao : "Localiza\u00e7\u00e3o n\u00e3o informada",
-      }));
-      setEquipamentos(equipamentosLiberados);
-      setSolicitacao((atual) => ({ ...atual, turma: dados.turma?.nome || atual?.turma }));
       setMensagemAguardando("");
-      setEtapa("APPROVED");
+      router.replace("/aluno/bem-vindo");
     } catch (erro) {
       if (erro.status === 404) {
-        setErroFormulario("N\u00e3o encontramos sua solicita\u00e7\u00e3o de acesso. Envie uma nova solicita\u00e7\u00e3o.");
+        setErroFormulario("Não encontramos sua solicitação de acesso. Envie uma nova solicitação.");
         setSolicitacao(null);
         setMensagemAguardando("");
         setEtapa("FORM");
         return;
       }
-      setMensagemAguardando(erro.message || "N\u00e3o foi poss\u00edvel verificar sua solicita\u00e7\u00e3o agora.");
+      setErroFormulario(
+        erro.message || "Não foi possível verificar seu acesso agora. Tente novamente.",
+      );
+      setEtapa("FORM");
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     verificarCheckinAtual();
@@ -84,6 +79,11 @@ export default function PaginaVinculacaoAluno() {
   return (
     <main className={styles.pagina}>
       <div className={`${styles.conteudo} ${styles.compacto}`}>
+        {etapa === "CHECKING" && (
+          <p className={styles.verificando} role="status">
+            Verificando seu acesso…
+          </p>
+        )}
         {etapa === "FORM" && (
           <section className={styles.formulario}>
             <Link className={styles.voltarLogin} href="/login">
@@ -105,9 +105,6 @@ export default function PaginaVinculacaoAluno() {
             mensagem={mensagemAguardando}
             onVerificar={verificarCheckinAtual}
           />
-        )}
-        {etapa === "APPROVED" && solicitacao && (
-          <EstadoLiberado sessao={solicitacao} equipamentos={equipamentos} />
         )}
       </div>
     </main>
