@@ -48,6 +48,26 @@ export function IconeEquipamento({ className }) {
   );
 }
 
+export function IconeDiagnostico({ className }) {
+  return (
+    <svg
+      className={className}
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 3.5h9l5 5V20a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20Z" />
+      <path d="M14 3.5V9h5M8.5 16l2.2-2.2 2 1.4 3-3.2" />
+    </svg>
+  );
+}
+
 export function IconeSeta({ className, direcao }) {
   return (
     <svg

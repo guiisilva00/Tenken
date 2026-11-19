@@ -118,9 +118,11 @@
 }
 .mainView {
   position: relative;
-  min-height: calc(100vh - 64px);
+  display: flex;
+  box-sizing: border-box;
+  height: calc(100vh - 64px);
   margin-top: 64px;
-  overflow-x: hidden;
+  overflow: auto;
   background: var(--onyx, #0b090a);
   padding: var(--admin-space-page-y, 26px) var(--admin-space-page-x, 30px) 48px;
 }

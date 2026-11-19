@@ -4,7 +4,8 @@ export async function buscarAgendamentoAtivo(turmaId) {
   const [linhas] = await pool.execute(
     `SELECT id FROM agendamentos
      WHERE turma_id = ?
-       AND inicio <= NOW() AND fim >= NOW()
+       AND inicio <= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+       AND fim >= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
        AND status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      ORDER BY inicio DESC
      LIMIT 1`,

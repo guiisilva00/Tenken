@@ -1,30 +1,67 @@
 .pagina {
   position: relative;
   display: flex;
-  min-height: calc(100vh - 44px);
+  box-sizing: border-box;
+  min-height: 0;
+  flex: 1;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
   padding: clamp(28px, 5vw, 64px);
   border: 1px solid #262626;
   background:
-    radial-gradient(ellipse at 86% 18%, rgb(164 22 26 / 15%), transparent 38%),
+    radial-gradient(ellipse at 12% 22%, rgb(164 22 26 / 32%), transparent 34%),
+    radial-gradient(ellipse at 88% 78%, rgb(46 196 182 / 17%), transparent 34%),
     #0b090a;
+}
+
+.pagina::before {
+  position: absolute;
+  top: 8%;
+  left: 68%;
+  width: min(44vw, 520px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(220 46 54 / 38%), rgb(164 22 26 / 17%) 44%, transparent 70%);
+  filter: blur(3px);
+  mix-blend-mode: screen;
+  animation: brilhoFlutuante 8s ease-in-out infinite alternate;
+  content: "";
+  pointer-events: none;
 }
 
 .pagina::after {
   position: absolute;
-  right: -8%;
-  bottom: -40%;
-  width: min(54vw, 620px);
+  right: -12%;
+  bottom: -34%;
+  width: min(62vw, 760px);
   aspect-ratio: 1;
-  border: 1px solid rgb(164 22 26 / 20%);
+  border: 1px solid rgb(225 73 78 / 52%);
   border-radius: 50%;
   box-shadow:
-    0 0 0 36px rgb(164 22 26 / 4%),
-    0 0 0 72px rgb(164 22 26 / 3%);
+    0 0 0 30px rgb(164 22 26 / 9%),
+    0 0 0 64px rgb(164 22 26 / 6%),
+    0 0 0 102px rgb(46 196 182 / 4%);
   content: "";
   pointer-events: none;
+  animation: aroFlutuante 24s ease-in-out infinite alternate;
+}
+
+@keyframes brilhoFlutuante {
+  from { transform: translate3d(-18%, -8%, 0) scale(.78); opacity: .55; }
+  to { transform: translate3d(-2%, 18%, 0) scale(1.12); opacity: 1; }
+}
+
+@keyframes aroFlutuante {
+  from { transform: translate3d(0, 0, 0) rotate(-8deg); }
+  to { transform: translate3d(-4%, -5%, 0) rotate(5deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagina::before,
+  .pagina::after {
+    animation: none;
+  }
 }
 
 .marca,

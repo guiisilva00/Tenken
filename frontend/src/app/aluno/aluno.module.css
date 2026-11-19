@@ -16,18 +16,6 @@
   background-color: var(--aluno-onyx);
 }
 
-.pagina::before {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
-  background-size: 42px 42px;
-  content: "";
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
-  pointer-events: none;
-}
-
 .conteudo {
   position: relative;
   z-index: 1;
@@ -41,6 +29,13 @@
 
 .compacto {
   max-width: 600px;
+}
+
+.verificando {
+  margin: 0;
+  color: #d8cecf;
+  font-size: 14px;
+  text-align: center;
 }
 
 .largo {

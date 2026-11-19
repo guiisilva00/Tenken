@@ -32,7 +32,6 @@ export default function AdminLayout({ children }) {
 
   const titulosPagina = {
     "/admin": "Visão geral",
-    "/admin/chamados": "Chamados",
     "/admin/equipamentos": "Equipamentos",
     "/admin/turmas": "Turmas",
     "/admin/relatorios": "Relatórios",
