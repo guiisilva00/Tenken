@@ -15,6 +15,20 @@ function dataLocalISO() {
   return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 }
 
+function agoraLocal() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+  const valor = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valor.year}-${valor.month}-${valor.day} ${valor.hour}:${valor.minute}`;
+}
+
 function dataISOValida(data) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data || "");
   if (!partes) return false;
@@ -44,6 +58,8 @@ export async function criar(dados, usuario) {
     throw new TypeError(
       "NÃ£o Ã© possÃ­vel criar agendamentos em dias anteriores a hoje.",
     );
+  if (`${data} ${inicio}` <= agoraLocal())
+    throw new TypeError("O início do agendamento precisa ser um horário futuro.");
   const turma = await TurmaModel.buscarPorId(turmaId);
   if (!turma || Number(turma.professor_id) !== Number(usuario.id))
     throw new TypeError("A turma não está vinculada a este professor.");

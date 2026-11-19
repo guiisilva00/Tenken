@@ -8,6 +8,12 @@ function dataLocalISO() {
   return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 }
 
+function instanteLocal(data, horario) {
+  const [ano, mes, dia] = data.split("-").map(Number);
+  const [hora, minuto] = horario.split(":").map(Number);
+  return new Date(ano, mes - 1, dia, hora, minuto, 0, 0);
+}
+
 export default function FormularioAgendamento({
   dataInicial,
   horarioInicial = "09:00",
@@ -49,6 +55,10 @@ export default function FormularioAgendamento({
     }
     if (form.data < dataLocalISO()) {
       setErro("A data do agendamento deve ser hoje ou uma data futura.");
+      return;
+    }
+    if (instanteLocal(form.data, form.inicio) <= new Date()) {
+      setErro("O início do agendamento precisa ser um horário futuro.");
       return;
     }
     if (form.fim <= form.inicio) {
