@@ -156,11 +156,38 @@ export default function CadastroPage() {
 
   async function copiarMatricula() {
     try {
-      await navigator.clipboard.writeText(matriculaGerada);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(matriculaGerada);
+      } else {
+        throw new Error("Clipboard API indisponível");
+      }
       setCopiado(true);
+      setAlerta("");
       setTimeout(() => setCopiado(false), 2000);
     } catch {
-      setCopiado(false);
+      let copiou = false;
+      const campoTemporario = document.createElement("textarea");
+      campoTemporario.value = matriculaGerada;
+      campoTemporario.setAttribute("readonly", "");
+      campoTemporario.style.position = "fixed";
+      campoTemporario.style.opacity = "0";
+      document.body.appendChild(campoTemporario);
+      try {
+        campoTemporario.select();
+        campoTemporario.setSelectionRange(0, campoTemporario.value.length);
+        copiou = document.execCommand("copy");
+      } catch {
+        copiou = false;
+      } finally {
+        document.body.removeChild(campoTemporario);
+      }
+      setCopiado(copiou);
+      setAlerta(
+        copiou
+          ? "Matrícula copiada para a área de transferência."
+          : "Não foi possível copiar. Selecione a matrícula e copie manualmente.",
+      );
+      if (copiou) setTimeout(() => setCopiado(false), 2000);
     }
   }
 
