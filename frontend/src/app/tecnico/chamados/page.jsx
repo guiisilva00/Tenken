@@ -501,15 +501,18 @@ export default function PaginaChamadosTecnico() {
                 </label>
                 <label className={styles.campoDescricaoServico}>
                   <span>Custo do reparo (opcional)</span>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={custoServico}
-                    onChange={(evento) =>
-                      setCustoServico(formatarCusto(evento.target.value))
-                    }
-                    placeholder="0,00"
-                  />
+                  <div className={styles.campoCusto}>
+                    <span aria-hidden="true">R$</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={custoServico}
+                      onChange={(evento) =>
+                        setCustoServico(formatarCusto(evento.target.value))
+                      }
+                      placeholder="0,00"
+                    />
+                  </div>
                 </label>
                 <button
                   type="button"
