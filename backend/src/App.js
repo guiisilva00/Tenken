@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 
 import { errorHandler } from "./middlewares/ErrorHandler.js";
+import { authMiddleware } from "./middlewares/AuthMiddleware.js";
 import adminDashboardRoutes from "./routes/AdminDashboardRoutes.js";
 import adminRelatorioRoutes from "./routes/AdminRelatorioRoutes.js";
 import alunoRoutes from "./routes/AlunoRoutes.js";
@@ -27,7 +28,7 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", authMiddleware, express.static("uploads"));
 
 app.get("/", (request, response) => {
   response.json({

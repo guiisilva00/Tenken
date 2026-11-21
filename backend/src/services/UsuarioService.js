@@ -75,18 +75,25 @@ export async function solicitarRedefinicaoSenha(emailRecebido) {
   const usuario = await UsuarioModel.buscarPorEmail(email);
   if (usuario?.ativo) {
     const token = gerarTokenResetSenha();
-    await TokenResetSenhaModel.invalidarAnteriores(usuario.id);
+    const tokenHash = hashTokenResetSenha(token);
     await TokenResetSenhaModel.criar({
       usuarioId: usuario.id,
-      tokenHash: hashTokenResetSenha(token),
+      tokenHash,
       expiraEm: calcularExpiracaoResetSenha(),
     });
     const link = `${process.env.FRONTEND_URL || "http://localhost:3000"}/redefinir-senha?token=${token}`;
     try {
-      await EmailService.enviarEmailRedefinicaoSenha({ para: usuario.email, nome: usuario.nome, link });
+      await EmailService.enviarEmailRedefinicaoSenha({
+        para: usuario.email,
+        nome: usuario.nome,
+        link,
+      });
     } catch (erro) {
+      await TokenResetSenhaModel.invalidarToken(tokenHash);
       console.error("Falha ao enviar e-mail de redefinição de senha:", erro);
+      return;
     }
+    await TokenResetSenhaModel.invalidarAnteriores(usuario.id, tokenHash);
   }
 }
 

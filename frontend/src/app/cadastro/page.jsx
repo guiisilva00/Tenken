@@ -189,7 +189,7 @@ export default function CadastroPage() {
                   : nome === "telefone"
                     ? "(00) 00000-0000"
                     : nome === "matricula"
-                      ? "MAT-XXXXX"
+                      ? "MAT- seguido do código recebido"
                       : nome === "senha"
                         ? "Digite sua senha"
                         : "Confirme sua senha"

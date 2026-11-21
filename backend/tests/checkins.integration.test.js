@@ -31,7 +31,9 @@ test("check-ins: reserva ativa, contexto e autorização no MySQL", async (t) =>
     );
     const reserva = async (status, inicio, fim) => inserir(
       `INSERT INTO agendamentos (responsavel_id,equipamento_id,turma_id,atividade,inicio,fim,status)
-       VALUES (?,?,?,'Atividade teste',DATE_ADD(NOW(), INTERVAL ? MINUTE),DATE_ADD(NOW(), INTERVAL ? MINUTE),?)`,
+       VALUES (?,?,?,'Atividade teste',
+         DATE_ADD(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00'), INTERVAL ? MINUTE),
+         DATE_ADD(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00'), INTERVAL ? MINUTE), ?)`,
       [professor, equipamento, turma, inicio, fim, status],
     );
     const antiga = await reserva("CONFIRMADO", -120, -60);
@@ -45,7 +47,12 @@ test("check-ins: reserva ativa, contexto e autorização no MySQL", async (t) =>
       "INSERT INTO checkins (agendamento_id,aluno_id) VALUES (?,?)", [id, idAluno],
     );
     for (const id of [antiga, futura, cancelada, concluida]) await checkin(id);
-    await conexao.query("UPDATE checkins SET realizado_em=DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE aluno_id=?", [aluno]);
+    await conexao.query(
+      `UPDATE checkins SET realizado_em=DATE_ADD(
+         CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00'), INTERVAL 1 HOUR)
+       WHERE aluno_id=?`,
+      [aluno],
+    );
     await t.test("aulas antigas, futuras, canceladas e concluídas não são atuais", async () => {
       await assert.rejects(service.buscarAtualDoAluno(aluno), { status: 404 });
       assert.deepEqual(await service.listarPendentes(professor), []);
@@ -92,10 +99,20 @@ test("check-ins: reserva ativa, contexto e autorização no MySQL", async (t) =>
       await assert.rejects(service.aprovar(`${ativa}-${aluno}`, professor), { status: 409 });
     });
     await t.test("expiração e cancelamento invalidam a aprovação recuperada", async () => {
-      await conexao.query("UPDATE agendamentos SET fim = DATE_SUB(NOW(), INTERVAL 1 SECOND) WHERE id=?", [ativa]);
+      await conexao.query(
+        `UPDATE agendamentos SET fim=DATE_SUB(
+           CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00'), INTERVAL 1 SECOND)
+         WHERE id=?`,
+        [ativa],
+      );
       await assert.rejects(service.buscarAtualDoAluno(aluno), { status: 404 });
       await assert.rejects(service.aprovar(`${antiga}-${aluno}`, professor), { status: 409 });
-      await conexao.query("UPDATE agendamentos SET fim=DATE_ADD(NOW(), INTERVAL 30 MINUTE), status='CANCELADO' WHERE id=?", [ativa]);
+      await conexao.query(
+        `UPDATE agendamentos SET fim=DATE_ADD(
+           CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00'), INTERVAL 30 MINUTE),
+           status='CANCELADO' WHERE id=?`,
+        [ativa],
+      );
       await assert.rejects(service.buscarAtualDoAluno(aluno), { status: 404 });
     });
   } finally {
