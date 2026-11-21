@@ -78,7 +78,10 @@ export async function verificarConflito(equipamentoId, inicio, fim, db = pool) {
 }
 
 export async function inicioJaPassou(inicio, db = pool) {
-  const [[linha]] = await db.query("SELECT ? <= NOW() AS ja_passou", [inicio]);
+  const [[linha]] = await db.query(
+    "SELECT ? <= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00') AS ja_passou",
+    [inicio],
+  );
   return Boolean(linha?.ja_passou);
 }
 
