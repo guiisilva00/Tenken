@@ -82,7 +82,7 @@ function LoginContent() {
             id="matricula"
             name="matricula"
             type="text"
-            placeholder="MAT-XXXXX"
+            placeholder="Sua matrícula"
             value={matricula}
             onChange={(event) => {
               setMatricula(event.target.value);
