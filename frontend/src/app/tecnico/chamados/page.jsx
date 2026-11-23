@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import styles from "./page.module.css";
 import EmptyState from "@/components/EmptyState";
+import FeedbackModal from "@/app/admin/components/FeedbackModal";
 
 const STATUS = [
   ["ABERTO", "Aberto"],
@@ -32,6 +33,21 @@ function formatarData(valor) {
     : data.toLocaleDateString("pt-BR");
 }
 
+function formatarCusto(valor) {
+  const digitos = String(valor).replace(/\D/g, "");
+  if (!digitos) return "";
+  return (Number(digitos) / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function converterCusto(valor) {
+  if (!valor.trim()) return 0;
+  const digitos = valor.replace(/\D/g, "");
+  return Number(digitos) / 100;
+}
+
 export default function PaginaChamadosTecnico() {
   const [chamados, setChamados] = useState([]);
   const [status, setStatus] = useState("");
@@ -45,6 +61,7 @@ export default function PaginaChamadosTecnico() {
   const [pecasTrocadas, setPecasTrocadas] = useState("");
   const [custoServico, setCustoServico] = useState("");
   const [aviso, setAviso] = useState("");
+  const [feedback, setFeedback] = useState(null);
 
   const carregar = useCallback(async () => {
     setCarregando(true);
@@ -146,7 +163,7 @@ export default function PaginaChamadosTecnico() {
 
   async function concluirOrdem() {
     if (!chamadoSelecionado || atualizandoStatus) return;
-    const custo = custoServico.trim() === "" ? 0 : Number(custoServico);
+    const custo = converterCusto(custoServico);
     if (!Number.isFinite(custo) || custo < 0) {
       setErro("Informe um custo vÃ¡lido, igual ou maior que zero.");
       return;
@@ -173,7 +190,11 @@ export default function PaginaChamadosTecnico() {
       setDescricaoServico("");
       setPecasTrocadas("");
       setCustoServico("");
-      setAviso("Ordem de serviço concluída com sucesso.");
+      setFeedback({
+        type: "success",
+        title: "Ordem de serviço concluída",
+        message: "A OS foi resolvida e registrada com sucesso.",
+      });
     } catch (error) {
       setErro(error.message || "Não foi possível concluir a ordem de serviço.");
     } finally {
@@ -435,12 +456,12 @@ export default function PaginaChamadosTecnico() {
                 <dd>{formatarData(chamadoSelecionado.aberto_em)}</dd>
               </div>
             </dl>
-            <div className={styles.modalDescricao}>
-              <h3>Descrição</h3>
+            <details className={styles.modalDescricao}>
+              <summary>Descrição original do chamado</summary>
               <p>
                 {chamadoSelecionado.descricao || "Sem descrição informada."}
               </p>
-            </div>
+            </details>
             {chamadoSelecionado.status === "ABERTO" && (
               <div className={styles.modalAcoes}>
                 <button
@@ -457,37 +478,45 @@ export default function PaginaChamadosTecnico() {
               chamadoSelecionado.status,
             ) && (
               <div className={styles.modalAcoes}>
-                <label className={styles.campoDescricaoServico}>
+                <label
+                  className={`${styles.campoDescricaoServico} ${styles.campoTextoServico}`}
+                >
                   <span>Descrição do serviço realizado</span>
                   <textarea
                     value={descricaoServico}
                     onChange={(evento) =>
                       setDescricaoServico(evento.target.value)
                     }
-                    rows={5}
+                    rows={3}
                     placeholder="Descreva o serviço realizado"
                     required
                   />
                 </label>
-                <label className={styles.campoDescricaoServico}>
+                <label
+                  className={`${styles.campoDescricaoServico} ${styles.campoPecasServico}`}
+                >
                   <span>Peças trocadas (opcional)</span>
                   <textarea
                     value={pecasTrocadas}
                     onChange={(evento) => setPecasTrocadas(evento.target.value)}
-                    rows={3}
+                    rows={2}
                     placeholder="Informe as peças substituídas, se houver"
                   />
                 </label>
                 <label className={styles.campoDescricaoServico}>
                   <span>Custo do reparo (opcional)</span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={custoServico}
-                    onChange={(evento) => setCustoServico(evento.target.value)}
-                    placeholder="0.00"
-                  />
+                  <div className={styles.campoCusto}>
+                    <span aria-hidden="true">R$</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={custoServico}
+                      onChange={(evento) =>
+                        setCustoServico(formatarCusto(evento.target.value))
+                      }
+                      placeholder="0,00"
+                    />
+                  </div>
                 </label>
                 <button
                   type="button"
@@ -497,8 +526,7 @@ export default function PaginaChamadosTecnico() {
                     atualizandoStatus ||
                     !descricaoServico.trim() ||
                     (custoServico !== "" &&
-                      (!Number.isFinite(Number(custoServico)) ||
-                        Number(custoServico) < 0))
+                      !Number.isFinite(converterCusto(custoServico)))
                   }
                 >
                   {atualizandoStatus
@@ -510,6 +538,7 @@ export default function PaginaChamadosTecnico() {
           </section>
         </div>
       )}
+      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </div>
   );
 }
