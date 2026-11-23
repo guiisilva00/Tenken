@@ -83,15 +83,13 @@ export async function inicioJaPassou(inicio, db = pool) {
 }
 
 export async function buscarPorTokenAtivo(token) {
-  // Os campos DATETIME são gravados como horário local do laboratório.
-  // Converta o instante atual para esse mesmo fuso antes da comparação;
-  // NOW() depende do fuso configurado no servidor MySQL.
+  // Os DATETIME e o NOW() usam o fuso de Brasília configurado na conexão.
   const [linhas] = await pool.query(
     `SELECT a.id, a.turma_id, t.nome AS turma
      FROM agendamentos a
      JOIN turmas_projetos t ON t.id = a.turma_id
      WHERE a.token_acesso = ?
-       AND a.fim >= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+       AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      LIMIT 1`,
     [token],
