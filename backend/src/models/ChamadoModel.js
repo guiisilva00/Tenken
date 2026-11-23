@@ -195,34 +195,45 @@ export async function contarEquipamentosCriticos() {
 }
 
 export async function resumoTecnico(tecnicoId) {
+  const escopoTecnico = `(
+    c.tecnico_id = ?
+    OR EXISTS (
+      SELECT 1 FROM ordens_servico os
+      WHERE os.chamado_id = c.id AND os.status IN ('EMITIDA', 'EM_EXECUCAO')
+    )
+    OR EXISTS (
+      SELECT 1 FROM historico_manutencao hm
+      WHERE hm.chamado_id = c.id AND hm.tecnico_id = ?
+    )
+  )`;
   const [porStatus] = await pool.query(
-    `SELECT status, COUNT(*) AS total
-     FROM chamados_manutencao
-     WHERE tecnico_id = ?
-     GROUP BY status`,
-    [tecnicoId],
+    `SELECT c.status, COUNT(*) AS total
+     FROM chamados_manutencao c
+     WHERE ${escopoTecnico}
+     GROUP BY c.status`,
+    [tecnicoId, tecnicoId],
   );
   const [porSeveridade] = await pool.query(
-    `SELECT severidade, COUNT(*) AS total
-     FROM chamados_manutencao
-     WHERE tecnico_id = ? AND status NOT IN ('CONCLUIDO', 'CANCELADO')
-     GROUP BY severidade`,
-    [tecnicoId],
+    `SELECT c.severidade, COUNT(*) AS total
+     FROM chamados_manutencao c
+     WHERE ${escopoTecnico} AND c.status NOT IN ('CONCLUIDO', 'CANCELADO')
+     GROUP BY c.severidade`,
+    [tecnicoId, tecnicoId],
   );
   const [abertosPorDia] = await pool.query(
-    `SELECT DATE(aberto_em) AS dia, COUNT(*) AS total
-     FROM chamados_manutencao
-     WHERE tecnico_id = ? AND aberto_em >= CURDATE() - INTERVAL 29 DAY
-     GROUP BY DATE(aberto_em)`,
-    [tecnicoId],
+    `SELECT DATE(c.aberto_em) AS dia, COUNT(*) AS total
+     FROM chamados_manutencao c
+     WHERE ${escopoTecnico} AND c.aberto_em >= CURDATE() - INTERVAL 29 DAY
+     GROUP BY DATE(c.aberto_em)`,
+    [tecnicoId, tecnicoId],
   );
   const [concluidosPorDia] = await pool.query(
-    `SELECT DATE(concluido_em) AS dia, COUNT(*) AS total
-     FROM chamados_manutencao
-     WHERE tecnico_id = ? AND status = 'CONCLUIDO'
-       AND concluido_em >= CURDATE() - INTERVAL 29 DAY
-     GROUP BY DATE(concluido_em)`,
-    [tecnicoId],
+    `SELECT DATE(c.concluido_em) AS dia, COUNT(*) AS total
+     FROM chamados_manutencao c
+     WHERE ${escopoTecnico} AND c.status = 'CONCLUIDO'
+       AND c.concluido_em >= CURDATE() - INTERVAL 29 DAY
+     GROUP BY DATE(c.concluido_em)`,
+    [tecnicoId, tecnicoId],
   );
 
   return { porStatus, porSeveridade, abertosPorDia, concluidosPorDia };

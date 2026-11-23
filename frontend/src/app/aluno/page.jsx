@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FormularioVinculo from "@/components/aluno/FormularioVinculo";
 import EstadoAguardando from "@/components/aluno/EstadoAguardando";
-import { ResumoAula } from "@/components/aluno/AulaContexto";
 import { apiFetch } from "@/lib/api";
 import { getUsuario } from "@/lib/session";
 import styles from "./aluno.module.css";
@@ -171,10 +170,6 @@ export default function PaginaVinculacaoAluno() {
           </section>
         )}
 
-        {solicitacao?.agendamento && etapa !== "FORM" && (
-          <ResumoAula agendamento={solicitacao.agendamento} />
-        )}
-
         {etapa === "FORM" && (
           <section className={styles.formulario}>
             <Link className={styles.voltarLogin} href="/login">
@@ -206,6 +201,7 @@ export default function PaginaVinculacaoAluno() {
           <EstadoAguardando
             sessao={solicitacao}
             token={solicitacao.token}
+            agendamento={solicitacao.agendamento}
             onCancelar={cancelarSolicitacao}
             mensagem={mensagemAguardando}
             onVerificar={verificarCheckinAtual}

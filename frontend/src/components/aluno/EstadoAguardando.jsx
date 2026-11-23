@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import styles from "./EstadoAguardando.module.css";
+import { ResumoAula } from "./AulaContexto";
 
-export default function EstadoAguardando({ sessao, token, mensagem, onCancelar, onVerificar }) {
+export default function EstadoAguardando({ sessao, token, mensagem, agendamento, onCancelar, onVerificar }) {
   const [verificando, setVerificando] = useState(false);
 
   async function verificarNovamente() {
@@ -26,6 +27,7 @@ export default function EstadoAguardando({ sessao, token, mensagem, onCancelar, 
         <div className={styles.item}><dt>Aluno</dt><dd>{sessao.nome}</dd></div>
         <div className={styles.item}><dt>Turma</dt><dd>{sessao.turma}</dd></div>
         {sessao.equipamentos?.map((item) => <div className={styles.item} key={item.id}><dt>Equipamento</dt><dd>{item.nome}</dd></div>)}
+        {agendamento && <div className={`${styles.item} ${styles.agendamento}`}><dt>Agendamento</dt><dd><ResumoAula agendamento={agendamento} /></dd></div>}
       {token && <div className={`${styles.item} ${styles.token}`}><dt>Token enviado</dt><dd>{token}</dd></div>}
       </dl>
       <div className={styles.acoes}>

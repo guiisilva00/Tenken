@@ -681,6 +681,13 @@
 }
 
 @media print {
+  :global([data-admin-shell]),
+  :global([data-admin-shell] > div),
+  :global([data-admin-shell] main) {
+    background: #fff !important;
+    color: #17201f !important;
+  }
+
   :global([data-admin-shell] > :first-child),
   :global([data-admin-navigation]) {
     display: none !important;
@@ -735,11 +742,6 @@
     background: #fff;
     box-shadow: none;
     border: 1px solid #bbb;
-    break-inside: avoid;
-  }
-  .bentoSection,
-  .chartsSection,
-  .dualSection {
     break-inside: avoid;
   }
 }
@@ -853,4 +855,157 @@
     animation: none;
     transition: none;
   }
+}
+
+@page {
+  size: A4 landscape;
+  margin: 13mm;
+}
+
+@media print {
+  :global(html),
+  :global(body) {
+    background: #fff !important;
+    color: #17201f !important;
+  }
+
+  :global(*) {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .container {
+    width: 100%;
+    gap: 14px;
+    padding: 0;
+    background: #fff !important;
+    color: #17201f !important;
+  }
+
+  .header {
+    gap: 8px;
+    padding: 0 0 12px;
+    border-bottom: 2px solid #a4161a;
+  }
+
+  .headerRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .title {
+    color: #17201f !important;
+    font-size: 24px;
+  }
+
+  .subtitle {
+    color: #4d5957 !important;
+    font-size: 11px;
+  }
+
+  .exportWrapper,
+  .filterGroup,
+  .alertError,
+  .alertSuccess {
+    display: none !important;
+  }
+
+  .filterBar {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .printSummary {
+    display: block;
+    margin: 0;
+    padding: 8px 10px;
+    border: 1px solid #d7dddc;
+    border-radius: 5px;
+    background: #f4f6f5;
+    color: #26302f;
+    font-size: 10px;
+  }
+
+  .bentoSection {
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .chartsSection,
+  .dualSection {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .mttrCard,
+  .kpiCard,
+  .chartCardLeft,
+  .chartCardRight,
+  .analysisCard {
+    break-inside: avoid;
+    border: 1px solid #cbd3d1 !important;
+    border-radius: 7px;
+    background: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #17201f !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .mttrCardGlow {
+    display: none !important;
+  }
+
+  .mttrFooterBox {
+    border-color: #d7dddc;
+    background: #f4f6f5 !important;
+  }
+
+  .slaTrack,
+  .barItemTrack {
+    background: #e7ebea !important;
+    box-shadow: none !important;
+  }
+
+  .statusDotGreen {
+    box-shadow: none !important;
+  }
+
+  .chartTitle,
+  .kpiValue,
+  .barItemName,
+  .barItemVal,
+  .barItemValMuted,
+  .legendText,
+  .legendPct,
+  .donutCenterNumber {
+    color: #17201f !important;
+  }
+
+  .subtitle,
+  .chartSubtitle,
+  .barsFooter,
+  .kpiDesc,
+  .legendUnits,
+  .donutCenterLabel {
+    color: #4d5957 !important;
+  }
+
+  .legendRow {
+    border-color: #d7dddc;
+    background: #fff !important;
+    transform: none !important;
+  }
+
+  .barItemTrack,
+  .donutTrack {
+    background: #e7ebea;
+    stroke: #e7ebea;
+  }
+
 }

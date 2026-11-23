@@ -5,6 +5,7 @@ import AdminLayout from "../components/AdminLayout";
 import styles from "./page.module.css";
 import { chamarApi } from "../lib/adminApi";
 import { formatarNumero } from "../lib/formatadores";
+import * as XLSX from "xlsx";
 
 const META_MTTR_HORAS = 5;
 
@@ -112,62 +113,50 @@ function Conteudo({ token }) {
   const mttrPercentualSla =
     mttrValor === null ? 0 : Math.min(100, (mttrValor / META_MTTR_HORAS) * 100);
 
-  function exportarCsv() {
+  function exportarXlsx() {
     setMenuExportarAberto(false);
     if (!relatorio) return;
 
-    const linhas = [];
-    linhas.push(["Relatório Tenken - Indicadores Operacionais"]);
-    linhas.push([`Período: ${datas.inicio} a ${datas.fim}`]);
-    linhas.push([`Tipo: ${tipoFiltro === "all" ? "Todos" : tipoFiltro}`]);
-    linhas.push([]);
-    linhas.push(["Tempo médio para conserto (horas)", mttrValor ?? ""]);
-    linhas.push([
-      "Equipamentos disponíveis (%)",
-      eficienciaGeral === null ? "" : eficienciaGeral.toFixed(1),
-    ]);
-    linhas.push(["Total Ativos", totalAtivosMonitorados]);
-    linhas.push([]);
+    const workbook = XLSX.utils.book_new();
+    const criarPlanilha = (nome, colunas, registros, larguras) => {
+      const linhas = [colunas.map(([titulo]) => titulo)];
+      (registros ?? []).forEach((registro) => {
+        linhas.push(colunas.map(([, chave, converter]) => {
+          const valor = registro?.[chave];
+          return valor == null ? "" : converter ? converter(valor) : valor;
+        }));
+      });
+      const worksheet = XLSX.utils.aoa_to_sheet(linhas);
+      worksheet["!cols"] = larguras.map((wch) => ({ wch }));
+      if (linhas.length > 1) {
+        worksheet["!autofilter"] = {
+          ref: `A1:${XLSX.utils.encode_col(colunas.length - 1)}${linhas.length}`,
+        };
+      }
+      XLSX.utils.book_append_sheet(workbook, worksheet, nome);
+    };
 
-    function bloco(titulo, rows, cols) {
-      linhas.push([titulo]);
-      linhas.push(cols.map(([c]) => c));
-      (rows ?? []).forEach((r) => linhas.push(cols.map(([, k]) => r[k] ?? "")));
-      linhas.push([]);
-    }
+    const resumo = XLSX.utils.aoa_to_sheet([
+      ["TENKEN · INDICADORES OPERACIONAIS"],
+      ["Período", `${datas.inicio} a ${datas.fim}`],
+      ["Tipo de equipamento", tipoFiltro === "all" ? "Todos" : tipoFiltro],
+      [],
+      ["Indicador", "Resultado"],
+      ["Tempo médio para conserto (h)", mttrValor ?? ""],
+      ["Equipamentos disponíveis (%)", eficienciaGeral === null ? "" : Number(eficienciaGeral.toFixed(1))],
+      ["Total de ativos", totalAtivosMonitorados],
+    ]);
+    resumo["!cols"] = [{ wch: 34 }, { wch: 26 }];
+    resumo["!merges"] = [XLSX.utils.decode_range("A1:B1")];
+    XLSX.utils.book_append_sheet(workbook, resumo, "Resumo");
 
-    bloco("Status de Equipamentos", relatorio.equipamentos_por_status, [
-      ["Status", "status"],
-      ["Total", "total"],
-    ]);
-    bloco("Falhas por Equipamento", relatorio.ranking_falhas, [
-      ["Equipamento", "equipamento_nome"],
-      ["Total Falhas", "total"],
-    ]);
-    bloco("Uso por Equipamento", relatorio.ranking_uso, [
-      ["Equipamento", "equipamento_nome"],
-      ["Agendamentos", "total_agendamentos"],
-      ["Horas Reservadas (h)", "horas_reservadas"],
-    ]);
-    bloco("Taxa de Ocupação", relatorio.taxa_ocupacao, [
-      ["Equipamento", "equipamento_nome"],
-      ["Horas Reservadas", "horas_reservadas"],
-      ["Ocupação (%)", "taxa_ocupacao_percentual"],
-    ]);
+    criarPlanilha("Status", [["Status", "status"], ["Total", "total", Number]], relatorio.equipamentos_por_status, [26, 14]);
+    criarPlanilha("Falhas", [["Equipamento", "equipamento_nome"], ["Total de falhas", "total", Number]], relatorio.ranking_falhas, [42, 20]);
+    criarPlanilha("Uso", [["Equipamento", "equipamento_nome"], ["Agendamentos", "total_agendamentos", Number], ["Horas reservadas", "horas_reservadas", Number]], relatorio.ranking_uso, [42, 20, 20]);
+    criarPlanilha("Ocupação", [["Equipamento", "equipamento_nome"], ["Horas reservadas", "horas_reservadas", Number], ["Ocupação (%)", "taxa_ocupacao_percentual", Number]], relatorio.taxa_ocupacao, [42, 20, 18]);
 
-    const csv = linhas
-      .map((l) => l.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `relatorio-tenken-${datas.inicio}-a-${datas.fim}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    setAviso("Relatório CSV gerado e descarregado com sucesso.");
+    XLSX.writeFile(workbook, `relatorio-tenken-${datas.inicio}-a-${datas.fim}.xlsx`, { compression: true });
+    setAviso("Relatório XLSX gerado e baixado com sucesso.");
   }
 
   function exportarPdf() {
@@ -226,7 +215,7 @@ function Conteudo({ token }) {
               >
                 file_download
               </span>
-              <span>Exportar Relatório (PDF/CSV)</span>
+              <span>Exportar relatório (PDF/XLSX)</span>
               <span
                 className="material-symbols-outlined"
                 style={{ fontSize: "16px" }}
@@ -253,14 +242,14 @@ function Conteudo({ token }) {
                 <button
                   type="button"
                   className={styles.exportMenuItem}
-                  onClick={exportarCsv}
+                  onClick={exportarXlsx}
                 >
-                  <span>Planilha CSV (.csv)</span>
+                  <span>Planilha Excel (.xlsx)</span>
                   <span
                     className="material-symbols-outlined"
                     style={{
                       fontSize: "16px",
-                      color: "var(--accent-tertiary)",
+                      color: "var(--status-ok, #10b981)",
                     }}
                   >
                     table_view

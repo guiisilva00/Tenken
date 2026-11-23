@@ -75,6 +75,20 @@
   grid-column: 1 / -1;
 }
 
+.agendamento p {
+  margin: 0 0 7px;
+  line-height: 1.4;
+}
+
+.agendamento p:last-child {
+  margin-bottom: 0;
+}
+
+.agendamento strong {
+  color: var(--white-smoke);
+  font-weight: 600;
+}
+
 .item dt {
   color: var(--silver);
   font-family: var(--fonte-mono);
