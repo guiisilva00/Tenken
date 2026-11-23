@@ -196,6 +196,12 @@
 .roleDot.roleTecnico {
   background: var(--status-warning, #f59e0b);
 }
+.roleDot.roleAdmin {
+  background: var(--primary, #ffb4ac);
+}
+.roleDot.roleProfessor {
+  background: var(--tertiary, #9ecaff);
+}
 .roleDot.roleAluno {
   background: var(--status-ok, #10b981);
 }

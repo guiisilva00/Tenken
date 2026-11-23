@@ -102,8 +102,13 @@ async function listarTurmas(alunoIds) {
   const [linhas] = await pool.query(
     `SELECT ta.aluno_id, t.id AS turma_id, t.nome AS turma_nome
      FROM turma_alunos ta JOIN turmas_projetos t ON t.id = ta.turma_id
-     WHERE ta.aluno_id IN (?) ORDER BY t.nome`,
-    [alunoIds],
+     WHERE ta.aluno_id IN (?)
+     UNION
+     SELECT t.professor_id AS aluno_id, t.id AS turma_id, t.nome AS turma_nome
+     FROM turmas_projetos t
+     WHERE t.professor_id IN (?)
+     ORDER BY turma_nome`,
+    [alunoIds, alunoIds],
   );
   return linhas;
 }
