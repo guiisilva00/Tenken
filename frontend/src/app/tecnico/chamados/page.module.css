@@ -386,7 +386,7 @@
   width: 100%;
   min-height: 0;
   padding: 9px 11px;
-  resize: vertical;
+  resize: none;
   color: var(--white-smoke);
   background: var(--surface-lowest);
   border: 1px solid var(--border-subtle);
