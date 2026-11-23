@@ -11,8 +11,14 @@ function idValido(v) {
 }
 
 function dataLocalISO() {
-  const hoje = new Date();
-  return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const valor = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valor.year}-${valor.month}-${valor.day}`;
 }
 
 function agoraLocal() {
@@ -33,12 +39,8 @@ function dataISOValida(data) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data || "");
   if (!partes) return false;
   const [, ano, mes, dia] = partes.map(Number);
-  const validada = new Date(Date.UTC(ano, mes - 1, dia));
-  return (
-    validada.getUTCFullYear() === ano &&
-    validada.getUTCMonth() === mes - 1 &&
-    validada.getUTCDate() === dia
-  );
+  if (mes < 1 || mes > 12 || dia < 1) return false;
+  return dia <= new Date(ano, mes, 0).getDate();
 }
 
 export async function listarPorProfessor(id) {
