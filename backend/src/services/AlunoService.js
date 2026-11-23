@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { randomBytes } from "node:crypto";
 import * as AlunoModel from "../models/AlunoModel.js";
 import * as TurmaModel from "../models/TurmaModel.js";
 import * as AgendamentoModel from "../models/AgendamentoModel.js";
@@ -26,7 +25,7 @@ function erroDeValidacao(errors) {
 }
 
 function gerarCodigoMatricula() {
-  return `MAT-${randomBytes(8).toString("hex").toUpperCase()}`;
+  return `MAT-${String(Math.floor(Math.random() * 100000)).padStart(5, "0")}`;
 }
 
 export async function solicitarAcesso(token, alunoId) {

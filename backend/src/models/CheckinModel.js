@@ -4,8 +4,7 @@ export async function buscarMaisRecentePorAluno(alunoId) {
   const [linhas] = await pool.query(
     `SELECT c.agendamento_id, c.aluno_id, c.aprovado_em,
             a.atividade, a.inicio, a.fim, a.token_acesso,
-            p.nome AS professor_nome,
-            CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00') AS agora,
+            p.nome AS professor_nome, NOW() AS agora,
             t.id AS turma_id, t.nome AS turma_nome,
             e.id AS equipamento_id, e.nome AS equipamento_nome,
             e.codigo_patrimonio, e.localizacao, e.tipo, e.status AS equipamento_status
@@ -16,8 +15,7 @@ export async function buscarMaisRecentePorAluno(alunoId) {
      JOIN usuarios p ON p.id = t.professor_id
      WHERE c.aluno_id = ?
        AND EXISTS (SELECT 1 FROM turma_alunos ta WHERE ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id)
-       AND a.inicio <= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
-       AND a.fim >= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+       AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      ORDER BY c.realizado_em DESC, c.agendamento_id DESC
      LIMIT 1`,
@@ -40,8 +38,7 @@ export async function listarPendentesPorProfessor(professorId) {
      JOIN usuarios u ON u.id = c.aluno_id
      WHERE c.aprovado_em IS NULL AND t.professor_id = ?
        AND EXISTS (SELECT 1 FROM turma_alunos ta WHERE ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id)
-       AND a.inicio <= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
-       AND a.fim >= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+       AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')
      ORDER BY c.realizado_em DESC`,
     [professorId],
@@ -68,11 +65,10 @@ export async function aprovar(agendamentoId, alunoId, professorId) {
      JOIN agendamentos a ON a.id = c.agendamento_id
      JOIN turmas_projetos t ON t.id = a.turma_id
      JOIN turma_alunos ta ON ta.turma_id = a.turma_id AND ta.aluno_id = c.aluno_id
-     SET c.aprovado_em = CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+     SET c.aprovado_em = NOW()
      WHERE c.agendamento_id = ? AND c.aluno_id = ? AND c.aprovado_em IS NULL
        AND t.professor_id = ?
-       AND a.inicio <= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
-       AND a.fim >= CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-03:00')
+       AND a.inicio <= NOW() AND a.fim >= NOW()
        AND a.status IN ('CONFIRMADO', 'EM_ANDAMENTO')`,
     [agendamentoId, alunoId, professorId],
   );

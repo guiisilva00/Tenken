@@ -1,17 +1,9 @@
 import { pool } from "../config/Database.js";
 
-export async function invalidarAnteriores(usuarioId, manterTokenHash) {
+export async function invalidarAnteriores(usuarioId) {
   await pool.query(
-    `UPDATE tokens_reset_senha SET usado_em = NOW()
-     WHERE usuario_id = ? AND usado_em IS NULL AND token_hash <> ?`,
-    [usuarioId, manterTokenHash],
-  );
-}
-
-export async function invalidarToken(tokenHash) {
-  await pool.query(
-    "UPDATE tokens_reset_senha SET usado_em = NOW() WHERE token_hash = ? AND usado_em IS NULL",
-    [tokenHash],
+    "UPDATE tokens_reset_senha SET usado_em = NOW() WHERE usuario_id = ? AND usado_em IS NULL",
+    [usuarioId],
   );
 }
 
