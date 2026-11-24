@@ -156,12 +156,37 @@ export default function CadastroPage() {
 
   async function copiarMatricula() {
     try {
-      await navigator.clipboard.writeText(matriculaGerada);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(matriculaGerada);
+      } else {
+        copiarComSelecao(matriculaGerada);
+      }
       setCopiado(true);
       setTimeout(() => setCopiado(false), 2000);
     } catch {
-      setCopiado(false);
+      try {
+        copiarComSelecao(matriculaGerada);
+        setCopiado(true);
+        setTimeout(() => setCopiado(false), 2000);
+      } catch {
+        setCopiado(false);
+        setAlerta("Não foi possível copiar. Selecione a matrícula e copie manualmente.");
+      }
     }
+  }
+
+  function copiarComSelecao(texto) {
+    const campoTemporario = document.createElement("textarea");
+    campoTemporario.value = texto;
+    campoTemporario.setAttribute("readonly", "");
+    campoTemporario.style.position = "fixed";
+    campoTemporario.style.opacity = "0";
+    document.body.appendChild(campoTemporario);
+    campoTemporario.select();
+    campoTemporario.setSelectionRange(0, campoTemporario.value.length);
+    const copiou = document.execCommand("copy");
+    document.body.removeChild(campoTemporario);
+    if (!copiou) throw new Error("Cópia bloqueada pelo navegador.");
   }
 
   function campo(nome, rotulo, tipo = "text", obrigatorio = false) {
