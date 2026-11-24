@@ -13,136 +13,132 @@
   </p>
 </div>
 
-## Sobre o projeto
+Plataforma web para organizar o uso, a inspeção e a manutenção de equipamentos em laboratórios educacionais de robótica e automação.
 
-Tenken (点検) é uma plataforma web para apoiar a organização de bancadas didáticas, robôs, componentes e ferramentas em laboratórios educacionais de robótica e automação. O nome significa inspeção, checagem ou verificação.
+Tenken conecta alunos, professores, técnicos e administradores em um fluxo rastreável de agendamento, check-in, inspeção pré e pós-uso e manutenção. O sistema valida permissões e regras de negócio na API, registra ocorrências por equipamento e ajuda a preservar o patrimônio do laboratório.
 
-O projeto substitui controles dispersos por um fluxo rastreável que ajuda a prevenir falhas, preservar equipamentos e registrar seu histórico de uso. Tem front-end em Next.js, back-end em Express e banco de dados MySQL, com autenticação por matrícula/senha e tokens JWT.
+## Funcionalidades
 
-## O que já está disponível
+- **Administrador:** painéis e relatórios, gestão de equipamentos, usuários, turmas, chamados e pré-cadastros de equipe.
+- **Professor:** gestão de turmas, agendamento de equipamentos, aprovação de check-ins, inspeções com checklist e acompanhamento de chamados.
+- **Aluno:** cadastro e acesso, solicitação de vínculo/acesso por token de turma ou reserva, consulta de check-in e visualização dos equipamentos da aula.
+- **Técnico:** painel operacional, atendimento de chamados, ordens de serviço e histórico de manutenção.
+- **Fluxo de manutenção:** inspeções registram respostas e evidências; reprovações podem abrir chamados e colocar o equipamento em manutenção conforme as regras do sistema.
+- **Acesso seguro:** autenticação JWT, senhas com hash bcrypt, autorização por perfil, validação de disponibilidade e proteção de rotas.
+## Tecnologias
 
-- Página institucional pública, login e cadastro de alunos.
-- Painel do administrador: gestão de equipamentos, usuários, turmas e chamados, além de relatórios.
-- Painel do professor: turmas, agendamentos de equipamentos, inspeções (checklist pré e pós-uso) e chamados de manutenção.
-- Painel do técnico: acompanhamento e atendimento de chamados de manutenção.
-- Área do aluno: solicitação de acesso à bancada por token de turma (a tela atual ainda usa dados de exemplo enquanto a integração completa com o back-end está em andamento).
-- API REST em Express, com autenticação JWT e senhas protegidas com bcrypt.
+- Front-end: Next.js 16, React, JavaScript e CSS Modules.
+- API: Node.js, Express 5 e JavaScript ES modules.
+- Persistência: MySQL com `mysql2`.
+- Infraestrutura local: Docker Compose.
 
-## Ciclo de uso
+## Requisitos
 
-**Agendamento → inspeção prévia → utilização → inspeção posterior → manutenção, quando necessária.**
+- Node.js compatível com as versões usadas pelas dependências do projeto.
+- MySQL 8 ou Docker para executar o banco.
+- npm.
 
-### Regras principais
+## Configuração e execução local
 
-- Inspeções pré e pós-uso são obrigatórias.
-- Reservas, inspeções e chamados ficam vinculados ao usuário responsável.
-- Falhas críticas bloqueiam o equipamento e abrem chamado corretivo com prioridade alta.
-- Permissões e disponibilidade são validadas no back-end, além da interface.
+### 1. Banco de dados
 
-## Executar localmente com Docker
-
-```bash
-cp .env.example .env
-docker compose up --build
-```
-
-O front-end fica disponível em `http://localhost:3000` e a API em `http://localhost:8080/api`.
-
-## Executar localmente sem Docker
-
-### Banco de dados
-
-Crie o banco e aplique `database/init/02-schema.sql`. Esse arquivo contém o schema atual completo e os checklists iniciais; uma instalação nova não precisa executar migrations. Em seguida, execute o seed de usuários de teste:
+Crie o banco `tenken_db` e aplique o schema completo:
 
 ```bash
-mysql tenken_db < database/seed/usuarios_teste.sql
+mysql -u SEU_USUARIO -p -e "CREATE DATABASE tenken_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u SEU_USUARIO -p tenken_db < database/init/02-schema.sql
 ```
 
-As migrations em `database/migrations/` servem apenas para atualizar bancos existentes. A migration `20261113_remove_unused_tables.sql` remove tabelas legadas e pode apagar dados; revise-as antes de executá-la.
+Opcionalmente, carregue dados de demonstração:
 
-Isso cria três contas de teste (uso restrito a ambiente local):
-
-```text
-Administrador — Matrícula: ADMIN001 — Senha: TenkenAdmin123!
-Professor     — Matrícula: PROF001  — Senha: TenkenProf123!
-Técnico       — Matrícula: TEC001   — Senha: TenkenTec123!
+```bash
+mysql -u SEU_USUARIO -p tenken_db < database/seed/20261108_1020_seed_completa_laboratorio.sql
 ```
 
-Para um ambiente de desenvolvimento com mais dados (turmas, equipamentos, agendamentos), use também `database/seed/20261108_1020_seed_completa_laboratorio.sql`.
+`database/seed/usuarios_teste.sql` contém credenciais destinadas apenas a desenvolvimento local. Não use essas contas em produção.
 
-### Back-end
+### 2. API
 
 ```bash
 cd backend
-cp .env.example .env   # defina DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-### Front-end
+Configure no `backend/.env` as variáveis `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `JWT_SECRET` e `FRONTEND_URL`. Para redefinição de senha por e-mail, configure também as variáveis SMTP do exemplo. A API usa a porta `8080` por padrão; o health check fica em `/api/health`.
+
+### 3. Front-end
+
+Em outro terminal:
 
 ```bash
 cd frontend
-cp .env.example .env   # defina NEXT_PUBLIC_API_URL
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-Abra `http://localhost:3000` no navegador.
+Defina `NEXT_PUBLIC_API_URL` como a URL base da API, incluindo `/api` (por exemplo, `http://localhost:8080/api`). O front-end fica em `http://localhost:3000`.
 
-### Comandos disponíveis (front-end)
+### Docker Compose
 
-| Comando         | Ação                                      |
-| --------------- | ----------------------------------------- |
-| `npm run dev`   | Inicia o servidor de desenvolvimento.     |
-| `npm run build` | Gera a versão de produção.                |
-| `npm run start` | Inicia a versão de produção após o build. |
+O `docker-compose.yml` configura MySQL, API e front-end. Copie os valores de configuração para um `.env` na raiz e inicie os serviços:
 
-### Comandos disponíveis (back-end)
-
-| Comando         | Ação                                        |
-| --------------- | ------------------------------------------- |
-| `npm run dev`   | Inicia a API com recarregamento automático. |
-| `npm run start` | Inicia a API em modo produção.              |
-
-## Estrutura do repositório
-
-```text
-backend/src/
-├── controllers/   # Recebe a requisição e devolve a resposta
-├── services/      # Regras de negócio
-├── models/        # Acesso ao banco de dados (mysql2)
-├── routes/        # Definição das rotas por recurso
-└── middlewares/   # Autenticação e tratamento de erros
-
-frontend/src/
-├── app/           # Rotas do Next.js (App Router), uma pasta por perfil
-├── components/    # Componentes compartilhados entre os perfis
-└── lib/           # Cliente de API e sessão do usuário
-
-database/
-├── init/          # Schema completo para bancos novos (MySQL)
-├── migrations/    # Atualizações para bancos existentes
-└── seed/          # Dados de exemplo e contas de teste
+```bash
+docker compose up --build
 ```
 
-## Identidade visual
+Revise as portas e credenciais no compose e use segredos próprios antes de expor o ambiente fora da máquina local.
 
-| Variável           | Cor       | Aplicação                        |
-| ------------------ | --------- | -------------------------------- |
-| `--onyx`           | `#0b090a` | Fundo principal                  |
-| `--carbon-black`   | `#161a1d` | Painéis e superfícies escuras    |
-| `--dark-garnet`    | `#660708` | Ações secundárias e bordas       |
-| `--mahogany-red`   | `#a4161a` | Cor principal da marca           |
-| `--mahogany-red-2` | `#ba181b` | Destaques e estados de interação |
-| `--silver`         | `#b1a7a6` | Texto secundário                 |
-| `--dust-grey`      | `#d3d3d3` | Divisores e linhas               |
-| `--white-smoke`    | `#f5f3f4` | Superfícies claras               |
-| `--white`          | `#ffffff` | Texto sobre fundos escuros       |
+## Comandos
+
+Na pasta `frontend/`:
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run dev` | Inicia o servidor de desenvolvimento. |
+| `npm run build` | Gera o build de produção. |
+| `npm run start` | Serve o build de produção. |
+
+Na pasta `backend/`:
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run dev` | Inicia a API com reinício automático. |
+| `npm start` | Inicia a API em modo normal. |
+
+## Estrutura
+
+```text
+frontend/src/app/       Rotas e páginas por perfil (Next.js App Router)
+frontend/src/components Componentes compartilhados
+backend/src/routes/     Rotas HTTP da API
+backend/src/controllers Controladores HTTP
+backend/src/services/   Regras de negócio
+backend/src/models/     Acesso a dados
+backend/src/middlewares/Autenticação, upload e tratamento de erros
+database/init/          Schema para novas instalações
+database/seed/          Dados de demonstração e contas locais
+docs/                   Documentação funcional e técnica
+```
+
+## Documentação
+
+- [Documentação oficial do projeto](docs/tenken_documentacao_oficial.md)
+- [Fluxo de acesso e aprovação do aluno](docs/fluxo-acesso-aluno.md)
+- [Chamados de manutenção originados por inspeções](docs/chamados-professor.md)
+- [Quadro Kanban Tenken](https://trello.com/b/ALSjCOok/tenken)
+
+## Observações para entrega
+
+- O projeto não declara uma suíte geral de testes automatizados ou um comando `npm test` nos pacotes. Os scripts disponíveis estão listados acima.
+- O schema em `database/init/02-schema.sql` é a referência disponível para inicializar o banco. Faça backup antes de substituir ou alterar um banco com dados reais.
+- Use senhas, `JWT_SECRET` e credenciais SMTP próprios. Não publique arquivos `.env`, dumps com dados pessoais ou credenciais de demonstração.
 
 ## Equipe
 
-- **Felipe Stevanato:** banco de dados, modelagem e suporte.
-- **Guilherme Silva:** interface, arquitetura visual e integração.
-- **Samuel Sousa:** documentação, requisitos e apoio ao front-end.
-- **Miguel Cantarino:** back-end, API e validação dos fluxos.
+- Felipe Stevanato — banco de dados e modelagem.
+- Guilherme Silva — interface e integração.
+- Samuel Sousa — documentação e requisitos.
+- Miguel Cantarino — API e regras de negócio.
