@@ -38,52 +38,6 @@
   color: inherit;
 }
 
-.brandBadge {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: var(--mahogany-red, #a4161a);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.brandBadge span {
-  font-size: 20px;
-}
-
-.brandInfo {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-}
-
-.brandTitle {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--white-smoke, #f5f3f4);
-}
-
-.brandSub {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--silver, #b1a7a6);
-  letter-spacing: 0.16em;
-}
-
-.brandStatusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--mahogany-red, #a4161a);
-  flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(164, 22, 26, 0.6);
-}
-
 .sectionHeading {
   padding: 18px 24px 8px;
 }
@@ -239,10 +193,6 @@
   background:
     radial-gradient(ellipse at 0 0, rgba(164, 22, 26, 0.11), transparent 42%),
     var(--surface-lowest, #0b0f12);
-}
-.brandBadge {
-  border-radius: 11px;
-  box-shadow: 0 7px 18px rgba(164, 22, 26, 0.24);
 }
 .navItem {
   border-radius: 11px;
