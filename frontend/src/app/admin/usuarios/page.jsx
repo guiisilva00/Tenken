@@ -7,7 +7,6 @@ import styles from "./page.module.css";
 import modalStyles from "../equipamentos/page.module.css";
 import { chamarApi } from "../lib/adminApi";
 import { useModalExit } from "../../useModalExit";
-import FeedbackModal from "../components/FeedbackModal";
 
 const PERFIS = [
   { chave: "all", rotulo: "Todos", valorFiltro: "" },
@@ -38,9 +37,6 @@ function Conteudo({ token }) {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
   const [aviso, setAviso] = useState("");
-  const [feedback, setFeedback] = useState(null);
-  const [modalAberto, setModalAberto, fechandoModal, finalizarFechamentoModal] =
-    useModalExit(false);
   const [
     modalEdicaoAberto,
     setModalEdicaoAberto,
@@ -59,15 +55,6 @@ function Conteudo({ token }) {
     email: "",
     matricula: "",
     turmaIds: [],
-  });
-
-  // Formulário de novo usuário
-  const [novoUsuario, setNovoUsuario] = useState({
-    nome: "",
-    email: "",
-    matricula: "",
-    perfil: "ALUNO",
-    senha: "",
   });
 
   const carregarUsuarios = useCallback(async () => {
@@ -170,43 +157,6 @@ function Conteudo({ token }) {
         ? form.turmaIds.filter((id) => id !== String(turmaId))
         : [...form.turmaIds, String(turmaId)],
     }));
-  }
-
-  async function criarUsuario(e) {
-    e.preventDefault();
-    setErro("");
-    try {
-      // Se for perfil de staff (PROFESSOR ou TECNICO), provisiona via pré-cadastro staff
-      if (
-        novoUsuario.perfil === "PROFESSOR" ||
-        novoUsuario.perfil === "TECNICO"
-      ) {
-        await chamarApi("/pre-cadastros", token, {
-          method: "POST",
-          body: {
-            nome: novoUsuario.nome,
-            email: novoUsuario.email,
-            perfil: novoUsuario.perfil,
-          },
-        });
-      }
-      setFeedback({
-        type: "success",
-        message: `Usuário ${novoUsuario.nome} cadastrado com sucesso.`,
-      });
-
-      setModalAberto(false);
-      setNovoUsuario({
-        nome: "",
-        email: "",
-        matricula: "",
-        perfil: "ALUNO",
-        senha: "",
-      });
-      await carregarUsuarios();
-    } catch (err) {
-      setFeedback({ type: "error", message: err.message });
-    }
   }
 
   // Quick stats calculados
@@ -331,19 +281,6 @@ function Conteudo({ token }) {
             )}
           </div>
 
-          <button
-            type="button"
-            className={styles.newUserBtn}
-            onClick={() => setModalAberto(true)}
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "18px" }}
-            >
-              add
-            </span>
-            <span>Cadastrar usuário</span>
-          </button>
         </div>
       </div>
 
@@ -529,139 +466,6 @@ function Conteudo({ token }) {
         })}
       </TabelaAdmin>
 
-      {/* Modal: Novo Usuário // Cadastramento */}
-      {modalAberto && (
-        <div
-          className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoModal ? "fechar-modal-fundo" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setModalAberto(false);
-          }}
-        >
-          <div
-            className={`${styles.modalCard} abrir-modal ${fechandoModal ? "fechar-modal" : ""}`}
-            onAnimationEnd={finalizarFechamentoModal}
-          >
-            <div className={styles.modalHeader}>
-              <div className={styles.modalHeaderTitleRow}>
-                <div className={modalStyles.modalHeaderIcon}>
-                  <span
-                    className="material-symbols-outlined"
-                    aria-hidden="true"
-                  >
-                    person_add
-                  </span>
-                </div>
-                <div>
-                  <h2 className={styles.modalTitle}>Adicionar usuário</h2>
-                  <p className={styles.modalDescription}>
-                    Preencha os dados para criar um novo acesso ao sistema.
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setModalAberto(false)}
-                aria-label="Fechar"
-              >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: "20px" }}
-                >
-                  close
-                </span>
-              </button>
-            </div>
-
-            <form onSubmit={criarUsuario} className={styles.modalForm}>
-              <div className={styles.modalField}>
-                <label className={styles.modalLabel}>Nome</label>
-                <input
-                  required
-                  placeholder="Como devemos chamar essa pessoa?"
-                  value={novoUsuario.nome}
-                  onChange={(e) =>
-                    setNovoUsuario({ ...novoUsuario, nome: e.target.value })
-                  }
-                  className={styles.modalInput}
-                />
-              </div>
-
-              <div className={styles.modalField}>
-                <label className={styles.modalLabel}>E-mail</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="nome@instituicao.edu.br"
-                  value={novoUsuario.email}
-                  onChange={(e) =>
-                    setNovoUsuario({ ...novoUsuario, email: e.target.value })
-                  }
-                  className={styles.modalInput}
-                />
-              </div>
-
-              <div className={styles.modalRow}>
-                <div className={styles.modalField} style={{ flex: 1 }}>
-                  <label className={styles.modalLabel}>
-                    Matrícula{" "}
-                    <span className={styles.optionalLabel}>opcional</span>
-                  </label>
-                  <input
-                    placeholder="Se houver"
-                    value={novoUsuario.matricula}
-                    onChange={(e) =>
-                      setNovoUsuario({
-                        ...novoUsuario,
-                        matricula: e.target.value,
-                      })
-                    }
-                    className={styles.modalInput}
-                  />
-                </div>
-
-                <div className={styles.modalField} style={{ flex: 1 }}>
-                  <label className={styles.modalLabel}>Perfil</label>
-                  <select
-                    value={novoUsuario.perfil}
-                    onChange={(e) =>
-                      setNovoUsuario({ ...novoUsuario, perfil: e.target.value })
-                    }
-                    className={styles.modalSelect}
-                  >
-                    <option value="ALUNO">Aluno</option>
-                    <option value="PROFESSOR">Professor</option>
-                    <option value="TECNICO">Técnico</option>
-                    <option value="ADMIN">Admin</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.cancelBtn}
-                  onClick={() => setModalAberto(false)}
-                >
-                  Cancelar
-                </button>
-                <button type="submit" className={styles.saveBtn}>
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ fontSize: "18px" }}
-                  >
-                    save
-                  </span>
-                  <span>Criar acesso</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {modalEdicaoAberto && alunoEditado && (
         <div
           className={`${styles.modalOverlay} abrir-modal-fundo ${fechandoEdicao ? "fechar-modal-fundo" : ""}`}
@@ -821,7 +625,6 @@ function Conteudo({ token }) {
           </div>
         </div>
       )}
-      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </div>
   );
 }

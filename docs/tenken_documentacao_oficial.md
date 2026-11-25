@@ -10,7 +10,7 @@ O sistema foi pensado para reduzir controles manuais dispersos, facilitar a iden
 
 | Perfil | Responsabilidades no sistema |
 | --- | --- |
-| Administrador | Gerencia usuários, equipamentos, turmas, chamados e visualiza painéis e relatórios. |
+| Administrador | Consulta e atualiza usuários existentes, gerencia equipamentos, turmas, chamados e pré-cadastros da equipe, e visualiza painéis e relatórios. Não cria usuários diretamente. |
 | Professor | Gerencia turmas, agenda equipamentos, aprova solicitações de acesso, executa inspeções e acompanha chamados da turma. |
 | Aluno | Solicita acesso com token, consulta o estado do check-in e visualiza o contexto e os equipamentos da aula autorizada. |
 | Técnico | Acompanha chamados e ordens de serviço, registra manutenção e atualiza o atendimento. |
@@ -32,7 +32,8 @@ As validações são feitas também na API: autorização por perfil, associaç�
 
 - Login por matrícula e senha, sessão baseada em JWT e proteção de rotas por perfil.
 - Cadastro de aluno, geração de matrícula, solicitação de acesso e fluxo de redefinição de senha por e-mail quando SMTP está configurado.
-- Administração de usuários e pré-cadastro/ativação de membros da equipe.
+- Consulta e atualização de dados, perfis e status de usuários existentes pelo administrador; o administrador não cria usuários diretamente.
+- Pré-cadastro de membros da equipe pelo administrador. O cadastro de alunos ocorre pelo fluxo próprio de cadastro.
 
 ### Equipamentos e turmas
 
@@ -97,7 +98,7 @@ Prefixos registrados em `backend/src/App.js`:
 | Prefixo | Recursos |
 | --- | --- |
 | `/api/health` | Verificação de disponibilidade da API. |
-| `/api/usuarios` | Login, sessão, recuperação de senha e administração de usuários. |
+| `/api/usuarios` | Login, sessão, recuperação de senha, consulta e atualização de usuários existentes (sem criação pelo administrador). |
 | `/api/alunos` | Cadastro, geração de matrícula, solicitação de acesso e área do aluno. |
 | `/api/turmas` | Consulta e administração de turmas. |
 | `/api/equipamentos` | Consulta e CRUD de equipamentos e status. |
