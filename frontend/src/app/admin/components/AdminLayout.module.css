@@ -33,12 +33,6 @@
   user-select: none;
 }
 
-.topbarLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -50,72 +44,9 @@
   color: var(--silver, #b1a7a6);
 }
 
-.breadcrumbRoot {
-  text-decoration: none;
-  color: var(--silver, #b1a7a6);
-  transition: color 0.15s;
-}
-
-.breadcrumbRoot:hover {
-  color: var(--white-smoke, #f5f3f4);
-}
-
 .breadcrumbCurrent {
   color: #ffb4ac; /* Stitch primary accent */
   font-weight: 700;
-}
-
-.verticalDivider {
-  width: 1px;
-  height: 16px;
-  background: var(--border-high, #313538);
-}
-
-.statusPill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  background: var(--surface-low, #181c1f);
-  border: 1px solid var(--border-subtle, #22272b);
-}
-
-.statusDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.statusDotOnline {
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-.statusDotOffline {
-  background: #ef4444;
-}
-
-@keyframes pulseDot {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.4;
-    transform: scale(0.85);
-  }
-}
-
-.statusText {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent-tertiary, #9ecaff);
 }
 
 .topbarRight {
@@ -264,7 +195,6 @@
     rgba(11, 15, 18, 0.94);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
-.statusPill,
 .userBadge {
   border-radius: 12px;
   border-color: rgba(245, 243, 244, 0.14);
