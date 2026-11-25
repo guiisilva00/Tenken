@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { listarEquipamentosIndisponiveis } from "../lib/professorApi";
 import styles from "./FormularioAgendamento.module.css";
 
 function dataLocalISO() {
@@ -39,9 +40,52 @@ export default function FormularioAgendamento({
   });
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [consultaAgenda, setConsultaAgenda] = useState({
+    status: "idle",
+    equipamentos: [],
+  });
+
+  useEffect(() => {
+    const horarioValido =
+      /^\d{2}:\d{2}$/.test(form.inicio) &&
+      /^\d{2}:\d{2}$/.test(form.fim) &&
+      form.fim > form.inicio;
+    if (!form.data || !horarioValido) {
+      setConsultaAgenda({ status: "idle", equipamentos: [] });
+      return undefined;
+    }
+
+    let ativo = true;
+    setConsultaAgenda({ status: "loading", equipamentos: [] });
+    listarEquipamentosIndisponiveis({
+      data: form.data,
+      inicio: form.inicio,
+      fim: form.fim,
+    })
+      .then((ids) => {
+        if (ativo)
+          setConsultaAgenda({ status: "ready", equipamentos: ids.map(Number) });
+      })
+      .catch(() => {
+        if (ativo) setConsultaAgenda({ status: "error", equipamentos: [] });
+      });
+    return () => {
+      ativo = false;
+    };
+  }, [form.data, form.inicio, form.fim]);
+
+  function equipamentoIndisponivel(equipamento) {
+    return (
+      ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status) ||
+      consultaAgenda.equipamentos.includes(Number(equipamento.id))
+    );
+  }
 
   function alterar(campo, valor) {
     setForm((atual) => ({ ...atual, [campo]: valor }));
+    if (["data", "inicio", "fim"].includes(campo)) {
+      setConsultaAgenda({ status: "idle", equipamentos: [] });
+    }
     setErro("");
   }
 
@@ -72,6 +116,19 @@ export default function FormularioAgendamento({
 
     if (form.fim <= form.inicio) {
       setErro("O horário de término precisa ser depois do início.");
+      return;
+    }
+
+    if (consultaAgenda.status === "loading" || consultaAgenda.status === "idle") {
+      setErro("Aguarde a consulta de disponibilidade para este hor\u00e1rio.");
+      return;
+    }
+    if (consultaAgenda.status === "error") {
+      setErro("N\u00e3o foi poss\u00edvel consultar a disponibilidade. Tente novamente.");
+      return;
+    }
+    if (consultaAgenda.equipamentos.includes(Number(form.equipamentoId))) {
+      setErro("Este equipamento est\u00e1 indispon\u00edvel nesse hor\u00e1rio.");
       return;
     }
 
@@ -140,12 +197,10 @@ export default function FormularioAgendamento({
             <option
               key={equipamento.id}
               value={equipamento.id}
-              disabled={["EM_MANUTENCAO", "INATIVO"].includes(
-                equipamento.status,
-              )}
+              disabled={equipamentoIndisponivel(equipamento)}
             >
               {equipamento.nome}
-              {["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status)
+              {equipamentoIndisponivel(equipamento)
                 ? " · indisponível"
                 : ""}
             </option>
@@ -187,6 +242,16 @@ export default function FormularioAgendamento({
         </label>
       </div>
 
+      {consultaAgenda.status === "loading" && (
+        <p className={styles.aviso} role="status">
+          {"Consultando disponibilidade para esse hor\u00e1rio..."}
+        </p>
+      )}
+      {consultaAgenda.status === "error" && (
+        <p className={styles.erro} role="alert">
+          {"N\u00e3o foi poss\u00edvel consultar a disponibilidade. Tente novamente."}
+        </p>
+      )}
       {erro && (
         <p className={styles.erro} role="alert">
           {erro}
@@ -203,7 +268,17 @@ export default function FormularioAgendamento({
           Voltar
         </button>
 
-        <button className={styles.primario} type="submit" disabled={enviando}>
+        <button
+          className={styles.primario}
+          type="submit"
+          disabled={
+            enviando ||
+            consultaAgenda.status === "loading" ||
+            consultaAgenda.status === "error" ||
+            (consultaAgenda.status === "ready" &&
+              consultaAgenda.equipamentos.includes(Number(form.equipamentoId)))
+          }
+        >
           {enviando ? "Salvando…" : "Criar agendamento"}
         </button>
       </div>

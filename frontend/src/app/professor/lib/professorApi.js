@@ -20,6 +20,14 @@ export async function listarEquipamentos() {
 export async function listarAgendamentos() {
   return (await apiFetch("/api/agendamentos"))?.dados ?? [];
 }
+export async function listarEquipamentosIndisponiveis({ data, inicio, fim }) {
+  const params = new URLSearchParams({ data, inicio, fim });
+  return (
+    (await apiFetch(`/api/agendamentos/disponibilidade?${params}`, {
+      cache: "no-store",
+    }))?.dados ?? []
+  );
+}
 export async function criarAgendamento(formulario) {
   return (
     await apiFetch("/api/agendamentos", { method: "POST", body: formulario })

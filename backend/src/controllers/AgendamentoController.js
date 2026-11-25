@@ -9,6 +9,18 @@ export async function listar(req, res, next) {
     return next(e);
   }
 }
+
+export async function listarDisponibilidade(req, res, next) {
+  try {
+    return res.json({
+      sucesso: true,
+      dados: await Service.listarEquipamentosComConflito(req.query),
+    });
+  } catch (e) {
+    return next(e);
+  }
+}
+
 export async function criar(req, res, next) {
   try {
     return res.status(201).json({

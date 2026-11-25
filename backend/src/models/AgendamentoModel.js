@@ -77,6 +77,14 @@ export async function verificarConflito(equipamentoId, inicio, fim, db = pool) {
   return linhas.length > 0;
 }
 
+export async function listarEquipamentosComConflito(inicio, fim, db = pool) {
+  const [linhas] = await db.query(
+    "SELECT DISTINCT equipamento_id FROM agendamentos WHERE status NOT IN ('CANCELADO','CONCLUIDO') AND inicio < ? AND fim > ?",
+    [fim, inicio],
+  );
+  return linhas.map((linha) => Number(linha.equipamento_id));
+}
+
 export async function inicioJaPassou(inicio, db = pool) {
   const [[linha]] = await db.query("SELECT ? <= NOW() AS ja_passou", [inicio]);
   return Boolean(linha?.ja_passou);
