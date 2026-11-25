@@ -56,30 +56,60 @@ export default function FormularioAgendamento({
     }
 
     let ativo = true;
-    setConsultaAgenda({ status: "loading", equipamentos: [] });
-    listarEquipamentosIndisponiveis({
-      data: form.data,
-      inicio: form.inicio,
-      fim: form.fim,
-    })
-      .then((ids) => {
+    let consultando = false;
+    const consultarDisponibilidade = async () => {
+      if (
+        !ativo ||
+        consultando ||
+        document.visibilityState !== "visible"
+      )
+        return;
+      consultando = true;
+      setConsultaAgenda((atual) => ({
+        status: atual.status === "ready" ? "ready" : "loading",
+        equipamentos: atual.equipamentos,
+      }));
+      try {
+        const ids = await listarEquipamentosIndisponiveis({
+          data: form.data,
+          inicio: form.inicio,
+          fim: form.fim,
+        });
         if (ativo)
           setConsultaAgenda({ status: "ready", equipamentos: ids.map(Number) });
-      })
-      .catch(() => {
+      } catch {
         if (ativo) setConsultaAgenda({ status: "error", equipamentos: [] });
-      });
+      } finally {
+        consultando = false;
+      }
+    };
+
+    consultarDisponibilidade();
+    const intervalo = window.setInterval(consultarDisponibilidade, 5000);
+    const aoFocar = () => consultarDisponibilidade();
+    const aoTornarVisivel = () => {
+      if (document.visibilityState === "visible") consultarDisponibilidade();
+    };
+    window.addEventListener("focus", aoFocar);
+    document.addEventListener("visibilitychange", aoTornarVisivel);
     return () => {
       ativo = false;
+      window.clearInterval(intervalo);
+      window.removeEventListener("focus", aoFocar);
+      document.removeEventListener("visibilitychange", aoTornarVisivel);
     };
   }, [form.data, form.inicio, form.fim]);
 
-  function equipamentoIndisponivel(equipamento) {
+  function equipamentoOcupado(equipamento) {
     return (
       ["EM_MANUTENCAO", "INATIVO"].includes(equipamento.status) ||
       consultaAgenda.equipamentos.includes(Number(equipamento.id))
     );
   }
+
+  const consultaPendente = ["idle", "loading", "error"].includes(
+    consultaAgenda.status,
+  );
 
   function alterar(campo, valor) {
     setForm((atual) => ({ ...atual, [campo]: valor }));
@@ -197,12 +227,16 @@ export default function FormularioAgendamento({
             <option
               key={equipamento.id}
               value={equipamento.id}
-              disabled={equipamentoIndisponivel(equipamento)}
+              disabled={consultaPendente || equipamentoOcupado(equipamento)}
             >
               {equipamento.nome}
-              {equipamentoIndisponivel(equipamento)
+              {equipamentoOcupado(equipamento)
                 ? " · indisponível"
-                : ""}
+                : consultaAgenda.status === "error"
+                  ? " · disponibilidade não verificada"
+                  : consultaPendente
+                    ? " · verificando disponibilidade"
+                    : ""}
             </option>
           ))}
         </select>
@@ -273,8 +307,7 @@ export default function FormularioAgendamento({
           type="submit"
           disabled={
             enviando ||
-            consultaAgenda.status === "loading" ||
-            consultaAgenda.status === "error" ||
+            consultaAgenda.status !== "ready" ||
             (consultaAgenda.status === "ready" &&
               consultaAgenda.equipamentos.includes(Number(form.equipamentoId)))
           }
