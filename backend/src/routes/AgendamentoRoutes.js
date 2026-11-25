@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   cancelar,
   criar,
+  listarDisponibilidade,
   listar,
 } from "../controllers/AgendamentoController.js";
 import {
@@ -10,6 +11,12 @@ import {
 } from "../middlewares/AuthMiddleware.js";
 const router = Router();
 router.get("/", authMiddleware, requirePerfil("PROFESSOR"), listar);
+router.get(
+  "/disponibilidade",
+  authMiddleware,
+  requirePerfil("PROFESSOR"),
+  listarDisponibilidade,
+);
 router.post("/", authMiddleware, requirePerfil("PROFESSOR"), criar);
 router.patch(
   "/:id/cancelar",

@@ -43,9 +43,31 @@ function dataISOValida(data) {
   return dia <= new Date(ano, mes, 0).getDate();
 }
 
+function horarioValido(horario) {
+  const partes = /^(\d{2}):(\d{2})$/.exec(horario || "");
+  return Boolean(partes && Number(partes[1]) < 24 && Number(partes[2]) < 60);
+}
+
 export async function listarPorProfessor(id) {
   return AgendamentoModel.listarPorProfessor(id);
 }
+
+export async function listarEquipamentosComConflito({ data, inicio, fim }) {
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(data || "") ||
+    !horarioValido(inicio) ||
+    !horarioValido(fim) ||
+    !dataISOValida(data) ||
+    inicio >= fim
+  ) {
+    throw new TypeError("Informe data e horário válidos para consultar a disponibilidade.");
+  }
+  return AgendamentoModel.listarEquipamentosComConflito(
+    `${data} ${inicio}:00`,
+    `${data} ${fim}:00`,
+  );
+}
+
 export async function criar(dados, usuario) {
   const turmaId = idValido(dados?.turmaId),
     equipamentoId = idValido(dados?.equipamentoId);
