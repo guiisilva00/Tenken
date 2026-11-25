@@ -39,6 +39,7 @@ export default function FormularioAgendamento({
     equipamentoId: equipamentoInicial,
   });
   const [erro, setErro] = useState("");
+  const [avisoDisponibilidade, setAvisoDisponibilidade] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [consultaAgenda, setConsultaAgenda] = useState({
     status: "idle",
@@ -75,8 +76,23 @@ export default function FormularioAgendamento({
           inicio: form.inicio,
           fim: form.fim,
         });
-        if (ativo)
-          setConsultaAgenda({ status: "ready", equipamentos: ids.map(Number) });
+        if (ativo) {
+          const equipamentosIndisponiveis = ids.map(Number);
+          setConsultaAgenda({ status: "ready", equipamentos: equipamentosIndisponiveis });
+          if (
+            form.equipamentoId &&
+            equipamentosIndisponiveis.includes(Number(form.equipamentoId))
+          ) {
+            setForm((atual) =>
+              String(atual.equipamentoId) === String(form.equipamentoId)
+                ? { ...atual, equipamentoId: "" }
+                : atual,
+            );
+            setAvisoDisponibilidade(
+              "O equipamento selecionado já está indisponível nesse horário. Escolha outro.",
+            );
+          }
+        }
       } catch {
         if (ativo) setConsultaAgenda({ status: "error", equipamentos: [] });
       } finally {
@@ -98,7 +114,7 @@ export default function FormularioAgendamento({
       window.removeEventListener("focus", aoFocar);
       document.removeEventListener("visibilitychange", aoTornarVisivel);
     };
-  }, [form.data, form.inicio, form.fim]);
+  }, [form.data, form.inicio, form.fim, form.equipamentoId]);
 
   function equipamentoOcupado(equipamento) {
     return (
@@ -115,7 +131,9 @@ export default function FormularioAgendamento({
     setForm((atual) => ({ ...atual, [campo]: valor }));
     if (["data", "inicio", "fim"].includes(campo)) {
       setConsultaAgenda({ status: "idle", equipamentos: [] });
+      setAvisoDisponibilidade("");
     }
+    if (campo === "equipamentoId") setAvisoDisponibilidade("");
     setErro("");
   }
 
@@ -173,7 +191,16 @@ export default function FormularioAgendamento({
       });
 
       if (!resultado.ok) {
-        setErro(resultado.message);
+        if (/reservad|indispon/i.test(resultado.message || "")) {
+          setForm((atual) => ({ ...atual, equipamentoId: "" }));
+          setConsultaAgenda({ status: "idle", equipamentos: [] });
+          setAvisoDisponibilidade(
+            "O equipamento selecionado já está indisponível nesse horário. Escolha outro.",
+          );
+          setErro("");
+        } else {
+          setErro(resultado.message);
+        }
         return;
       }
 
@@ -215,33 +242,6 @@ export default function FormularioAgendamento({
         </select>
       </label>
 
-      <label className={styles.campo} htmlFor="equipamento-reserva">
-        <span>Equipamento</span>
-        <select
-          id="equipamento-reserva"
-          value={form.equipamentoId}
-          onChange={(evento) => alterar("equipamentoId", evento.target.value)}
-        >
-          <option value="">Selecione um equipamento</option>
-          {equipamentos.map((equipamento) => (
-            <option
-              key={equipamento.id}
-              value={equipamento.id}
-              disabled={consultaPendente || equipamentoOcupado(equipamento)}
-            >
-              {equipamento.nome}
-              {equipamentoOcupado(equipamento)
-                ? " · indisponível"
-                : consultaAgenda.status === "error"
-                  ? " · disponibilidade não verificada"
-                  : consultaPendente
-                    ? " · verificando disponibilidade"
-                    : ""}
-            </option>
-          ))}
-        </select>
-      </label>
-
       <label className={styles.campo} htmlFor="data-reserva">
         <span>Data</span>
         <input
@@ -275,6 +275,39 @@ export default function FormularioAgendamento({
           />
         </label>
       </div>
+
+      <label className={styles.campo} htmlFor="equipamento-reserva">
+        <span>Equipamento</span>
+        <select
+          id="equipamento-reserva"
+          value={form.equipamentoId}
+          onChange={(evento) => alterar("equipamentoId", evento.target.value)}
+        >
+          <option value="">Selecione um equipamento</option>
+          {equipamentos.map((equipamento) => (
+            <option
+              key={equipamento.id}
+              value={equipamento.id}
+              disabled={consultaPendente || equipamentoOcupado(equipamento)}
+            >
+              {equipamento.nome}
+              {equipamentoOcupado(equipamento)
+                ? " · indisponível"
+                : consultaAgenda.status === "error"
+                  ? " · disponibilidade não verificada"
+                  : consultaPendente
+                    ? " · verificando disponibilidade"
+                    : ""}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {avisoDisponibilidade && (
+        <p className={styles.aviso} role="status">
+          {avisoDisponibilidade}
+        </p>
+      )}
 
       {consultaAgenda.status === "loading" && (
         <p className={styles.aviso} role="status">
